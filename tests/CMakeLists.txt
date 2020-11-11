@@ -1,0 +1,59 @@
+cmake_minimum_required(VERSION 3.5)
+
+project(ruuvi_esp_wrappers-tests)
+
+add_definitions(
+        -DRUUVI_ESP_WRAPPERS_TESTS=1
+)
+
+enable_testing()
+add_subdirectory(googletest)
+add_subdirectory(posix_gcc_simulator)
+
+include_directories(
+        "posix_gcc_simulator/FreeRTOS_Posix"
+        "posix_gcc_simulator/FreeRTOS_Posix/FreeRTOS_Kernel/include"
+        "posix_gcc_simulator/FreeRTOS_Posix/FreeRTOS_Kernel/include/freertos"
+        "posix_gcc_simulator/FreeRTOS_Posix/FreeRTOS_Kernel/portable/GCC/Posix"
+)
+
+set(RUUVI_ESP_WRAPPERS ${CMAKE_CURRENT_SOURCE_DIR}/..)
+set(RUUVI_ESP_WRAPPERS_SRC ${RUUVI_ESP_WRAPPERS}/src)
+set(RUUVI_ESP_WRAPPERS_INC ${RUUVI_ESP_WRAPPERS}/include)
+
+set(RUUVI_ESP_WRAPPERS_TESTS_COMMON ${RUUVI_ESP_WRAPPERS}/tests/common)
+set(RUUVI_ESP_WRAPPERS_TESTS_COMMON_INC ${RUUVI_ESP_WRAPPERS_TESTS_COMMON}/include)
+set(RUUVI_ESP_WRAPPERS_TESTS_COMMON_SRC ${RUUVI_ESP_WRAPPERS_TESTS_COMMON})
+
+add_subdirectory(${RUUVI_ESP_WRAPPERS_TESTS_COMMON})
+
+add_subdirectory(test_app_malloc)
+add_subdirectory(test_app_str)
+add_subdirectory(test_os_task)
+add_subdirectory(test_str_buf)
+add_subdirectory(test_time_units)
+
+add_test(NAME test_app_malloc
+        COMMAND ruuvi_esp_wrappers-test-app_malloc
+            --gtest_output=xml:$<TARGET_FILE_DIR:ruuvi_esp_wrappers-test-app_malloc>/gtestresults.xml
+)
+
+add_test(NAME test_app_str
+        COMMAND ruuvi_esp_wrappers-test-app_str
+            --gtest_output=xml:$<TARGET_FILE_DIR:ruuvi_esp_wrappers-test-app_str>/gtestresults.xml
+)
+
+add_test(NAME test_os_task
+        COMMAND ruuvi_esp_wrappers-test-os_task
+            --gtest_output=xml:$<TARGET_FILE_DIR:ruuvi_esp_wrappers-test-os_task>/gtestresults.xml
+)
+
+add_test(NAME test_str_buf
+        COMMAND ruuvi_esp_wrappers-test-str_buf
+            --gtest_output=xml:$<TARGET_FILE_DIR:ruuvi_esp_wrappers-test-str_buf>/gtestresults.xml
+)
+
+add_test(NAME test_time_units
+        COMMAND ruuvi_esp_wrappers-test-time_units
+            --gtest_output=xml:$<TARGET_FILE_DIR:ruuvi_esp_wrappers-test-time_units>/gtestresults.xml
+)
