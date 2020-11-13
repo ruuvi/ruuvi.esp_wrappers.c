@@ -55,13 +55,13 @@ public:
 };
 
 TestOsTask::TestOsTask()
-    : m_taskParam(0)
+    : Test()
+    , m_taskParam(0)
     , m_createdTaskHandle(nullptr)
     , m_createdTaskFunc(nullptr)
     , m_createdTaskStackDepth(0)
     , m_createdTaskParam(nullptr)
     , m_createdTaskPriority(0)
-    , Test()
 {
 }
 

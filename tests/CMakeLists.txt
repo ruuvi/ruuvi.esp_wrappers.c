@@ -25,6 +25,9 @@ set(RUUVI_ESP_WRAPPERS_TESTS_COMMON ${RUUVI_ESP_WRAPPERS}/tests/common)
 set(RUUVI_ESP_WRAPPERS_TESTS_COMMON_INC ${RUUVI_ESP_WRAPPERS_TESTS_COMMON}/include)
 set(RUUVI_ESP_WRAPPERS_TESTS_COMMON_SRC ${RUUVI_ESP_WRAPPERS_TESTS_COMMON})
 
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -Wextra -Wno-error=nonnull-compare")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wno-error=nonnull-compare")
+
 add_subdirectory(${RUUVI_ESP_WRAPPERS_TESTS_COMMON})
 
 add_subdirectory(test_app_malloc)
