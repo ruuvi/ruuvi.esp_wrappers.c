@@ -43,6 +43,6 @@ else()
             CXX_STANDARD 14
     )
 
-    target_compile_options(${ProjectId} PRIVATE -Wall -Werror -Wextra -Wpedantic -Wno-error=nonnull-compare)
+    target_compile_options(${ProjectId} PRIVATE -Wall -Werror -Wextra -Wno-error=nonnull-compare)
 
 endif()
