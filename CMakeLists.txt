@@ -27,6 +27,8 @@ if(${ESP_PLATFORM})
             ${RUUVI_ESP_WRAPPERS_INC}
     )
 
+    target_compile_options(__idf_ruuvi.esp_wrappers.c PRIVATE -Wall -Werror -Wextra -Wno-error=nonnull-compare)
+
 else()
 
     project(ruuvi_esp_wrappers)
@@ -40,5 +42,7 @@ else()
             C_STANDARD 11
             CXX_STANDARD 14
     )
+
+    target_compile_options(${ProjectId} PRIVATE -Wall -Werror -Wextra -Wpedantic -Wno-error=nonnull-compare)
 
 endif()

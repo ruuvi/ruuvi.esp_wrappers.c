@@ -9,20 +9,24 @@
 #define RUUVI_GATEWAY_ESP_APP_MALLOC_H
 
 #include <stddef.h>
+#include "attribs.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+ATTR_MALLOC
 void *
 app_malloc(const size_t size);
 
 void
 app_free(void *ptr);
 
+ATTR_NONNULL(1)
 void
 app_free_pptr(void **p_ptr);
 
+ATTR_NONNULL(1)
 void
 app_free_const_pptr(const void **p_ptr);
 

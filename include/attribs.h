@@ -20,6 +20,11 @@ extern "C" {
 
 #define ATTR_NORETURN ATTRIBUTE((noreturn))
 #define ATTR_UNUSED   ATTRIBUTE((unused))
+#define ATTR_MALLOC   ATTRIBUTE((malloc))
+
+#define ATTR_PRINTF(idx_fmt, idx_args) ATTRIBUTE((format(printf, idx_fmt, idx_args)))
+
+#define ATTR_NONNULL(arg_idx, ...) ATTRIBUTE((nonnull(arg_idx, ##__VA_ARGS__)))
 
 #ifdef __cplusplus
 }

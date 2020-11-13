@@ -7,7 +7,6 @@ add_executable(${ProjectId}
         test_os_task.cpp
         ../../src/os_task.c
         ../../include/os_task.h
-        $ENV{IDF_PATH}/components/esp_common/src/esp_err_to_name.c
 )
 
 set_target_properties(${ProjectId} PROPERTIES

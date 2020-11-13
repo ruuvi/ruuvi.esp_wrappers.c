@@ -9,6 +9,7 @@
 #define RUUVI_ESP_WRAPPERS_APP_STR_H
 
 #include <stdint.h>
+#include "attribs.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,6 +26,7 @@ typedef int app_print_precision_t;
  * @param base - should be in range 2..36 or 0 for auto detection
  * @return the result of the conversion
  */
+ATTR_NONNULL(1)
 uint32_t
 app_strtoul_cptr(const char *__restrict p_str, const char **__restrict pp_end, const str2num_base_t base);
 
@@ -35,6 +37,7 @@ app_strtoul_cptr(const char *__restrict p_str, const char **__restrict pp_end, c
  * @param base - should be in range 2..36 or 0 for auto detection
  * @return the result of the conversion
  */
+ATTR_NONNULL(1)
 uint32_t
 app_strtoul(char *__restrict p_str, char **__restrict pp_end, const str2num_base_t base);
 
@@ -45,6 +48,7 @@ app_strtoul(char *__restrict p_str, char **__restrict pp_end, const str2num_base
  * @param base - should be in range 2..36 or 0 for auto detection
  * @return the result of the conversion
  */
+ATTR_NONNULL(1)
 int32_t
 app_strtol_cptr(const char *__restrict p_str, const char **__restrict pp_end, const str2num_base_t base);
 
@@ -55,6 +59,7 @@ app_strtol_cptr(const char *__restrict p_str, const char **__restrict pp_end, co
  * @param base - should be in range 2..36 or 0 for auto detection
  * @return the result of the conversion
  */
+ATTR_NONNULL(1)
 int32_t
 app_strtol(char *__restrict p_str, char **__restrict pp_end, const str2num_base_t base);
 
