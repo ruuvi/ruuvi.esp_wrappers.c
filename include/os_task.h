@@ -18,6 +18,7 @@ extern "C" {
 #endif
 
 typedef ATTR_NORETURN void (*os_task_func_t)(void *p_param);
+typedef ATTR_NORETURN void (*os_task_func_const_param_t)(const void *p_param);
 typedef UBaseType_t  os_task_priority_t;
 typedef TaskHandle_t os_task_handle_t;
 
@@ -39,6 +40,25 @@ os_task_create(
     void *                   p_param,
     const os_task_priority_t priority,
     os_task_handle_t *       ph_task);
+
+/**
+ * Create a new task thread.
+ * @param p_func - pointer to the task function which takes pointer to 'const' as an argument.
+ * @param p_name - pointer to the task name
+ * @param stack_depth - the size of the task stack (in bytes)
+ * @param p_param - pointer that will be passed as the parameter to the task function
+ * @param priority - task priority
+ * @param[out] ph_task - pointer to the variable to return task handle
+ * @return true if successful
+ */
+bool
+os_task_create_with_const_param(
+    os_task_func_const_param_t p_func,
+    const char *               p_name,
+    const uint32_t             stack_depth,
+    const void *               p_param,
+    const os_task_priority_t   priority,
+    os_task_handle_t *         ph_task);
 
 /**
  * Get task name for the current thread.

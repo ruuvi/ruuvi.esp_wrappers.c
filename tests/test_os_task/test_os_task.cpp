@@ -111,6 +111,15 @@ task_func(void *p_param)
     }
 }
 
+static ATTR_NORETURN void
+task_func_with_const_param(const void *p_param)
+{
+    (void)p_param;
+    while (true)
+    {
+    }
+}
+
 } // extern "C"
 
 #define TEST_CHECK_LOG_RECORD_EX(tag_, level_, msg_, flag_skip_file_info_) \
@@ -196,6 +205,58 @@ TEST_F(TestOsTask, os_task_create_fail) // NOLINT
     os_task_handle_t h_task;
     this->m_createdTaskHandle = nullptr;
     ASSERT_FALSE(os_task_create(&task_func, task_name, stack_depth, &this->m_taskParam, priority, &h_task));
+    TEST_CHECK_LOG_RECORD(
+        ESP_LOG_INFO,
+        "[my_task_name2] Start thread 'my_task_name2' with priority 3, stack size 2048 bytes");
+    TEST_CHECK_LOG_RECORD_NO_FILE(ESP_LOG_ERROR, "Failed to start thread 'my_task_name2'");
+    ASSERT_TRUE(esp_log_wrapper_is_empty());
+}
+
+TEST_F(TestOsTask, os_task_create_with_const_param_ok) // NOLINT
+{
+    const char *             task_name   = "my_task_name2";
+    const uint32_t           stack_depth = 2048;
+    const os_task_priority_t priority    = 3;
+    this->m_taskName.assign(task_name);
+    os_task_handle_t           h_task;
+    struct tskTaskControlBlock taskControlBlock = { 0 };
+    this->m_createdTaskHandle                   = &taskControlBlock;
+    ASSERT_TRUE(os_task_create_with_const_param(
+        &task_func_with_const_param,
+        task_name,
+        stack_depth,
+        &this->m_taskParam,
+        priority,
+        &h_task));
+    ASSERT_EQ(&taskControlBlock, h_task);
+    ASSERT_EQ(
+        reinterpret_cast<void *>(g_pTestClass->m_createdTaskFunc),
+        reinterpret_cast<void *>(&task_func_with_const_param));
+    ASSERT_EQ(g_pTestClass->m_createdTaskName, task_name);
+    ASSERT_EQ(g_pTestClass->m_createdTaskStackDepth, stack_depth);
+    ASSERT_EQ(g_pTestClass->m_createdTaskParam, &this->m_taskParam);
+    ASSERT_EQ(g_pTestClass->m_createdTaskPriority, priority);
+    TEST_CHECK_LOG_RECORD(
+        ESP_LOG_INFO,
+        "[my_task_name2] Start thread 'my_task_name2' with priority 3, stack size 2048 bytes");
+    ASSERT_TRUE(esp_log_wrapper_is_empty());
+}
+
+TEST_F(TestOsTask, os_task_create_with_const_param_fail) // NOLINT
+{
+    const char *             task_name   = "my_task_name2";
+    const uint32_t           stack_depth = 2048;
+    const os_task_priority_t priority    = 3;
+    this->m_taskName.assign(task_name);
+    os_task_handle_t h_task;
+    this->m_createdTaskHandle = nullptr;
+    ASSERT_FALSE(os_task_create_with_const_param(
+        &task_func_with_const_param,
+        task_name,
+        stack_depth,
+        &this->m_taskParam,
+        priority,
+        &h_task));
     TEST_CHECK_LOG_RECORD(
         ESP_LOG_INFO,
         "[my_task_name2] Start thread 'my_task_name2' with priority 3, stack size 2048 bytes");
