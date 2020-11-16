@@ -28,6 +28,18 @@ os_task_create(
     return true;
 }
 
+bool
+os_task_create_with_const_param(
+    os_task_func_const_param_t p_func,
+    const char *               p_name,
+    const uint32_t             stack_depth,
+    const void *               p_param,
+    const os_task_priority_t   priority,
+    os_task_handle_t *         ph_task)
+{
+    return os_task_create((os_task_func_t)p_func, p_name, stack_depth, (void *)p_param, priority, ph_task);
+}
+
 const char *
 os_task_get_name(void)
 {
