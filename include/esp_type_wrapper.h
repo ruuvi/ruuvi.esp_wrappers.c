@@ -19,6 +19,11 @@ typedef long          printf_long_t;
 typedef unsigned long printf_ulong_t;
 
 typedef int socket_t;
+#define SOCKET_INVALID ((socket_t)(-1))
+
+typedef int socket_bind_result_t;
+#define SOCKET_BIND_ERROR ((socket_bind_result_t)(-1))
+
 typedef int socket_recv_result_t;
 typedef int socket_send_result_t;
 
