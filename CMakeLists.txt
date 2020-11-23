@@ -6,11 +6,13 @@ set(RUUVI_ESP_WRAPPERS_SRC
         include/attribs.h
         include/esp_type_wrapper.h
         include/log.h
+        include/os_mutex.h
         include/os_task.h
         include/time_units.h
         include/str_buf.h
         src/app_malloc.c
         src/app_str.c
+        src/os_mutex.c
         src/os_task.c
         src/str_buf.c
 )
