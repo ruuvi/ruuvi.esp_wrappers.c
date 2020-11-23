@@ -85,7 +85,7 @@ str_buf_is_overflow(const str_buf_t *p_str_buf);
  * @param p_str_buf - pointer to str_buf_t object
  * @param fmt - format string
  * @param args - arguments for format string
- * @return str_buf_t which points to the new allocated buffer
+ * @return true if the string was successfully printed to the buffer and there was no buffer overflow.
  */
 ATTR_NONNULL(1, 2)
 bool
@@ -96,7 +96,7 @@ str_buf_vprintf(str_buf_t *p_str_buf, const char *fmt, va_list args);
  * @param p_str_buf - pointer to str_buf_t object
  * @param fmt - format string
  * @param ... - arguments for format string
- * @return str_buf_t which points to the new allocated buffer
+ * @return true if the string was successfully printed to the buffer and there was no buffer overflow.
  */
 ATTR_PRINTF(2, 3)
 ATTR_NONNULL(1, 2)
