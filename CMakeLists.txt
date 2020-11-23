@@ -4,6 +4,7 @@ set(RUUVI_ESP_WRAPPERS_SRC
         include/app_malloc.h
         include/app_str.h
         include/attribs.h
+        include/esp_type_wrapper.h
         include/log.h
         include/os_task.h
         include/time_units.h
