@@ -21,6 +21,7 @@ typedef ATTR_NORETURN void (*os_task_func_t)(void *p_param);
 typedef ATTR_NORETURN void (*os_task_func_const_param_t)(const void *p_param);
 typedef UBaseType_t  os_task_priority_t;
 typedef TaskHandle_t os_task_handle_t;
+typedef TickType_t   os_delta_ticks_t;
 
 /**
  * Create a new task thread.
@@ -66,6 +67,13 @@ os_task_create_with_const_param(
  */
 const char *
 os_task_get_name(void);
+
+/**
+ * Delay a task for a given number of ticks.
+ * @param delay_ticks
+ */
+void
+os_task_delay(const os_delta_ticks_t delay_ticks);
 
 #ifdef __cplusplus
 }

@@ -15,6 +15,7 @@ set(RUUVI_ESP_WRAPPERS_SRC
         src/app_str.c
         src/os_mutex.c
         src/os_task.c
+        src/os_task_delay.c
         src/os_time.c
         src/str_buf.c
 )
