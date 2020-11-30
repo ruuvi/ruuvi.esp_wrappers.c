@@ -8,12 +8,14 @@ set(RUUVI_ESP_WRAPPERS_SRC
         include/log.h
         include/os_mutex.h
         include/os_task.h
+        include/os_time.h
         include/time_units.h
         include/str_buf.h
         src/app_malloc.c
         src/app_str.c
         src/os_mutex.c
         src/os_task.c
+        src/os_time.c
         src/str_buf.c
 )
 
