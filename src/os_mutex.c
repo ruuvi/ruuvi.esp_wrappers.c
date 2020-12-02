@@ -15,8 +15,17 @@ os_mutex_create(void)
     return h_mutex;
 }
 
+#if configSUPPORT_STATIC_ALLOCATION
+os_mutex_t
+os_mutex_create_static(os_mutex_static_t* p_mutex_static)
+{
+    SemaphoreHandle_t h_mutex = xSemaphoreCreateMutexStatic(p_mutex_static);
+    return h_mutex;
+}
+#endif
+
 void
-os_mutex_delete(os_mutex_t *ph_mutex)
+os_mutex_delete(os_mutex_t * const ph_mutex)
 {
     if (NULL != *ph_mutex)
     {
