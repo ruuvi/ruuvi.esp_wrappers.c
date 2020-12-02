@@ -11,6 +11,7 @@
 #include <stdbool.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
+#include "os_wrapper_types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,7 +38,7 @@ bool
 os_sema_wait_immediate(os_sema_t h_sema);
 
 bool
-os_sema_wait_with_timeout(os_sema_t h_sema, TickType_t ticks_to_wait);
+os_sema_wait_with_timeout(os_sema_t h_sema, const os_delta_ticks_t ticks_to_wait);
 
 void
 os_sema_signal(os_sema_t h_sema);

@@ -11,6 +11,7 @@
 #include <stdbool.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "os_wrapper_types.h"
 #include "attribs.h"
 
 #ifdef __cplusplus
@@ -21,7 +22,6 @@ typedef ATTR_NORETURN void (*os_task_func_t)(void *p_param);
 typedef ATTR_NORETURN void (*os_task_func_const_param_t)(const void *p_param);
 typedef UBaseType_t  os_task_priority_t;
 typedef TaskHandle_t os_task_handle_t;
-typedef TickType_t   os_delta_ticks_t;
 
 /**
  * Create a new task thread.

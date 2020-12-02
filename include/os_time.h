@@ -15,8 +15,6 @@
 extern "C" {
 #endif
 
-#define OS_TIME_MS_TO_TICKS(ms) pdMS_TO_TICKS(ms)
-
 time_t
 os_time_get(void);
 
