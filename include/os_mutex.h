@@ -17,12 +17,13 @@ extern "C" {
 #endif
 
 typedef SemaphoreHandle_t os_mutex_t;
+typedef StaticSemaphore_t os_mutex_static_t;
 
 os_mutex_t
 os_mutex_create(void);
 
 void
-os_mutex_delete(os_mutex_t *ph_mutex);
+os_mutex_delete(os_mutex_t * const ph_mutex);
 
 void
 os_mutex_lock(os_mutex_t h_mutex);
