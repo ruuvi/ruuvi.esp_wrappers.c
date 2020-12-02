@@ -35,7 +35,7 @@ os_mutex_delete(os_mutex_t * const ph_mutex)
 }
 
 bool
-os_mutex_lock_with_timeout(os_mutex_t h_mutex, TickType_t ticks_to_wait)
+os_mutex_lock_with_timeout(os_mutex_t h_mutex, const os_delta_ticks_t ticks_to_wait)
 {
     if (pdTRUE != xSemaphoreTake(h_mutex, ticks_to_wait))
     {
@@ -47,7 +47,7 @@ os_mutex_lock_with_timeout(os_mutex_t h_mutex, TickType_t ticks_to_wait)
 void
 os_mutex_lock(os_mutex_t h_mutex)
 {
-    if (!os_mutex_lock_with_timeout(h_mutex, portMAX_DELAY))
+    if (!os_mutex_lock_with_timeout(h_mutex, OS_DELTA_TICKS_INFINITE))
     {
         assert(0);
     }
@@ -56,7 +56,7 @@ os_mutex_lock(os_mutex_t h_mutex)
 bool
 os_mutex_try_lock(os_mutex_t h_mutex)
 {
-    return os_mutex_lock_with_timeout(h_mutex, 0);
+    return os_mutex_lock_with_timeout(h_mutex, OS_DELTA_TICKS_IMMEDIATE);
 }
 
 void

@@ -11,6 +11,7 @@
 #include <stdbool.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
+#include "os_wrapper_types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,7 +36,7 @@ bool
 os_mutex_try_lock(os_mutex_t h_mutex);
 
 bool
-os_mutex_lock_with_timeout(os_mutex_t h_mutex, TickType_t ticks_to_wait);
+os_mutex_lock_with_timeout(os_mutex_t h_mutex, const os_delta_ticks_t ticks_to_wait);
 
 #ifdef __cplusplus
 }
