@@ -29,7 +29,7 @@ struct QueueDefinition
         StaticSemaphore_t static_sema;
         struct
         {
-#if( ( configSUPPORT_STATIC_ALLOCATION == 1 ) && ( configSUPPORT_DYNAMIC_ALLOCATION == 1 ) )
+#if ((configSUPPORT_STATIC_ALLOCATION == 1) && (configSUPPORT_DYNAMIC_ALLOCATION == 1))
             bool isStaticallyAllocated;
 #endif
             bool       isUsed;
@@ -50,11 +50,11 @@ protected:
     {
         for (auto &mutex : this->arrOfMutexes)
         {
-#if( ( configSUPPORT_STATIC_ALLOCATION == 1 ) && ( configSUPPORT_DYNAMIC_ALLOCATION == 1 ) )
+#if ((configSUPPORT_STATIC_ALLOCATION == 1) && (configSUPPORT_DYNAMIC_ALLOCATION == 1))
             mutex.isStaticallyAllocated = false;
 #endif
-            mutex.isUsed   = false;
-            mutex.isLocked = false;
+            mutex.isUsed       = false;
+            mutex.isLocked     = false;
             mutex.xTicksToWait = 0;
         }
         esp_log_wrapper_init();
@@ -100,13 +100,15 @@ pcTaskGetName(TaskHandle_t xTaskToQuery)
     return const_cast<char *>(g_pTestClass->m_taskName.c_str());
 }
 
-static void prvInitialiseMutex(struct QueueDefinition *p_mutex, const bool isStaticallyAllocated)
+static void
+prvInitialiseMutex(struct QueueDefinition *p_mutex, const bool isStaticallyAllocated)
 {
-    p_mutex->isUsed = true;
+    p_mutex->isUsed                = true;
     p_mutex->isStaticallyAllocated = isStaticallyAllocated;
 }
 
-static void prvDeinitialiseMutex(struct QueueDefinition *p_mutex)
+static void
+prvDeinitialiseMutex(struct QueueDefinition *p_mutex)
 {
     p_mutex->isUsed = false;
 }
@@ -249,8 +251,8 @@ TEST_F(TestOsMutex, os_mutex_create_delete_dynamic_only) // NOLINT
 TEST_F(TestOsMutex, os_mutex_create_delete_static_only) // NOLINT
 {
     static StaticSemaphore_t static_sema1;
-    os_mutex_t h_mutex1 = os_mutex_create_static(&static_sema1);
-    ASSERT_EQ(reinterpret_cast<void*>(&static_sema1), reinterpret_cast<void*>(h_mutex1));
+    os_mutex_t               h_mutex1 = os_mutex_create_static(&static_sema1);
+    ASSERT_EQ(reinterpret_cast<void *>(&static_sema1), reinterpret_cast<void *>(h_mutex1));
 
     os_mutex_delete(&h_mutex1);
     ASSERT_EQ(nullptr, h_mutex1);
@@ -265,13 +267,13 @@ TEST_F(TestOsMutex, os_mutex_create_delete_static_and_dynamic) // NOLINT
     ASSERT_EQ(&this->arrOfMutexes[0], h_mutex_dyn1);
 
     os_mutex_t h_mutex_sta1 = os_mutex_create_static(&static_sema1);
-    ASSERT_EQ(reinterpret_cast<void*>(&static_sema1), reinterpret_cast<void*>(h_mutex_sta1));
+    ASSERT_EQ(reinterpret_cast<void *>(&static_sema1), reinterpret_cast<void *>(h_mutex_sta1));
 
     os_mutex_t h_mutex_dyn2 = os_mutex_create();
     ASSERT_EQ(&this->arrOfMutexes[1], h_mutex_dyn2);
 
     os_mutex_t h_mutex_sta2 = os_mutex_create_static(&static_sema2);
-    ASSERT_EQ(reinterpret_cast<void*>(&static_sema2), reinterpret_cast<void*>(h_mutex_sta2));
+    ASSERT_EQ(reinterpret_cast<void *>(&static_sema2), reinterpret_cast<void *>(h_mutex_sta2));
 
     os_mutex_t h_mutex_dyn3 = os_mutex_create();
     ASSERT_EQ(nullptr, h_mutex_dyn3);
@@ -320,8 +322,8 @@ TEST_F(TestOsMutex, os_mutex_lock_unlock) // NOLINT
 TEST_F(TestOsMutex, os_mutex_lock_unlock_static) // NOLINT
 {
     static StaticSemaphore_t static_sema1;
-    os_mutex_t h_mutex = os_mutex_create_static(&static_sema1);
-    ASSERT_EQ(reinterpret_cast<void*>(&static_sema1), reinterpret_cast<void*>(h_mutex));
+    os_mutex_t               h_mutex = os_mutex_create_static(&static_sema1);
+    ASSERT_EQ(reinterpret_cast<void *>(&static_sema1), reinterpret_cast<void *>(h_mutex));
     struct QueueDefinition *p_mutex = h_mutex;
     ASSERT_FALSE(p_mutex->isLocked);
 
