@@ -23,6 +23,11 @@ typedef StaticSemaphore_t os_mutex_static_t;
 os_mutex_t
 os_mutex_create(void);
 
+#if configSUPPORT_STATIC_ALLOCATION
+os_mutex_t
+os_mutex_create_static(os_mutex_static_t* p_mutex_static);
+#endif
+
 void
 os_mutex_delete(os_mutex_t * const ph_mutex);
 
