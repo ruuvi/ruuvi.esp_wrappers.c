@@ -27,7 +27,7 @@ bool
 str_buf_init_with_alloc(str_buf_t *p_str_buf)
 {
     const size_t buf_size = str_buf_get_len(p_str_buf) + 1;
-    char* p_buf = app_malloc(buf_size);
+    char *       p_buf    = app_malloc(buf_size);
     if (NULL == p_buf)
     {
         return false;
@@ -123,7 +123,7 @@ str_buf_t
 str_buf_vprintf_with_alloc(const char *fmt, va_list args)
 {
     str_buf_t str_buf = str_buf_init_null();
-    va_list args2;
+    va_list   args2;
     va_copy(args2, args);
     const bool res = str_buf_vprintf(&str_buf, fmt, args2);
     va_end(args2);
@@ -152,8 +152,8 @@ str_buf_printf_with_alloc(const char *fmt, ...)
 void
 str_buf_free_buf(str_buf_t *p_str_buf)
 {
-    app_free_pptr((void**)&p_str_buf->buf);
+    app_free_pptr((void **)&p_str_buf->buf);
     p_str_buf->size = 0;
-    p_str_buf->idx = 0;
-    p_str_buf->buf = NULL;
+    p_str_buf->idx  = 0;
+    p_str_buf->buf  = NULL;
 }

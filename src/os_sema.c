@@ -17,7 +17,7 @@ os_sema_create(void)
 
 #if configSUPPORT_STATIC_ALLOCATION
 os_sema_t
-os_sema_create_static(os_sema_static_t* p_sema_static)
+os_sema_create_static(os_sema_static_t *p_sema_static)
 {
     SemaphoreHandle_t h_sema = xSemaphoreCreateBinaryStatic(p_sema_static);
     return h_sema;
@@ -25,7 +25,7 @@ os_sema_create_static(os_sema_static_t* p_sema_static)
 #endif
 
 void
-os_sema_delete(os_sema_t * const ph_sema)
+os_sema_delete(os_sema_t *const ph_sema)
 {
     if (NULL != *ph_sema)
     {

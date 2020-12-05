@@ -7,7 +7,8 @@
 
 #include "os_task.h"
 
-void os_task_delay(const os_delta_ticks_t delay_ticks)
+void
+os_task_delay(const os_delta_ticks_t delay_ticks)
 {
     vTaskDelay(delay_ticks);
 }
