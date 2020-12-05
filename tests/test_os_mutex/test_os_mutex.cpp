@@ -130,7 +130,8 @@ xQueueCreateMutex(const uint8_t ucQueueType)
 QueueHandle_t
 xQueueCreateMutexStatic(const uint8_t ucQueueType, StaticQueue_t *pxStaticQueue)
 {
-    (void)ucQueueType;
+    assert(queueQUEUE_TYPE_MUTEX == ucQueueType);
+    assert(nullptr != pxStaticQueue);
     auto *p_mutex = reinterpret_cast<struct QueueDefinition *>(pxStaticQueue);
     prvInitialiseMutex(p_mutex, true);
     return p_mutex;
