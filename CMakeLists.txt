@@ -10,6 +10,7 @@ set(RUUVI_ESP_WRAPPERS_SRC
         include/os_sema.h
         include/os_task.h
         include/os_time.h
+        include/os_wrapper_types.h
         include/time_units.h
         include/str_buf.h
         src/app_malloc.c

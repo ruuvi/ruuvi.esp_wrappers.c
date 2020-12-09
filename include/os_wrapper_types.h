@@ -17,9 +17,9 @@ extern "C" {
 
 typedef TickType_t os_delta_ticks_t;
 
-#define OS_DELTA_TICKS_IMMEDIATE             (0U)
-#define OS_DELTA_TICKS_INFINITE              (portMAX_DELAY)
-#define OS_DELTA_TICKS_MS_TO_TICKS(delay_ms) pdMS_TO_TICKS(delay_ms)
+#define OS_DELTA_TICKS_IMMEDIATE       (0U)
+#define OS_DELTA_TICKS_INFINITE        (portMAX_DELAY)
+#define OS_DELTA_MS_TO_TICKS(delay_ms) pdMS_TO_TICKS(delay_ms)
 
 #ifdef __cplusplus
 }
