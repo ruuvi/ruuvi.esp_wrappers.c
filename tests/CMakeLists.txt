@@ -39,6 +39,7 @@ add_subdirectory(test_os_sema)
 add_subdirectory(test_os_signal_freertos)
 add_subdirectory(test_os_task)
 add_subdirectory(test_os_task_freertos)
+add_subdirectory(test_os_timer_freertos)
 add_subdirectory(test_str_buf)
 add_subdirectory(test_time_units)
 
@@ -75,6 +76,11 @@ add_test(NAME test_os_task
 add_test(NAME test_os_task_freertos
         COMMAND ruuvi_esp_wrappers-test-os_task_freertos
             --gtest_output=xml:$<TARGET_FILE_DIR:ruuvi_esp_wrappers-test-os_task_freertos>/gtestresults.xml
+)
+
+add_test(NAME test_os_timer_freertos
+        COMMAND ruuvi_esp_wrappers-test-os_timer_freertos
+            --gtest_output=xml:$<TARGET_FILE_DIR:ruuvi_esp_wrappers-test-os_timer_freertos>/gtestresults.xml
 )
 
 add_test(NAME test_str_buf
