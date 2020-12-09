@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.7)
 
-project(ruuvi_esp_wrappers-test-app_str)
-set(ProjectId ruuvi_esp_wrappers-test-app_str)
+project(ruuvi_esp_wrappers-test-os_str)
+set(ProjectId ruuvi_esp_wrappers-test-os_str)
 
 add_executable(${ProjectId}
-        test_app_strtoul.cpp
-        test_app_strtol.cpp
-        ../../src/app_str.c
-        ../../include/app_str.h
+        test_os_str_to_int32.cpp
+        test_os_str_to_uint32.cpp
+        ../../src/os_str.c
+        ../../include/os_str.h
 )
 
 set_target_properties(${ProjectId} PROPERTIES
@@ -23,7 +23,7 @@ target_include_directories(${ProjectId} PUBLIC
 )
 
 target_compile_definitions(${ProjectId} PUBLIC
-        RUUVI_TESTS_APP_WRAPPERS=1
+        RUUVI_TESTS_OS_STR=1
 )
 
 target_compile_options(${ProjectId} PUBLIC
