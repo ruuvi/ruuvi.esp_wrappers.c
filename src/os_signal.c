@@ -10,7 +10,7 @@
 #include "os_task.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "app_malloc.h"
+#include "os_malloc.h"
 
 struct os_signal_t
 {

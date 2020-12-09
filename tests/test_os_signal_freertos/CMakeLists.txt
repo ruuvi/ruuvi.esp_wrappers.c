@@ -6,7 +6,7 @@ set(ProjectId ruuvi_esp_wrappers-test-os_signal_freertos)
 add_executable(${ProjectId}
         test_os_signal_freertos.cpp
         ../../src/os_signal.c
-        ../../src/app_malloc.c
+        ../../src/os_malloc.c
         ../../src/os_task.c
         ../../include/os_signal.h
 )

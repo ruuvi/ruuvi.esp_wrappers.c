@@ -9,7 +9,7 @@
 #include "os_timer.h"
 #include "os_signal.h"
 #include "os_wrapper_types.h"
-#include "app_malloc.h"
+#include "os_malloc.h"
 #include "attribs.h"
 
 struct os_timer_sig_periodic_t

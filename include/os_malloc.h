@@ -1,12 +1,12 @@
 /**
- * @file app_malloc.h
+ * @file os_malloc.h
  * @author TheSomeMan
  * @date 2020-10-01
  * @copyright Ruuvi Innovations Ltd, license BSD-3-Clause.
  */
 
-#ifndef RUUVI_GATEWAY_ESP_APP_MALLOC_H
-#define RUUVI_GATEWAY_ESP_APP_MALLOC_H
+#ifndef RUUVI_GATEWAY_ESP_OS_MALLOC_H
+#define RUUVI_GATEWAY_ESP_OS_MALLOC_H
 
 #include <stddef.h>
 #include "attribs.h"
@@ -37,4 +37,4 @@ app_calloc(const size_t nmemb, const size_t size);
 }
 #endif
 
-#endif // RUUVI_GATEWAY_ESP_APP_MALLOC_H
+#endif // RUUVI_GATEWAY_ESP_OS_MALLOC_H

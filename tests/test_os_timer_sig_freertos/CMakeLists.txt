@@ -8,12 +8,12 @@ add_executable(${ProjectId}
         ../../src/os_timer_sig.c
         ../../src/os_timer.c
         ../../src/os_signal.c
-        ../../src/app_malloc.c
+        ../../src/os_malloc.c
         ../../src/os_task.c
         ../../include/os_timer.h
         ../../include/os_timer_sig.h
         ../../include/os_signal.h
-        ../../include/app_malloc.h
+        ../../include/os_malloc.h
         ../../include/os_task.h
 )
 
