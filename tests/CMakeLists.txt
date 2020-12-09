@@ -30,6 +30,8 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wno-error=nonnull
 
 add_subdirectory(${RUUVI_ESP_WRAPPERS_TESTS_COMMON})
 
+add_subdirectory(esp_simul)
+
 add_subdirectory(test_app_malloc)
 add_subdirectory(test_app_str)
 add_subdirectory(test_os_mutex)
