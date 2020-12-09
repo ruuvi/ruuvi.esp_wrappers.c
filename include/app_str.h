@@ -17,8 +17,6 @@ extern "C" {
 
 typedef int str2num_base_t;
 
-typedef int app_print_precision_t;
-
 /**
  * @brief This is a wrapper for stdlib strtoul which implements const-correctness and fixes portability issues (MISRA)
  * @param p_str - ptr to a const string
