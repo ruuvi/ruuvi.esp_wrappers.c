@@ -2,13 +2,13 @@ cmake_minimum_required(VERSION 3.5)
 
 set(RUUVI_ESP_WRAPPERS_SRC
         include/app_malloc.h
-        include/app_str.h
         include/attribs.h
         include/esp_type_wrapper.h
         include/log.h
         include/os_mutex.h
         include/os_sema.h
         include/os_signal.h
+        include/os_str.h
         include/os_task.h
         include/os_time.h
         include/os_timer.h
@@ -17,10 +17,10 @@ set(RUUVI_ESP_WRAPPERS_SRC
         include/time_units.h
         include/str_buf.h
         src/app_malloc.c
-        src/app_str.c
         src/os_mutex.c
         src/os_sema.c
         src/os_signal.c
+        src/os_str.c
         src/os_task.c
         src/os_task_delay.c
         src/os_time.c

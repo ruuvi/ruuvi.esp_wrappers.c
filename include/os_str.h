@@ -1,12 +1,12 @@
 /**
- * @file app_str.h
+ * @file os_str.h
  * @author TheSomeMan
  * @date 2020-10-03
  * @copyright Ruuvi Innovations Ltd, license BSD-3-Clause.
  */
 
-#ifndef RUUVI_ESP_WRAPPERS_APP_STR_H
-#define RUUVI_ESP_WRAPPERS_APP_STR_H
+#ifndef RUUVI_ESP_WRAPPERS_OS_STR_H
+#define RUUVI_ESP_WRAPPERS_OS_STR_H
 
 #include <stdint.h>
 #include "attribs.h"
@@ -15,7 +15,7 @@
 extern "C" {
 #endif
 
-typedef int str2num_base_t;
+typedef int os_str2num_base_t;
 
 /**
  * @brief This is a wrapper for stdlib strtoul which implements const-correctness and fixes portability issues (MISRA)
@@ -26,7 +26,7 @@ typedef int str2num_base_t;
  */
 ATTR_NONNULL(1)
 uint32_t
-app_strtoul_cptr(const char *__restrict p_str, const char **__restrict pp_end, const str2num_base_t base);
+os_str_to_uint32_cptr(const char *__restrict p_str, const char **__restrict pp_end, const os_str2num_base_t base);
 
 /**
  * @brief This is a wrapper for stdlib strtoul which implements const-correctness and fixes portability issues (MISRA)
@@ -37,7 +37,7 @@ app_strtoul_cptr(const char *__restrict p_str, const char **__restrict pp_end, c
  */
 ATTR_NONNULL(1)
 uint32_t
-app_strtoul(char *__restrict p_str, char **__restrict pp_end, const str2num_base_t base);
+os_str_to_uint32(char *__restrict p_str, char **__restrict pp_end, const os_str2num_base_t base);
 
 /**
  * @brief This is a wrapper for stdlib strtol which implements const-correctness and fixes portability issues (MISRA)
@@ -48,7 +48,7 @@ app_strtoul(char *__restrict p_str, char **__restrict pp_end, const str2num_base
  */
 ATTR_NONNULL(1)
 int32_t
-app_strtol_cptr(const char *__restrict p_str, const char **__restrict pp_end, const str2num_base_t base);
+os_str_to_int32_cptr(const char *__restrict p_str, const char **__restrict pp_end, const os_str2num_base_t base);
 
 /**
  * @brief This is a wrapper for stdlib strtul which implements const-correctness and fixes portability issues (MISRA)
@@ -59,10 +59,10 @@ app_strtol_cptr(const char *__restrict p_str, const char **__restrict pp_end, co
  */
 ATTR_NONNULL(1)
 int32_t
-app_strtol(char *__restrict p_str, char **__restrict pp_end, const str2num_base_t base);
+os_str_to_int32(char *__restrict p_str, char **__restrict pp_end, const os_str2num_base_t base);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // RUUVI_ESP_WRAPPERS_APP_STR_H
+#endif // RUUVI_ESP_WRAPPERS_OS_STR_H
