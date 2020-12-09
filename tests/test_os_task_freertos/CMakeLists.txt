@@ -1,25 +1,13 @@
 cmake_minimum_required(VERSION 3.7)
 
-project(ruuvi_esp_wrappers-test-os_task)
-set(ProjectId ruuvi_esp_wrappers-test-os_task)
+project(ruuvi_esp_wrappers-test-os_task_freertos)
+set(ProjectId ruuvi_esp_wrappers-test-os_task_freertos)
 
 add_executable(${ProjectId}
-        test_os_task.hpp
-        test_os_task.cpp
-        test_os_task_create.cpp
-        test_os_task_create_with_const_param.cpp
-        test_os_task_create_without_param.cpp
-        test_os_task_create_finite.cpp
-        test_os_task_create_finite_with_const_param.cpp
-        test_os_task_create_finite_without_param.cpp
-        test_os_task_create_static.cpp
-        test_os_task_create_static_with_const_param.cpp
-        test_os_task_create_static_without_param.cpp
-        test_os_task_create_static_finite.cpp
-        test_os_task_create_static_finite_with_const_param.cpp
-        test_os_task_create_static_finite_without_param.cpp
-        stubs.cpp
+        test_os_task_freertos.cpp
         ../../src/os_task.c
+        ../../src/os_task_delay.c
+        ../../src/app_malloc.c
         ../../include/os_task.h
 )
 
@@ -35,7 +23,7 @@ target_include_directories(${ProjectId} PUBLIC
 )
 
 target_compile_definitions(${ProjectId} PUBLIC
-        RUUVI_TESTS_OS_TASK=1
+        RUUVI_TESTS_OS_TASK_FREERTOS=1
 )
 
 target_compile_options(${ProjectId} PUBLIC
@@ -54,6 +42,8 @@ target_compile_options(${ProjectId} PUBLIC
 target_link_libraries(${ProjectId}
         gtest
         gtest_main
+        FreeRTOS_Posix
+        esp_simul
         gcov
         ruuvi_esp_wrappers-common_test_funcs
         --coverage
