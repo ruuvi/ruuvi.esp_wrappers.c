@@ -10,7 +10,7 @@
 #include "freertos/timers.h"
 #include "os_wrapper_types.h"
 #include "os_task.h"
-#include "app_malloc.h"
+#include "os_malloc.h"
 
 struct os_timer_periodic_t
 {

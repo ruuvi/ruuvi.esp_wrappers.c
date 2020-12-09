@@ -7,7 +7,7 @@ add_executable(${ProjectId}
         test_os_task_freertos.cpp
         ../../src/os_task.c
         ../../src/os_task_delay.c
-        ../../src/app_malloc.c
+        ../../src/os_malloc.c
         ../../include/os_task.h
 )
 

@@ -7,7 +7,7 @@
 
 #include "str_buf.h"
 #include <stdio.h>
-#include "app_malloc.h"
+#include "os_malloc.h"
 
 str_buf_t
 str_buf_init(char *p_buf, const str_buf_size_t buf_size)

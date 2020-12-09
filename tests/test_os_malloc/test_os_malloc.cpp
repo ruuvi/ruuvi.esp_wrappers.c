@@ -5,7 +5,7 @@
  * @copyright Ruuvi Innovations Ltd, license BSD-3-Clause.
  */
 
-#include "app_malloc.h"
+#include "os_malloc.h"
 #include "gtest/gtest.h"
 #include <string>
 

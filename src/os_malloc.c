@@ -1,11 +1,11 @@
 /**
- * @file app_malloc.h
+ * @file os_malloc.c
  * @author TheSomeMan
  * @date 2020-10-01
  * @copyright Ruuvi Innovations Ltd, license BSD-3-Clause.
  */
 
-#include "app_malloc.h"
+#include "os_malloc.h"
 #include <stdlib.h>
 
 void *

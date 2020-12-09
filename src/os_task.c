@@ -7,7 +7,7 @@
 
 #include "os_task.h"
 #include <assert.h>
-#include "app_malloc.h"
+#include "os_malloc.h"
 #include "log.h"
 
 typedef struct os_task_arg_finite_with_param_t
