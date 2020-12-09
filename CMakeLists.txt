@@ -12,6 +12,7 @@ set(RUUVI_ESP_WRAPPERS_SRC
         include/os_task.h
         include/os_time.h
         include/os_timer.h
+        include/os_timer_sig.h
         include/os_wrapper_types.h
         include/time_units.h
         include/str_buf.h
@@ -24,6 +25,7 @@ set(RUUVI_ESP_WRAPPERS_SRC
         src/os_task_delay.c
         src/os_time.c
         src/os_timer.c
+        src/os_timer_sig.c
         src/str_buf.c
 )
 
