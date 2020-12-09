@@ -36,6 +36,7 @@ add_subdirectory(test_app_malloc)
 add_subdirectory(test_app_str)
 add_subdirectory(test_os_mutex)
 add_subdirectory(test_os_sema)
+add_subdirectory(test_os_signal_freertos)
 add_subdirectory(test_os_task)
 add_subdirectory(test_os_task_freertos)
 add_subdirectory(test_str_buf)
@@ -59,6 +60,11 @@ add_test(NAME test_os_mutex
 add_test(NAME test_os_sema
         COMMAND ruuvi_esp_wrappers-test-os_sema
             --gtest_output=xml:$<TARGET_FILE_DIR:ruuvi_esp_wrappers-test-os_sema>/gtestresults.xml
+)
+
+add_test(NAME test_os_signal_freertos
+        COMMAND ruuvi_esp_wrappers-test-os_signal_freertos
+            --gtest_output=xml:$<TARGET_FILE_DIR:ruuvi_esp_wrappers-test-os_signal_freertos>/gtestresults.xml
 )
 
 add_test(NAME test_os_task

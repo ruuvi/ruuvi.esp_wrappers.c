@@ -8,6 +8,7 @@ set(RUUVI_ESP_WRAPPERS_SRC
         include/log.h
         include/os_mutex.h
         include/os_sema.h
+        include/os_signal.h
         include/os_task.h
         include/os_time.h
         include/os_wrapper_types.h
@@ -17,6 +18,7 @@ set(RUUVI_ESP_WRAPPERS_SRC
         src/app_str.c
         src/os_mutex.c
         src/os_sema.c
+        src/os_signal.c
         src/os_task.c
         src/os_task_delay.c
         src/os_time.c
