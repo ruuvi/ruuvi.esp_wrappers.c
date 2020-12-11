@@ -21,6 +21,7 @@ struct os_signal_t
 
 _Static_assert(sizeof(os_signal_t) == sizeof(os_signal_static_t), "os_signal_t != os_signal_static_t");
 
+ATTR_NONNULL(1)
 static os_signal_t *
 os_signal_init(os_signal_t *const p_signal, const bool is_static)
 {
@@ -52,6 +53,7 @@ os_signal_create_static(os_signal_static_t *const p_signal_mem)
     return os_signal_init(p_signal, is_static);
 }
 
+ATTR_NONNULL(1)
 void
 os_signal_delete(os_signal_t **const pp_signal)
 {
@@ -104,6 +106,7 @@ os_signal_is_current_thread_registered(os_signal_t *const p_signal)
     return false;
 }
 
+ATTR_CONST
 static bool
 os_signal_is_valid_sig_num(const os_signal_num_e sig_num)
 {
@@ -179,6 +182,7 @@ os_signal_send(os_signal_t *const p_signal, const os_signal_num_e sig_num)
     return true;
 }
 
+ATTR_NONNULL(4)
 bool
 os_signal_wait_with_sig_mask(
     os_signal_t *const         p_signal,
@@ -211,6 +215,7 @@ os_signal_wait_with_sig_mask(
     return true;
 }
 
+ATTR_NONNULL(3)
 bool
 os_signal_wait_with_timeout(
     os_signal_t *const        p_signal,
@@ -220,12 +225,14 @@ os_signal_wait_with_timeout(
     return os_signal_wait_with_sig_mask(p_signal, p_signal->sig_mask, timeout_ticks, p_sig_events);
 }
 
+ATTR_NONNULL(2)
 void
 os_signal_wait(os_signal_t *const p_signal, os_signal_events_t *const p_sig_events)
 {
     os_signal_wait_with_timeout(p_signal, OS_DELTA_TICKS_INFINITE, p_sig_events);
 }
 
+ATTR_NONNULL(1)
 os_signal_num_e
 os_signal_num_get_next(os_signal_events_t *const p_sig_events)
 {

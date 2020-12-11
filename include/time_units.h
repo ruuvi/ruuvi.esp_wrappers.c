@@ -9,6 +9,7 @@
 #define RUUVI_TIME_UNITS_H
 
 #include <stdint.h>
+#include "attribs.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,12 +26,14 @@ typedef uint32_t TimeUnitsSeconds_t;
 typedef uint32_t TimeUnitsMilliSeconds_t;
 typedef uint64_t TimeUnitsMicroSeconds_t;
 
+ATTR_CONST
 static inline TimeUnitsMilliSeconds_t
 time_units_conv_seconds_to_ms(const TimeUnitsSeconds_t num_seconds)
 {
     return num_seconds * TIME_UNITS_MS_PER_SECOND;
 }
 
+ATTR_CONST
 static inline TimeUnitsMicroSeconds_t
 time_units_conv_ms_to_us(const TimeUnitsMilliSeconds_t num_ms)
 {

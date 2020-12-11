@@ -67,6 +67,7 @@ os_timer_sig_cb_one_shot(ATTR_UNUSED os_timer_one_shot_t *p_timer, void *p_arg)
     }
 }
 
+ATTR_WARN_UNUSED_RESULT
 os_timer_sig_periodic_t *
 os_timer_sig_periodic_create(
     const char *const      p_timer_name,
@@ -92,6 +93,9 @@ os_timer_sig_periodic_create(
     return p_obj;
 }
 
+ATTR_WARN_UNUSED_RESULT
+ATTR_NONNULL(1)
+ATTR_RETURNS_NONNULL
 os_timer_sig_periodic_t *
 os_timer_sig_periodic_create_static(
     os_timer_sig_periodic_static_t *const p_timer_sig_mem,
@@ -116,6 +120,7 @@ os_timer_sig_periodic_create_static(
     return p_obj;
 }
 
+ATTR_WARN_UNUSED_RESULT
 os_timer_sig_one_shot_t *
 os_timer_sig_one_shot_create(
     const char *const      p_timer_name,
@@ -141,6 +146,9 @@ os_timer_sig_one_shot_create(
     return p_obj;
 }
 
+ATTR_WARN_UNUSED_RESULT
+ATTR_NONNULL(1)
+ATTR_RETURNS_NONNULL
 os_timer_sig_one_shot_t *
 os_timer_sig_one_shot_create_static(
     os_timer_sig_one_shot_static_t *const p_timer_sig_mem,
@@ -165,6 +173,7 @@ os_timer_sig_one_shot_create_static(
     return p_obj;
 }
 
+ATTR_NONNULL(1)
 void
 os_timer_sig_periodic_delete(os_timer_sig_periodic_t **const pp_obj)
 {
@@ -187,6 +196,7 @@ os_timer_sig_periodic_delete(os_timer_sig_periodic_t **const pp_obj)
     }
 }
 
+ATTR_NONNULL(1)
 void
 os_timer_sig_one_shot_delete(os_timer_sig_one_shot_t **const pp_obj)
 {

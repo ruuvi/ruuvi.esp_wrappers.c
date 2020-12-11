@@ -66,6 +66,7 @@ str_buf_init_with_alloc(str_buf_t *const p_str_buf);
  * @return length of string.
  */
 ATTR_NONNULL(1)
+ATTR_PURE
 str_buf_size_t
 str_buf_get_len(const str_buf_t *const p_str_buf);
 
@@ -75,6 +76,7 @@ str_buf_get_len(const str_buf_t *const p_str_buf);
  * @return true if buffer overflow occurred.
  */
 ATTR_NONNULL(1)
+ATTR_PURE
 bool
 str_buf_is_overflow(const str_buf_t *const p_str_buf);
 
