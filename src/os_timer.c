@@ -6,6 +6,7 @@
  */
 
 #include "os_timer.h"
+#include <assert.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/timers.h"
 #include "os_wrapper_types.h"
@@ -149,17 +150,17 @@ os_timer_one_shot_create_static(
         p_timer,
         &os_timer_callback_one_shot,
         &p_mem->timer_mem);
-    if (NULL == p_timer->h_timer)
-    {
-        app_free_pptr((void **)&p_timer);
-        return NULL;
-    }
+    assert(NULL != p_timer->h_timer);
     return p_timer;
 }
 
 bool
 os_timer_periodic_is_active(os_timer_periodic_t *p_timer)
 {
+    if (NULL == p_timer)
+    {
+        return false;
+    }
     if (pdFALSE == xTimerIsTimerActive(p_timer->h_timer))
     {
         return false;
@@ -170,6 +171,10 @@ os_timer_periodic_is_active(os_timer_periodic_t *p_timer)
 bool
 os_timer_one_shot_is_active(os_timer_one_shot_t *p_timer)
 {
+    if (NULL == p_timer)
+    {
+        return false;
+    }
     if (pdFALSE == xTimerIsTimerActive(p_timer->h_timer))
     {
         return false;
@@ -181,7 +186,7 @@ void
 os_timer_periodic_delete(os_timer_periodic_t **pp_timer)
 {
     os_timer_periodic_t *p_timer = *pp_timer;
-    *pp_timer = NULL;
+    *pp_timer                    = NULL;
     if (NULL == p_timer)
     {
         return;
@@ -202,7 +207,7 @@ void
 os_timer_one_shot_delete(os_timer_one_shot_t **pp_timer)
 {
     os_timer_one_shot_t *p_timer = *pp_timer;
-    *pp_timer = NULL;
+    *pp_timer                    = NULL;
     if (NULL == p_timer)
     {
         return;
@@ -222,6 +227,10 @@ os_timer_one_shot_delete(os_timer_one_shot_t **pp_timer)
 void
 os_timer_periodic_stop(os_timer_periodic_t *p_timer)
 {
+    if (NULL == p_timer)
+    {
+        return;
+    }
     while (pdPASS != xTimerStop(p_timer->h_timer, 0))
     {
         os_task_delay(1);
@@ -231,6 +240,10 @@ os_timer_periodic_stop(os_timer_periodic_t *p_timer)
 void
 os_timer_one_shot_stop(os_timer_one_shot_t *p_timer)
 {
+    if (NULL == p_timer)
+    {
+        return;
+    }
     while (pdPASS != xTimerStop(p_timer->h_timer, 0))
     {
         os_task_delay(1);
@@ -240,6 +253,10 @@ os_timer_one_shot_stop(os_timer_one_shot_t *p_timer)
 void
 os_timer_periodic_start(os_timer_periodic_t *p_timer)
 {
+    if (NULL == p_timer)
+    {
+        return;
+    }
     if (os_timer_periodic_is_active(p_timer))
     {
         return;
@@ -253,6 +270,10 @@ os_timer_periodic_start(os_timer_periodic_t *p_timer)
 void
 os_timer_one_shot_start(os_timer_one_shot_t *p_timer)
 {
+    if (NULL == p_timer)
+    {
+        return;
+    }
     if (os_timer_one_shot_is_active(p_timer))
     {
         return;
@@ -266,6 +287,10 @@ os_timer_one_shot_start(os_timer_one_shot_t *p_timer)
 static void
 os_timer_set_period_periodic(os_timer_periodic_t *p_timer, const os_delta_ticks_t delta_ticks)
 {
+    if (NULL == p_timer)
+    {
+        return;
+    }
     while (pdPASS != xTimerChangePeriod(p_timer->h_timer, delta_ticks, 0))
     {
         os_task_delay(1);
@@ -275,6 +300,10 @@ os_timer_set_period_periodic(os_timer_periodic_t *p_timer, const os_delta_ticks_
 static void
 os_timer_set_period_one_shot(os_timer_one_shot_t *p_timer, const os_delta_ticks_t delta_ticks)
 {
+    if (NULL == p_timer)
+    {
+        return;
+    }
     while (pdPASS != xTimerChangePeriod(p_timer->h_timer, delta_ticks, 0))
     {
         os_task_delay(1);
@@ -284,6 +313,10 @@ os_timer_set_period_one_shot(os_timer_one_shot_t *p_timer, const os_delta_ticks_
 void
 os_timer_periodic_restart(os_timer_periodic_t *p_timer, const os_delta_ticks_t period_ticks)
 {
+    if (NULL == p_timer)
+    {
+        return;
+    }
     os_timer_set_period_periodic(p_timer, period_ticks);
     os_timer_periodic_start(p_timer);
 }
@@ -291,6 +324,10 @@ os_timer_periodic_restart(os_timer_periodic_t *p_timer, const os_delta_ticks_t p
 void
 os_timer_one_shot_restart(os_timer_one_shot_t *p_timer, const os_delta_ticks_t delay_ticks)
 {
+    if (NULL == p_timer)
+    {
+        return;
+    }
     os_timer_set_period_one_shot(p_timer, delay_ticks);
     os_timer_one_shot_start(p_timer);
 }
@@ -298,11 +335,19 @@ os_timer_one_shot_restart(os_timer_one_shot_t *p_timer, const os_delta_ticks_t d
 void
 os_timer_periodic_simulate(os_timer_periodic_t *p_timer)
 {
+    if (NULL == p_timer)
+    {
+        return;
+    }
     p_timer->cb_func(p_timer, p_timer->p_arg);
 }
 
 void
 os_timer_one_shot_simulate(os_timer_one_shot_t *p_timer)
 {
+    if (NULL == p_timer)
+    {
+        return;
+    }
     p_timer->cb_func(p_timer, p_timer->p_arg);
 }

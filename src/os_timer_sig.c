@@ -169,7 +169,7 @@ void
 os_timer_sig_periodic_delete(os_timer_sig_periodic_t **pp_obj)
 {
     os_timer_sig_periodic_t *p_obj = *pp_obj;
-    *pp_obj = NULL;
+    *pp_obj                        = NULL;
     if (NULL == p_obj)
     {
         return;
@@ -191,7 +191,7 @@ void
 os_timer_sig_one_shot_delete(os_timer_sig_one_shot_t **pp_obj)
 {
     os_timer_sig_one_shot_t *p_obj = *pp_obj;
-    *pp_obj = NULL;
+    *pp_obj                        = NULL;
     if (NULL == p_obj)
     {
         return;
@@ -212,6 +212,10 @@ os_timer_sig_one_shot_delete(os_timer_sig_one_shot_t **pp_obj)
 void
 os_timer_sig_periodic_start(os_timer_sig_periodic_t *p_obj)
 {
+    if (NULL == p_obj)
+    {
+        return;
+    }
     p_obj->is_active = true;
     os_timer_periodic_start(p_obj->p_timer);
 }
@@ -219,6 +223,10 @@ os_timer_sig_periodic_start(os_timer_sig_periodic_t *p_obj)
 void
 os_timer_sig_one_shot_start(os_timer_sig_one_shot_t *p_obj)
 {
+    if (NULL == p_obj)
+    {
+        return;
+    }
     p_obj->is_active = true;
     os_timer_one_shot_start(p_obj->p_timer);
 }
@@ -226,6 +234,10 @@ os_timer_sig_one_shot_start(os_timer_sig_one_shot_t *p_obj)
 void
 os_timer_sig_periodic_restart(os_timer_sig_periodic_t *p_obj, const os_delta_ticks_t delay_ticks)
 {
+    if (NULL == p_obj)
+    {
+        return;
+    }
     p_obj->is_active = true;
     os_timer_periodic_restart(p_obj->p_timer, delay_ticks);
 }
@@ -233,6 +245,10 @@ os_timer_sig_periodic_restart(os_timer_sig_periodic_t *p_obj, const os_delta_tic
 void
 os_timer_sig_one_shot_restart(os_timer_sig_one_shot_t *p_obj, const os_delta_ticks_t delay_ticks)
 {
+    if (NULL == p_obj)
+    {
+        return;
+    }
     p_obj->is_active = true;
     os_timer_one_shot_restart(p_obj->p_timer, delay_ticks);
 }
@@ -240,6 +256,10 @@ os_timer_sig_one_shot_restart(os_timer_sig_one_shot_t *p_obj, const os_delta_tic
 void
 os_timer_sig_periodic_stop(os_timer_sig_periodic_t *p_obj)
 {
+    if (NULL == p_obj)
+    {
+        return;
+    }
     p_obj->is_active = false;
     os_timer_periodic_stop(p_obj->p_timer);
 }
@@ -247,6 +267,10 @@ os_timer_sig_periodic_stop(os_timer_sig_periodic_t *p_obj)
 void
 os_timer_sig_one_shot_stop(os_timer_sig_one_shot_t *p_obj)
 {
+    if (NULL == p_obj)
+    {
+        return;
+    }
     p_obj->is_active = false;
     os_timer_one_shot_stop(p_obj->p_timer);
 }
@@ -254,23 +278,39 @@ os_timer_sig_one_shot_stop(os_timer_sig_one_shot_t *p_obj)
 bool
 os_timer_sig_periodic_is_active(os_timer_sig_periodic_t *p_obj)
 {
+    if (NULL == p_obj)
+    {
+        return false;
+    }
     return p_obj->is_active;
 }
 
 bool
 os_timer_sig_one_shot_is_active(os_timer_sig_one_shot_t *p_obj)
 {
+    if (NULL == p_obj)
+    {
+        return false;
+    }
     return p_obj->is_active;
 }
 
 void
 os_timer_sig_periodic_simulate(os_timer_sig_periodic_t *p_obj)
 {
+    if (NULL == p_obj)
+    {
+        return;
+    }
     os_timer_periodic_simulate(p_obj->p_timer);
 }
 
 void
 os_timer_sig_one_shot_simulate(os_timer_sig_one_shot_t *p_obj)
 {
+    if (NULL == p_obj)
+    {
+        return;
+    }
     os_timer_one_shot_simulate(p_obj->p_timer);
 }
