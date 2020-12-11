@@ -28,6 +28,8 @@ typedef int socket_recv_result_t;
 typedef int socket_send_result_t;
 
 typedef int file_descriptor_t;
+#define FILE_DESCRIPTOR_INVALID ((file_descriptor_t)(-1))
+
 typedef int file_read_result_t;
 
 #ifdef __cplusplus
