@@ -70,7 +70,7 @@ os_timer_sig_cb_one_shot(ATTR_UNUSED os_timer_one_shot_t *p_timer, void *p_arg)
 os_timer_sig_periodic_t *
 os_timer_sig_periodic_create(
     const char *const      p_timer_name,
-    os_signal_t *          p_signal,
+    os_signal_t *const     p_signal,
     const os_signal_num_e  sig_num,
     const os_delta_ticks_t period_ticks)
 {
@@ -94,13 +94,13 @@ os_timer_sig_periodic_create(
 
 os_timer_sig_periodic_t *
 os_timer_sig_periodic_create_static(
-    os_timer_sig_periodic_static_t *p_timer_sig_mem,
-    const char *const               p_timer_name,
-    os_signal_t *                   p_signal,
-    const os_signal_num_e           sig_num,
-    const os_delta_ticks_t          period_ticks)
+    os_timer_sig_periodic_static_t *const p_timer_sig_mem,
+    const char *const                     p_timer_name,
+    os_signal_t *const                    p_signal,
+    const os_signal_num_e                 sig_num,
+    const os_delta_ticks_t                period_ticks)
 {
-    os_timer_sig_periodic_t *p_obj = (os_timer_sig_periodic_t *)&p_timer_sig_mem->obj_mem;
+    os_timer_sig_periodic_t *const p_obj = (os_timer_sig_periodic_t *)&p_timer_sig_mem->obj_mem;
 
     p_obj->p_signal  = p_signal;
     p_obj->sig_num   = sig_num;
@@ -119,7 +119,7 @@ os_timer_sig_periodic_create_static(
 os_timer_sig_one_shot_t *
 os_timer_sig_one_shot_create(
     const char *const      p_timer_name,
-    os_signal_t *          p_signal,
+    os_signal_t *const     p_signal,
     const os_signal_num_e  sig_num,
     const os_delta_ticks_t period_ticks)
 {
@@ -143,13 +143,13 @@ os_timer_sig_one_shot_create(
 
 os_timer_sig_one_shot_t *
 os_timer_sig_one_shot_create_static(
-    os_timer_sig_one_shot_static_t *p_timer_sig_mem,
-    const char *const               p_timer_name,
-    os_signal_t *                   p_signal,
-    const os_signal_num_e           sig_num,
-    const os_delta_ticks_t          period_ticks)
+    os_timer_sig_one_shot_static_t *const p_timer_sig_mem,
+    const char *const                     p_timer_name,
+    os_signal_t *const                    p_signal,
+    const os_signal_num_e                 sig_num,
+    const os_delta_ticks_t                period_ticks)
 {
-    os_timer_sig_one_shot_t *p_obj = (os_timer_sig_one_shot_t *)&p_timer_sig_mem->obj_mem;
+    os_timer_sig_one_shot_t *const p_obj = (os_timer_sig_one_shot_t *)&p_timer_sig_mem->obj_mem;
 
     p_obj->p_signal  = p_signal;
     p_obj->sig_num   = sig_num;
@@ -166,7 +166,7 @@ os_timer_sig_one_shot_create_static(
 }
 
 void
-os_timer_sig_periodic_delete(os_timer_sig_periodic_t **pp_obj)
+os_timer_sig_periodic_delete(os_timer_sig_periodic_t **const pp_obj)
 {
     os_timer_sig_periodic_t *p_obj = *pp_obj;
     *pp_obj                        = NULL;
@@ -188,7 +188,7 @@ os_timer_sig_periodic_delete(os_timer_sig_periodic_t **pp_obj)
 }
 
 void
-os_timer_sig_one_shot_delete(os_timer_sig_one_shot_t **pp_obj)
+os_timer_sig_one_shot_delete(os_timer_sig_one_shot_t **const pp_obj)
 {
     os_timer_sig_one_shot_t *p_obj = *pp_obj;
     *pp_obj                        = NULL;
@@ -210,7 +210,7 @@ os_timer_sig_one_shot_delete(os_timer_sig_one_shot_t **pp_obj)
 }
 
 void
-os_timer_sig_periodic_start(os_timer_sig_periodic_t *p_obj)
+os_timer_sig_periodic_start(os_timer_sig_periodic_t *const p_obj)
 {
     if (NULL == p_obj)
     {
@@ -221,7 +221,7 @@ os_timer_sig_periodic_start(os_timer_sig_periodic_t *p_obj)
 }
 
 void
-os_timer_sig_one_shot_start(os_timer_sig_one_shot_t *p_obj)
+os_timer_sig_one_shot_start(os_timer_sig_one_shot_t *const p_obj)
 {
     if (NULL == p_obj)
     {
@@ -232,7 +232,7 @@ os_timer_sig_one_shot_start(os_timer_sig_one_shot_t *p_obj)
 }
 
 void
-os_timer_sig_periodic_restart(os_timer_sig_periodic_t *p_obj, const os_delta_ticks_t delay_ticks)
+os_timer_sig_periodic_restart(os_timer_sig_periodic_t *const p_obj, const os_delta_ticks_t delay_ticks)
 {
     if (NULL == p_obj)
     {
@@ -243,7 +243,7 @@ os_timer_sig_periodic_restart(os_timer_sig_periodic_t *p_obj, const os_delta_tic
 }
 
 void
-os_timer_sig_one_shot_restart(os_timer_sig_one_shot_t *p_obj, const os_delta_ticks_t delay_ticks)
+os_timer_sig_one_shot_restart(os_timer_sig_one_shot_t *const p_obj, const os_delta_ticks_t delay_ticks)
 {
     if (NULL == p_obj)
     {
@@ -254,7 +254,7 @@ os_timer_sig_one_shot_restart(os_timer_sig_one_shot_t *p_obj, const os_delta_tic
 }
 
 void
-os_timer_sig_periodic_stop(os_timer_sig_periodic_t *p_obj)
+os_timer_sig_periodic_stop(os_timer_sig_periodic_t *const p_obj)
 {
     if (NULL == p_obj)
     {
@@ -265,7 +265,7 @@ os_timer_sig_periodic_stop(os_timer_sig_periodic_t *p_obj)
 }
 
 void
-os_timer_sig_one_shot_stop(os_timer_sig_one_shot_t *p_obj)
+os_timer_sig_one_shot_stop(os_timer_sig_one_shot_t *const p_obj)
 {
     if (NULL == p_obj)
     {
@@ -276,7 +276,7 @@ os_timer_sig_one_shot_stop(os_timer_sig_one_shot_t *p_obj)
 }
 
 bool
-os_timer_sig_periodic_is_active(os_timer_sig_periodic_t *p_obj)
+os_timer_sig_periodic_is_active(os_timer_sig_periodic_t *const p_obj)
 {
     if (NULL == p_obj)
     {
@@ -286,7 +286,7 @@ os_timer_sig_periodic_is_active(os_timer_sig_periodic_t *p_obj)
 }
 
 bool
-os_timer_sig_one_shot_is_active(os_timer_sig_one_shot_t *p_obj)
+os_timer_sig_one_shot_is_active(os_timer_sig_one_shot_t *const p_obj)
 {
     if (NULL == p_obj)
     {
@@ -296,7 +296,7 @@ os_timer_sig_one_shot_is_active(os_timer_sig_one_shot_t *p_obj)
 }
 
 void
-os_timer_sig_periodic_simulate(os_timer_sig_periodic_t *p_obj)
+os_timer_sig_periodic_simulate(os_timer_sig_periodic_t *const p_obj)
 {
     if (NULL == p_obj)
     {
@@ -306,7 +306,7 @@ os_timer_sig_periodic_simulate(os_timer_sig_periodic_t *p_obj)
 }
 
 void
-os_timer_sig_one_shot_simulate(os_timer_sig_one_shot_t *p_obj)
+os_timer_sig_one_shot_simulate(os_timer_sig_one_shot_t *const p_obj)
 {
     if (NULL == p_obj)
     {

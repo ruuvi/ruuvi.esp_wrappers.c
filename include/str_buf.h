@@ -23,11 +23,9 @@ extern "C" {
         .buf = (buf_), .size = (len_), .idx = 0, \
     }
 
-#define STR_BUF_INIT_NULL() \
-    STR_BUF_INIT(NULL, 0)
+#define STR_BUF_INIT_NULL() STR_BUF_INIT(NULL, 0)
 
-#define STR_BUF_INIT_WITH_ARR(arr_) \
-    STR_BUF_INIT((arr_), sizeof(arr_))
+#define STR_BUF_INIT_WITH_ARR(arr_) STR_BUF_INIT((arr_), sizeof(arr_))
 
 typedef size_t str_buf_size_t;
 
@@ -44,7 +42,7 @@ typedef struct str_buf_t
  */
 ATTR_NONNULL(1)
 str_buf_t
-str_buf_init(char *p_buf, const str_buf_size_t buf_size);
+str_buf_init(char *const p_buf, const str_buf_size_t buf_size);
 
 /**
  * Init str_buf_t object with NULL pointer to buffer.
@@ -60,7 +58,7 @@ str_buf_init_null(void);
  */
 ATTR_NONNULL(1)
 bool
-str_buf_init_with_alloc(str_buf_t *p_str_buf);
+str_buf_init_with_alloc(str_buf_t *const p_str_buf);
 
 /**
  * Get the accumulated length of string.
@@ -69,7 +67,7 @@ str_buf_init_with_alloc(str_buf_t *p_str_buf);
  */
 ATTR_NONNULL(1)
 str_buf_size_t
-str_buf_get_len(const str_buf_t *p_str_buf);
+str_buf_get_len(const str_buf_t *const p_str_buf);
 
 /**
  * Check if buffer overflow occurred during last call to str_buf_vprintf or str_buf_printf.
@@ -78,7 +76,7 @@ str_buf_get_len(const str_buf_t *p_str_buf);
  */
 ATTR_NONNULL(1)
 bool
-str_buf_is_overflow(const str_buf_t *p_str_buf);
+str_buf_is_overflow(const str_buf_t *const p_str_buf);
 
 /**
  * Print string to buffer or calculate size of string if the p_str_buf->buf is NULL.
@@ -89,7 +87,7 @@ str_buf_is_overflow(const str_buf_t *p_str_buf);
  */
 ATTR_NONNULL(1, 2)
 bool
-str_buf_vprintf(str_buf_t *p_str_buf, const char *fmt, va_list args);
+str_buf_vprintf(str_buf_t *const p_str_buf, const char *const fmt, va_list args);
 
 /**
  * Print string to buffer or calculate size of string if the p_str_buf->buf is NULL.
@@ -101,7 +99,7 @@ str_buf_vprintf(str_buf_t *p_str_buf, const char *fmt, va_list args);
 ATTR_PRINTF(2, 3)
 ATTR_NONNULL(1, 2)
 bool
-str_buf_printf(str_buf_t *p_str_buf, const char *fmt, ...);
+str_buf_printf(str_buf_t *const p_str_buf, const char *const fmt, ...);
 
 /**
  * Allocate buffer for a new string and print it there.
@@ -112,7 +110,7 @@ str_buf_printf(str_buf_t *p_str_buf, const char *fmt, ...);
  */
 ATTR_NONNULL(1)
 str_buf_t
-str_buf_vprintf_with_alloc(const char *fmt, va_list args);
+str_buf_vprintf_with_alloc(const char *const fmt, va_list args);
 
 /**
  * Allocate buffer for a new string and print it there.
@@ -124,7 +122,7 @@ str_buf_vprintf_with_alloc(const char *fmt, va_list args);
 ATTR_PRINTF(1, 2)
 ATTR_NONNULL(1)
 str_buf_t
-str_buf_printf_with_alloc(const char *fmt, ...);
+str_buf_printf_with_alloc(const char *const fmt, ...);
 
 /**
  * Free the buffer to which the str_buf_t object points to.
@@ -132,7 +130,7 @@ str_buf_printf_with_alloc(const char *fmt, ...);
  */
 ATTR_NONNULL(1)
 void
-str_buf_free_buf(str_buf_t *p_str_buf);
+str_buf_free_buf(str_buf_t *const p_str_buf);
 
 #ifdef __cplusplus
 }

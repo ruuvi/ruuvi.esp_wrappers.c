@@ -12,7 +12,10 @@ typedef unsigned long os_strtoul_result_t;
 typedef long          os_strtol_result_t;
 
 uint32_t
-os_str_to_uint32_cptr(const char *__restrict p_str, const char **__restrict pp_end, const os_str2num_base_t base)
+os_str_to_uint32_cptr(
+    const char *__restrict const p_str,
+    const char **__restrict const pp_end,
+    const os_str2num_base_t base)
 {
     os_strtoul_result_t result = strtoul(p_str, (char **)pp_end, base);
     if (result >= UINT32_MAX)
@@ -23,7 +26,7 @@ os_str_to_uint32_cptr(const char *__restrict p_str, const char **__restrict pp_e
 }
 
 uint32_t
-os_str_to_uint32(char *__restrict p_str, char **__restrict pp_end, const os_str2num_base_t base)
+os_str_to_uint32(char *__restrict const p_str, char **__restrict const pp_end, const os_str2num_base_t base)
 {
     os_strtoul_result_t result = strtoul(p_str, pp_end, base);
     if (result >= UINT32_MAX)
@@ -34,7 +37,10 @@ os_str_to_uint32(char *__restrict p_str, char **__restrict pp_end, const os_str2
 }
 
 int32_t
-os_str_to_int32_cptr(const char *__restrict p_str, const char **__restrict pp_end, const os_str2num_base_t base)
+os_str_to_int32_cptr(
+    const char *__restrict const p_str,
+    const char **__restrict const pp_end,
+    const os_str2num_base_t base)
 {
     os_strtol_result_t result = strtol(p_str, (char **)pp_end, base);
     if (result >= INT32_MAX)
@@ -54,7 +60,7 @@ os_str_to_int32_cptr(const char *__restrict p_str, const char **__restrict pp_en
 }
 
 int32_t
-os_str_to_int32(char *__restrict p_str, char **__restrict pp_end, const os_str2num_base_t base)
+os_str_to_int32(char *__restrict const p_str, char **__restrict const pp_end, const os_str2num_base_t base)
 {
     os_strtol_result_t result = strtol(p_str, pp_end, base);
     if (result >= INT32_MAX)
