@@ -18,7 +18,7 @@ struct os_timer_sig_periodic_t
     os_signal_t *        p_signal;
     os_signal_num_e      sig_num;
     bool                 is_static;
-    bool                 is_active;
+    volatile bool        is_active;
 };
 
 _Static_assert(
@@ -31,7 +31,7 @@ struct os_timer_sig_one_shot_t
     os_signal_t *        p_signal;
     os_signal_num_e      sig_num;
     bool                 is_static;
-    bool                 is_active;
+    volatile bool        is_active;
 };
 
 _Static_assert(
