@@ -67,7 +67,7 @@ os_timer_periodic_create(
     os_timer_callback_periodic_t cb_func,
     void *                       p_arg)
 {
-    os_timer_periodic_t *p_timer = app_calloc(1, sizeof(*p_timer));
+    os_timer_periodic_t *p_timer = os_calloc(1, sizeof(*p_timer));
     if (NULL == p_timer)
     {
         return NULL;
@@ -78,7 +78,7 @@ os_timer_periodic_create(
     p_timer->h_timer   = xTimerCreate(p_timer_name, period_ticks, pdTRUE, p_timer, &os_timer_callback_periodic);
     if (NULL == p_timer->h_timer)
     {
-        app_free_pptr((void **)&p_timer);
+        os_free(p_timer);
         return NULL;
     }
     return p_timer;
@@ -113,7 +113,7 @@ os_timer_one_shot_create(
     os_timer_callback_one_shot_t cb_func,
     void *                       p_arg)
 {
-    os_timer_one_shot_t *p_timer = app_calloc(1, sizeof(*p_timer));
+    os_timer_one_shot_t *p_timer = os_calloc(1, sizeof(*p_timer));
     if (NULL == p_timer)
     {
         return NULL;
@@ -124,7 +124,7 @@ os_timer_one_shot_create(
     p_timer->h_timer   = xTimerCreate(p_timer_name, period_ticks, pdFALSE, p_timer, &os_timer_callback_one_shot);
     if (NULL == p_timer->h_timer)
     {
-        app_free_pptr((void **)&p_timer);
+        os_free(p_timer);
         return NULL;
     }
     return p_timer;
@@ -181,22 +181,20 @@ void
 os_timer_periodic_delete(os_timer_periodic_t **pp_timer)
 {
     os_timer_periodic_t *p_timer = *pp_timer;
+    *pp_timer = NULL;
+    if (NULL == p_timer)
+    {
+        return;
+    }
     vTimerSetTimerID(p_timer->h_timer, NULL);
     while (pdPASS != xTimerDelete(p_timer->h_timer, 0))
     {
         os_task_delay(1);
     }
-    if (p_timer->is_static)
+    // dynamic timers are automatically freed by the Delete command handler
+    if (!p_timer->is_static)
     {
-        // dynamic timers are automatically freed by the Delete command handler
-        while (os_timer_periodic_is_active(p_timer))
-        {
-            os_task_delay(1);
-        }
-    }
-    else
-    {
-        app_free_pptr((void **)pp_timer);
+        os_free(p_timer);
     }
 }
 
@@ -204,22 +202,20 @@ void
 os_timer_one_shot_delete(os_timer_one_shot_t **pp_timer)
 {
     os_timer_one_shot_t *p_timer = *pp_timer;
+    *pp_timer = NULL;
+    if (NULL == p_timer)
+    {
+        return;
+    }
     vTimerSetTimerID(p_timer->h_timer, NULL);
     while (pdPASS != xTimerDelete(p_timer->h_timer, 0))
     {
         os_task_delay(1);
     }
-    if (p_timer->is_static)
+    // dynamic timers are automatically freed by the Delete command handler
+    if (!p_timer->is_static)
     {
-        // dynamic timers are automatically freed by the Delete command handler
-        while (os_timer_one_shot_is_active(p_timer))
-        {
-            os_task_delay(1);
-        }
-    }
-    else
-    {
-        app_free_pptr((void **)pp_timer);
+        os_free(p_timer);
     }
 }
 

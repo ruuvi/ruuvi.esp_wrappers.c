@@ -74,7 +74,7 @@ os_timer_sig_periodic_create(
     const os_signal_num_e  sig_num,
     const os_delta_ticks_t period_ticks)
 {
-    os_timer_sig_periodic_t *p_obj = app_calloc(1, sizeof(*p_obj));
+    os_timer_sig_periodic_t *p_obj = os_calloc(1, sizeof(*p_obj));
     if (NULL == p_obj)
     {
         return NULL;
@@ -123,7 +123,7 @@ os_timer_sig_one_shot_create(
     const os_signal_num_e  sig_num,
     const os_delta_ticks_t period_ticks)
 {
-    os_timer_sig_one_shot_t *p_obj = app_calloc(1, sizeof(*p_obj));
+    os_timer_sig_one_shot_t *p_obj = os_calloc(1, sizeof(*p_obj));
     if (NULL == p_obj)
     {
         return NULL;
@@ -169,6 +169,7 @@ void
 os_timer_sig_periodic_delete(os_timer_sig_periodic_t **pp_obj)
 {
     os_timer_sig_periodic_t *p_obj = *pp_obj;
+    *pp_obj = NULL;
     if (NULL == p_obj)
     {
         return;
@@ -182,7 +183,7 @@ os_timer_sig_periodic_delete(os_timer_sig_periodic_t **pp_obj)
     p_obj->sig_num  = OS_SIGNAL_NUM_NONE;
     if (!p_obj->is_static)
     {
-        app_free_pptr((void **)pp_obj);
+        os_free(p_obj);
     }
 }
 
@@ -190,6 +191,7 @@ void
 os_timer_sig_one_shot_delete(os_timer_sig_one_shot_t **pp_obj)
 {
     os_timer_sig_one_shot_t *p_obj = *pp_obj;
+    *pp_obj = NULL;
     if (NULL == p_obj)
     {
         return;
@@ -203,7 +205,7 @@ os_timer_sig_one_shot_delete(os_timer_sig_one_shot_t **pp_obj)
     p_obj->sig_num  = OS_SIGNAL_NUM_NONE;
     if (!p_obj->is_static)
     {
-        app_free_pptr((void **)pp_obj);
+        os_free(p_obj);
     }
 }
 

@@ -1,5 +1,5 @@
 /**
- * @file test_app_malloc.cpp
+ * @file test_os_malloc.cpp
  * @author TheSomeMan
  * @date 2020-10-02
  * @copyright Ruuvi Innovations Ltd, license BSD-3-Clause.
@@ -14,7 +14,7 @@ using namespace std;
 /*** Google-test class implementation
  * *********************************************************************************/
 
-class TestAppMalloc : public ::testing::Test
+class TestOsMalloc : public ::testing::Test
 {
 private:
 protected:
@@ -29,47 +29,49 @@ protected:
     }
 
 public:
-    TestAppMalloc();
+    TestOsMalloc();
 
-    ~TestAppMalloc() override;
+    ~TestOsMalloc() override;
 };
 
-TestAppMalloc::TestAppMalloc()
+TestOsMalloc::TestOsMalloc()
     : Test()
 {
 }
 
-TestAppMalloc::~TestAppMalloc() = default;
+TestOsMalloc::~TestOsMalloc() = default;
 
 /*** Unit-Tests
  * *******************************************************************************************************/
 
-TEST_F(TestAppMalloc, test_app_malloc_app_free) // NOLINT
+TEST_F(TestOsMalloc, test_os_malloc_os_free) // NOLINT
 {
-    void *ptr = app_malloc(1000);
+    void *ptr = os_malloc(1000);
     ASSERT_NE(nullptr, ptr);
-    app_free(ptr);
-}
-
-TEST_F(TestAppMalloc, test_app_malloc_app_free_pptr) // NOLINT
-{
-    void *ptr = app_malloc(1000);
-    ASSERT_NE(nullptr, ptr);
-    app_free_pptr(&ptr);
+    os_free(ptr);
     ASSERT_EQ(nullptr, ptr);
 }
 
-TEST_F(TestAppMalloc, test_app_malloc_app_free_const_pptr) // NOLINT
+TEST_F(TestOsMalloc, test_os_calloc) // NOLINT
 {
-    const void *ptr = app_malloc(1000);
+    void *ptr = os_calloc(sizeof(uint32_t), 1000);
     ASSERT_NE(nullptr, ptr);
-    app_free_const_pptr(&ptr);
+    os_free(ptr);
     ASSERT_EQ(nullptr, ptr);
 }
 
-TEST_F(TestAppMalloc, test_app_calloc) // NOLINT
+TEST_F(TestOsMalloc, test_os_realloc) // NOLINT
 {
-    void *ptr = app_calloc(sizeof(uint32_t), 1000);
+    void *ptr = os_malloc(4);
     ASSERT_NE(nullptr, ptr);
-    app_free(ptr);
+    void *ptr2 = os_malloc(4);
+    ASSERT_NE(nullptr, ptr2);
+    const void *const saved_ptr = ptr;
+    ASSERT_TRUE(os_realloc_safe((void **)&ptr, 1 * 1024));
+    ASSERT_NE(nullptr, ptr);
+    ASSERT_NE(saved_ptr, ptr);
+    os_free(ptr);
+    ASSERT_EQ(nullptr, ptr);
+    os_free(ptr2);
+    ASSERT_EQ(nullptr, ptr2);
 }
