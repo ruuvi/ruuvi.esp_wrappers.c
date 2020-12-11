@@ -26,12 +26,12 @@ static const char *TAG = "os_task";
 
 static bool
 os_task_create_internal(
-    os_task_func_t           p_func,
-    const char *             p_name,
+    const os_task_func_t     p_func,
+    const char *const        p_name,
     const uint32_t           stack_depth,
-    void *                   p_param,
+    void *const              p_param,
     const os_task_priority_t priority,
-    os_task_handle_t *       ph_task)
+    os_task_handle_t *const  ph_task)
 {
     LOG_INFO("Start thread '%s' with priority %d, stack size %u bytes", p_name, priority, stack_depth);
     if (pdPASS != xTaskCreate(p_func, p_name, stack_depth, p_param, priority, ph_task))
@@ -44,24 +44,24 @@ os_task_create_internal(
 
 bool
 os_task_create(
-    os_task_func_t           p_func,
-    const char *             p_name,
+    const os_task_func_t     p_func,
+    const char *const        p_name,
     const uint32_t           stack_depth,
-    void *                   p_param,
+    void *const              p_param,
     const os_task_priority_t priority,
-    os_task_handle_t *       ph_task)
+    os_task_handle_t *const  ph_task)
 {
     return os_task_create_internal(p_func, p_name, stack_depth, p_param, priority, ph_task);
 }
 
 bool
 os_task_create_with_const_param(
-    os_task_func_const_param_t p_func,
-    const char *               p_name,
-    const uint32_t             stack_depth,
-    const void *               p_param,
-    const os_task_priority_t   priority,
-    os_task_handle_t *         ph_task)
+    const os_task_func_const_param_t p_func,
+    const char *const                p_name,
+    const uint32_t                   stack_depth,
+    const void *const                p_param,
+    const os_task_priority_t         priority,
+    os_task_handle_t *const          ph_task)
 {
     return os_task_create_internal((os_task_func_t)p_func, p_name, stack_depth, (void *)p_param, priority, ph_task);
 }
@@ -78,11 +78,11 @@ os_task_thread_func_wrapper_without_param(void *p_arg)
 
 bool
 os_task_create_without_param(
-    os_task_func_without_param_t p_func,
-    const char *                 p_name,
-    const uint32_t               stack_depth,
-    const os_task_priority_t     priority,
-    os_task_handle_t *           ph_task)
+    const os_task_func_without_param_t p_func,
+    const char *const                  p_name,
+    const uint32_t                     stack_depth,
+    const os_task_priority_t           priority,
+    os_task_handle_t *const            ph_task)
 {
     return os_task_create_internal(
         &os_task_thread_func_wrapper_without_param,
@@ -108,11 +108,11 @@ os_task_thread_func_wrapper_finite_with_param(void *p_arg)
 
 bool
 os_task_create_finite(
-    os_task_finite_func_with_param_t p_func,
-    const char *                     p_name,
-    const uint32_t                   stack_depth,
-    void *                           p_param,
-    const os_task_priority_t         priority)
+    const os_task_finite_func_with_param_t p_func,
+    const char *const                      p_name,
+    const uint32_t                         stack_depth,
+    void *const                            p_param,
+    const os_task_priority_t               priority)
 {
     os_task_arg_finite_with_param_t *const p_arg = os_calloc(1, sizeof(*p_arg));
     if (NULL == p_arg)
@@ -147,11 +147,11 @@ os_task_thread_func_wrapper_finite_with_const_param(void *p_arg)
 
 bool
 os_task_create_finite_with_const_param(
-    os_task_finite_func_with_const_param_t p_func,
-    const char *                           p_name,
-    const uint32_t                         stack_depth,
-    const void *                           p_param,
-    const os_task_priority_t               priority)
+    const os_task_finite_func_with_const_param_t p_func,
+    const char *const                            p_name,
+    const uint32_t                               stack_depth,
+    const void *const                            p_param,
+    const os_task_priority_t                     priority)
 {
     os_task_arg_finite_with_const_param_t *const p_arg = os_calloc(1, sizeof(*p_arg));
     if (NULL == p_arg)
@@ -176,7 +176,7 @@ ATTR_NONNULL(1)
 static void
 os_task_thread_func_wrapper_finite_without_param(void *p_arg)
 {
-    os_task_finite_func_without_param_t p_func = p_arg;
+    const os_task_finite_func_without_param_t p_func = p_arg;
     p_arg                                            = NULL;
     p_func();
     vTaskDelete(NULL);
@@ -185,10 +185,10 @@ os_task_thread_func_wrapper_finite_without_param(void *p_arg)
 
 bool
 os_task_create_finite_without_param(
-    os_task_finite_func_without_param_t p_func,
-    const char *                        p_name,
-    const uint32_t                      stack_depth,
-    const os_task_priority_t            priority)
+    const os_task_finite_func_without_param_t p_func,
+    const char *const                         p_name,
+    const uint32_t                            stack_depth,
+    const os_task_priority_t                  priority)
 {
     os_task_handle_t h_task = NULL;
     return os_task_create_internal(
@@ -202,14 +202,14 @@ os_task_create_finite_without_param(
 
 static bool
 os_task_create_static_internal(
-    os_task_func_t           p_func,
-    const char *             p_name,
-    os_task_stack_type_t *   p_stack_mem,
-    const uint32_t           stack_depth,
-    void *                   p_param,
-    const os_task_priority_t priority,
-    os_task_static_t *       p_task_mem,
-    os_task_handle_t *       ph_task)
+    const os_task_func_t        p_func,
+    const char *const           p_name,
+    os_task_stack_type_t *const p_stack_mem,
+    const uint32_t              stack_depth,
+    void *const                 p_param,
+    const os_task_priority_t    priority,
+    os_task_static_t *const     p_task_mem,
+    os_task_handle_t *const     ph_task)
 {
     LOG_INFO("Start thread(static) '%s' with priority %d, stack size %u bytes", p_name, priority, stack_depth);
     *ph_task = xTaskCreateStatic(p_func, p_name, stack_depth, p_param, priority, p_stack_mem, p_task_mem);
@@ -223,14 +223,14 @@ os_task_create_static_internal(
 
 bool
 os_task_create_static(
-    os_task_func_t           p_func,
-    const char *             p_name,
-    os_task_stack_type_t *   p_stack_mem,
-    const uint32_t           stack_depth,
-    void *                   p_param,
-    const os_task_priority_t priority,
-    os_task_static_t *       p_task_mem,
-    os_task_handle_t *       ph_task)
+    const os_task_func_t        p_func,
+    const char *const           p_name,
+    os_task_stack_type_t *const p_stack_mem,
+    const uint32_t              stack_depth,
+    void *const                 p_param,
+    const os_task_priority_t    priority,
+    os_task_static_t *const     p_task_mem,
+    os_task_handle_t *const     ph_task)
 {
     return os_task_create_static_internal(
         p_func,
@@ -245,14 +245,14 @@ os_task_create_static(
 
 bool
 os_task_create_static_with_const_param(
-    os_task_func_const_param_t p_func,
-    const char *               p_name,
-    os_task_stack_type_t *     p_stack_mem,
-    const uint32_t             stack_depth,
-    const void *               p_param,
-    const os_task_priority_t   priority,
-    os_task_static_t *         p_task_mem,
-    os_task_handle_t *         ph_task)
+    const os_task_func_const_param_t p_func,
+    const char *const                p_name,
+    os_task_stack_type_t *const      p_stack_mem,
+    const uint32_t                   stack_depth,
+    const void *const                p_param,
+    const os_task_priority_t         priority,
+    os_task_static_t *const          p_task_mem,
+    os_task_handle_t *const          ph_task)
 {
     return os_task_create_static_internal(
         (os_task_func_t)p_func,
@@ -267,13 +267,13 @@ os_task_create_static_with_const_param(
 
 bool
 os_task_create_static_without_param(
-    os_task_func_without_param_t p_func,
-    const char *                 p_name,
-    os_task_stack_type_t *       p_stack_mem,
-    const uint32_t               stack_depth,
-    const os_task_priority_t     priority,
-    os_task_static_t *           p_task_mem,
-    os_task_handle_t *           ph_task)
+    const os_task_func_without_param_t p_func,
+    const char *const                  p_name,
+    os_task_stack_type_t *const        p_stack_mem,
+    const uint32_t                     stack_depth,
+    const os_task_priority_t           priority,
+    os_task_static_t *const            p_task_mem,
+    os_task_handle_t *const            ph_task)
 {
     return os_task_create_static_internal(
         &os_task_thread_func_wrapper_without_param,
@@ -288,13 +288,13 @@ os_task_create_static_without_param(
 
 bool
 os_task_create_static_finite(
-    os_task_finite_func_with_param_t p_func,
-    const char *                     p_name,
-    os_task_stack_type_t *           p_stack_mem,
-    const uint32_t                   stack_depth,
-    void *                           p_param,
-    const os_task_priority_t         priority,
-    os_task_static_t *               p_task_mem)
+    const os_task_finite_func_with_param_t p_func,
+    const char *const                      p_name,
+    os_task_stack_type_t *const            p_stack_mem,
+    const uint32_t                         stack_depth,
+    void *const                            p_param,
+    const os_task_priority_t               priority,
+    os_task_static_t *const                p_task_mem)
 {
     os_task_arg_finite_with_param_t *p_arg = os_calloc(1, sizeof(*p_arg));
     if (NULL == p_arg)
@@ -318,13 +318,13 @@ os_task_create_static_finite(
 
 bool
 os_task_create_static_finite_with_const_param(
-    os_task_finite_func_with_const_param_t p_func,
-    const char *                           p_name,
-    os_task_stack_type_t *                 p_stack_mem,
-    const uint32_t                         stack_depth,
-    const void *                           p_param,
-    const os_task_priority_t               priority,
-    os_task_static_t *                     p_task_mem)
+    const os_task_finite_func_with_const_param_t p_func,
+    const char *const                            p_name,
+    os_task_stack_type_t *const                  p_stack_mem,
+    const uint32_t                               stack_depth,
+    const void *const                            p_param,
+    const os_task_priority_t                     priority,
+    os_task_static_t *const                      p_task_mem)
 {
     os_task_arg_finite_with_const_param_t *p_arg = os_calloc(1, sizeof(*p_arg));
     if (NULL == p_arg)
@@ -348,12 +348,12 @@ os_task_create_static_finite_with_const_param(
 
 bool
 os_task_create_static_finite_without_param(
-    os_task_finite_func_without_param_t p_func,
-    const char *                        p_name,
-    os_task_stack_type_t *              p_stack_mem,
-    const uint32_t                      stack_depth,
-    const os_task_priority_t            priority,
-    os_task_static_t *                  p_task_mem)
+    const os_task_finite_func_without_param_t p_func,
+    const char *const                         p_name,
+    os_task_stack_type_t *const               p_stack_mem,
+    const uint32_t                            stack_depth,
+    const os_task_priority_t                  priority,
+    os_task_static_t *const                   p_task_mem)
 {
     os_task_handle_t h_task = NULL;
     return os_task_create_static_internal(
@@ -368,7 +368,7 @@ os_task_create_static_finite_without_param(
 }
 
 void
-os_task_delete(os_task_handle_t *ph_task)
+os_task_delete(os_task_handle_t *const ph_task)
 {
     vTaskDelete(*ph_task);
     *ph_task = NULL;

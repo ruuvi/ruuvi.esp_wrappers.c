@@ -82,7 +82,7 @@ os_signal_create(void);
  * @return ptr to the instance of os_signal_t object.
  */
 os_signal_t *
-os_signal_create_static(os_signal_static_t *p_signal_mem);
+os_signal_create_static(os_signal_static_t *const p_signal_mem);
 
 /**
  * @brief Create os_signal_t object.
@@ -98,21 +98,21 @@ os_signal_delete(os_signal_t **pp_signal);
  * @param None.
  */
 void
-os_signal_register_cur_thread(os_signal_t *p_signal);
+os_signal_register_cur_thread(os_signal_t *const p_signal);
 
 /**
  * @brief Check if any task registered in os_signal_t object.
  * @param true if any task was registered.
  */
 bool
-os_signal_is_any_thread_registered(os_signal_t *p_signal);
+os_signal_is_any_thread_registered(os_signal_t *const p_signal);
 
 /**
  * @brief Check if the current task registered in os_signal_t object.
  * @param true if the current task was registered.
  */
 bool
-os_signal_is_current_thread_registered(os_signal_t *p_signal);
+os_signal_is_current_thread_registered(os_signal_t *const p_signal);
 
 /**
  * @brief Register a signal number to handle by os_signal_t.
@@ -121,7 +121,7 @@ os_signal_is_current_thread_registered(os_signal_t *p_signal);
  * @return true if success.
  */
 bool
-os_signal_add(os_signal_t *p_signal, const os_signal_num_e sig_num);
+os_signal_add(os_signal_t *const p_signal, const os_signal_num_e sig_num);
 
 /**
  * @brief Send the signal to the registered thread.
@@ -130,7 +130,7 @@ os_signal_add(os_signal_t *p_signal, const os_signal_num_e sig_num);
  * @return true if successful
  */
 bool
-os_signal_send(os_signal_t *p_signal, const os_signal_num_e sig_num);
+os_signal_send(os_signal_t *const p_signal, const os_signal_num_e sig_num);
 
 /**
  * @brief Wait for the calling task to receive one or more signals.
@@ -142,10 +142,10 @@ os_signal_send(os_signal_t *p_signal, const os_signal_num_e sig_num);
  */
 bool
 os_signal_wait_with_sig_mask(
-    os_signal_t *              p_signal,
+    os_signal_t *const         p_signal,
     const os_signal_sig_mask_t expected_sig_mask,
     const os_delta_ticks_t     timeout_ticks,
-    os_signal_events_t *       p_sig_events);
+    os_signal_events_t *const  p_sig_events);
 
 /**
  * @brief Wait for the calling task to receive one or more signals withing the specified timeout.
@@ -155,7 +155,10 @@ os_signal_wait_with_sig_mask(
  * @return true if success
  */
 bool
-os_signal_wait_with_timeout(os_signal_t *p_signal, os_delta_ticks_t timeout_ticks, os_signal_events_t *p_sig_events);
+os_signal_wait_with_timeout(
+    os_signal_t *const        p_signal,
+    const os_delta_ticks_t    timeout_ticks,
+    os_signal_events_t *const p_sig_events);
 
 /**
  * @brief Wait infinitely for the calling task to receive one or more signals.
@@ -164,10 +167,10 @@ os_signal_wait_with_timeout(os_signal_t *p_signal, os_delta_ticks_t timeout_tick
  * @return true if success
  */
 void
-os_signal_wait(os_signal_t *p_signal, os_signal_events_t *p_sig_events);
+os_signal_wait(os_signal_t *const p_signal, os_signal_events_t *const p_sig_events);
 
 os_signal_num_e
-os_signal_num_get_next(os_signal_events_t *p_sig_events);
+os_signal_num_get_next(os_signal_events_t *const p_sig_events);
 
 #ifdef __cplusplus
 }

@@ -25,23 +25,23 @@ os_mutex_create(void);
 
 #if configSUPPORT_STATIC_ALLOCATION
 os_mutex_t
-os_mutex_create_static(os_mutex_static_t* p_mutex_static);
+os_mutex_create_static(os_mutex_static_t *const p_mutex_static);
 #endif
 
 void
-os_mutex_delete(os_mutex_t * const ph_mutex);
+os_mutex_delete(os_mutex_t *const ph_mutex);
 
 void
-os_mutex_lock(os_mutex_t h_mutex);
+os_mutex_lock(os_mutex_t const h_mutex);
 
 void
-os_mutex_unlock(os_mutex_t h_mutex);
+os_mutex_unlock(os_mutex_t const h_mutex);
 
 bool
-os_mutex_try_lock(os_mutex_t h_mutex);
+os_mutex_try_lock(os_mutex_t const h_mutex);
 
 bool
-os_mutex_lock_with_timeout(os_mutex_t h_mutex, const os_delta_ticks_t ticks_to_wait);
+os_mutex_lock_with_timeout(os_mutex_t const h_mutex, const os_delta_ticks_t ticks_to_wait);
 
 #ifdef __cplusplus
 }

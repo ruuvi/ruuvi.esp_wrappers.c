@@ -10,7 +10,7 @@
 #include "os_malloc.h"
 
 str_buf_t
-str_buf_init(char *p_buf, const str_buf_size_t buf_size)
+str_buf_init(char *const p_buf, const str_buf_size_t buf_size)
 {
     const str_buf_t str_buf = STR_BUF_INIT(p_buf, buf_size);
     return str_buf;
@@ -24,7 +24,7 @@ str_buf_init_null(void)
 }
 
 bool
-str_buf_init_with_alloc(str_buf_t *p_str_buf)
+str_buf_init_with_alloc(str_buf_t *const p_str_buf)
 {
     const size_t buf_size = str_buf_get_len(p_str_buf) + 1;
     char *       p_buf    = os_malloc(buf_size);
@@ -37,13 +37,13 @@ str_buf_init_with_alloc(str_buf_t *p_str_buf)
 }
 
 str_buf_size_t
-str_buf_get_len(const str_buf_t *p_str_buf)
+str_buf_get_len(const str_buf_t *const p_str_buf)
 {
     return p_str_buf->idx;
 }
 
 bool
-str_buf_is_overflow(const str_buf_t *p_str_buf)
+str_buf_is_overflow(const str_buf_t *const p_str_buf)
 {
     if (0 == p_str_buf->size)
     {
@@ -57,7 +57,7 @@ str_buf_is_overflow(const str_buf_t *p_str_buf)
 }
 
 bool
-str_buf_vprintf(str_buf_t *p_str_buf, const char *fmt, va_list args)
+str_buf_vprintf(str_buf_t *const p_str_buf, const char *const fmt, va_list args)
 {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wnonnull-compare"
@@ -110,7 +110,7 @@ str_buf_vprintf(str_buf_t *p_str_buf, const char *fmt, va_list args)
 }
 
 bool
-str_buf_printf(str_buf_t *p_str_buf, const char *fmt, ...)
+str_buf_printf(str_buf_t *const p_str_buf, const char *const fmt, ...)
 {
     va_list args;
     va_start(args, fmt);
@@ -120,7 +120,7 @@ str_buf_printf(str_buf_t *p_str_buf, const char *fmt, ...)
 }
 
 str_buf_t
-str_buf_vprintf_with_alloc(const char *fmt, va_list args)
+str_buf_vprintf_with_alloc(const char *const fmt, va_list args)
 {
     str_buf_t str_buf = str_buf_init_null();
     va_list   args2;
@@ -140,7 +140,7 @@ str_buf_vprintf_with_alloc(const char *fmt, va_list args)
 }
 
 str_buf_t
-str_buf_printf_with_alloc(const char *fmt, ...)
+str_buf_printf_with_alloc(const char *const fmt, ...)
 {
     va_list args;
     va_start(args, fmt);
@@ -150,7 +150,7 @@ str_buf_printf_with_alloc(const char *fmt, ...)
 }
 
 void
-str_buf_free_buf(str_buf_t *p_str_buf)
+str_buf_free_buf(str_buf_t *const p_str_buf)
 {
     os_free(p_str_buf->buf);
     p_str_buf->size = 0;

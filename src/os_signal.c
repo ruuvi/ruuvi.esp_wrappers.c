@@ -22,7 +22,7 @@ struct os_signal_t
 _Static_assert(sizeof(os_signal_t) == sizeof(os_signal_static_t), "os_signal_t != os_signal_static_t");
 
 static os_signal_t *
-os_signal_init(os_signal_t *p_signal, const bool is_static)
+os_signal_init(os_signal_t *const p_signal, const bool is_static)
 {
     p_signal->task_handle = NULL;
     p_signal->sig_mask    = 0x0U;
@@ -42,20 +42,18 @@ os_signal_create(void)
     return os_signal_init(p_signal, is_static);
 }
 
-/**
- * @brief Create new os_signal_t object using pre-allocated memory.
- * @return ptr to the instance of os_signal_t object.
- */
+ATTR_RETURNS_NONNULL
+ATTR_NONNULL(1)
 os_signal_t *
-os_signal_create_static(os_signal_static_t *p_signal_mem)
+os_signal_create_static(os_signal_static_t *const p_signal_mem)
 {
-    os_signal_t *p_signal  = (os_signal_t *)p_signal_mem;
-    const bool   is_static = true;
+    os_signal_t *const p_signal  = (os_signal_t *)p_signal_mem;
+    const bool         is_static = true;
     return os_signal_init(p_signal, is_static);
 }
 
 void
-os_signal_delete(os_signal_t **pp_signal)
+os_signal_delete(os_signal_t **const pp_signal)
 {
     os_signal_t *p_signal = *pp_signal;
     p_signal->task_handle = NULL;
@@ -68,7 +66,7 @@ os_signal_delete(os_signal_t **pp_signal)
 }
 
 void
-os_signal_register_cur_thread(os_signal_t *p_signal)
+os_signal_register_cur_thread(os_signal_t *const p_signal)
 {
     if (NULL == p_signal)
     {
@@ -78,7 +76,7 @@ os_signal_register_cur_thread(os_signal_t *p_signal)
 }
 
 bool
-os_signal_is_any_thread_registered(os_signal_t *p_signal)
+os_signal_is_any_thread_registered(os_signal_t *const p_signal)
 {
     if (NULL == p_signal)
     {
@@ -92,7 +90,7 @@ os_signal_is_any_thread_registered(os_signal_t *p_signal)
 }
 
 bool
-os_signal_is_current_thread_registered(os_signal_t *p_signal)
+os_signal_is_current_thread_registered(os_signal_t *const p_signal)
 {
     if (NULL == p_signal)
     {
@@ -121,7 +119,7 @@ os_signal_is_valid_sig_num(const os_signal_num_e sig_num)
 }
 
 bool
-os_signal_add(os_signal_t *p_signal, const os_signal_num_e sig_num)
+os_signal_add(os_signal_t *const p_signal, const os_signal_num_e sig_num)
 {
     if (NULL == p_signal)
     {
@@ -141,7 +139,7 @@ os_signal_add(os_signal_t *p_signal, const os_signal_num_e sig_num)
 }
 
 bool
-os_signal_send(os_signal_t *p_signal, const os_signal_num_e sig_num)
+os_signal_send(os_signal_t *const p_signal, const os_signal_num_e sig_num)
 {
     if (NULL == p_signal)
     {
@@ -183,10 +181,10 @@ os_signal_send(os_signal_t *p_signal, const os_signal_num_e sig_num)
 
 bool
 os_signal_wait_with_sig_mask(
-    os_signal_t *              p_signal,
+    os_signal_t *const         p_signal,
     const os_signal_sig_mask_t expected_sig_mask,
     const os_delta_ticks_t     timeout_ticks,
-    os_signal_events_t *       p_sig_events)
+    os_signal_events_t *const  p_sig_events)
 {
     if (NULL == p_signal)
     {
@@ -214,19 +212,22 @@ os_signal_wait_with_sig_mask(
 }
 
 bool
-os_signal_wait_with_timeout(os_signal_t *p_signal, os_delta_ticks_t timeout_ticks, os_signal_events_t *p_sig_events)
+os_signal_wait_with_timeout(
+    os_signal_t *const        p_signal,
+    const os_delta_ticks_t    timeout_ticks,
+    os_signal_events_t *const p_sig_events)
 {
     return os_signal_wait_with_sig_mask(p_signal, p_signal->sig_mask, timeout_ticks, p_sig_events);
 }
 
 void
-os_signal_wait(os_signal_t *p_signal, os_signal_events_t *p_sig_events)
+os_signal_wait(os_signal_t *const p_signal, os_signal_events_t *const p_sig_events)
 {
     os_signal_wait_with_timeout(p_signal, OS_DELTA_TICKS_INFINITE, p_sig_events);
 }
 
 os_signal_num_e
-os_signal_num_get_next(os_signal_events_t *p_sig_events)
+os_signal_num_get_next(os_signal_events_t *const p_sig_events)
 {
     if (0 == p_sig_events->sig_mask)
     {
