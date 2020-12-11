@@ -70,12 +70,20 @@ os_signal_delete(os_signal_t **pp_signal)
 void
 os_signal_register_cur_thread(os_signal_t *p_signal)
 {
+    if (NULL == p_signal)
+    {
+        return;
+    }
     p_signal->task_handle = os_task_get_cur_task_handle();
 }
 
 bool
 os_signal_is_any_thread_registered(os_signal_t *p_signal)
 {
+    if (NULL == p_signal)
+    {
+        return false;
+    }
     if (NULL != p_signal->task_handle)
     {
         return true;
@@ -86,6 +94,10 @@ os_signal_is_any_thread_registered(os_signal_t *p_signal)
 bool
 os_signal_is_current_thread_registered(os_signal_t *p_signal)
 {
+    if (NULL == p_signal)
+    {
+        return false;
+    }
     os_task_handle_t cur_task_handle = os_task_get_cur_task_handle();
     if (cur_task_handle == p_signal->task_handle)
     {
@@ -111,6 +123,10 @@ os_signal_is_valid_sig_num(const os_signal_num_e sig_num)
 bool
 os_signal_add(os_signal_t *p_signal, const os_signal_num_e sig_num)
 {
+    if (NULL == p_signal)
+    {
+        return false;
+    }
     if (!os_signal_is_valid_sig_num(sig_num))
     {
         return false;
@@ -172,6 +188,10 @@ os_signal_wait_with_sig_mask(
     const os_delta_ticks_t     timeout_ticks,
     os_signal_events_t *       p_sig_events)
 {
+    if (NULL == p_signal)
+    {
+        return false;
+    }
     if (NULL == p_signal->task_handle)
     {
         return false;

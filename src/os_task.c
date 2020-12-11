@@ -138,6 +138,7 @@ static void
 os_task_thread_func_wrapper_finite_with_const_param(void *p_arg)
 {
     const os_task_arg_finite_with_const_param_t *p_param = p_arg;
+    p_arg                                                = NULL;
     p_param->p_func(p_param->p_arg);
     os_free(p_param);
     vTaskDelete(NULL);
@@ -176,6 +177,7 @@ static void
 os_task_thread_func_wrapper_finite_without_param(void *p_arg)
 {
     os_task_finite_func_without_param_t p_func = p_arg;
+    p_arg                                            = NULL;
     p_func();
     vTaskDelete(NULL);
     assert(0);

@@ -37,6 +37,7 @@ os_mutex_delete(os_mutex_t *const ph_mutex)
 bool
 os_mutex_lock_with_timeout(os_mutex_t h_mutex, const os_delta_ticks_t ticks_to_wait)
 {
+    assert(NULL != h_mutex);
     if (pdTRUE != xSemaphoreTake(h_mutex, ticks_to_wait))
     {
         return false;
@@ -47,6 +48,7 @@ os_mutex_lock_with_timeout(os_mutex_t h_mutex, const os_delta_ticks_t ticks_to_w
 void
 os_mutex_lock(os_mutex_t h_mutex)
 {
+    assert(NULL != h_mutex);
     if (!os_mutex_lock_with_timeout(h_mutex, OS_DELTA_TICKS_INFINITE))
     {
         assert(0);
@@ -56,6 +58,7 @@ os_mutex_lock(os_mutex_t h_mutex)
 bool
 os_mutex_try_lock(os_mutex_t h_mutex)
 {
+    assert(NULL != h_mutex);
     return os_mutex_lock_with_timeout(h_mutex, OS_DELTA_TICKS_IMMEDIATE);
 }
 

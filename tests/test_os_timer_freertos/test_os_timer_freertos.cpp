@@ -357,7 +357,7 @@ TEST_F(TestOsTimerFreertos, test1) // NOLINT
     ASSERT_EQ(3, this->counter);
 
     cmdQueue.push_and_wait(MainTaskCmd_TimerOneShotDelete);
-    ASSERT_NE(nullptr, this->p_timer_one_shot);
+    ASSERT_EQ(nullptr, this->p_timer_one_shot);
 
     //
     // Test TimerPeriodic
@@ -409,5 +409,5 @@ TEST_F(TestOsTimerFreertos, test1) // NOLINT
     ASSERT_EQ(2, this->counter);
 
     cmdQueue.push_and_wait(MainTaskCmd_TimerPeriodicDelete);
-    ASSERT_NE(nullptr, this->p_timer_periodic);
+    ASSERT_EQ(nullptr, this->p_timer_periodic);
 }

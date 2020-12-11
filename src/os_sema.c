@@ -37,6 +37,7 @@ os_sema_delete(os_sema_t *const ph_sema)
 bool
 os_sema_wait_with_timeout(os_sema_t h_sema, const os_delta_ticks_t ticks_to_wait)
 {
+    assert(NULL != h_sema);
     if (pdTRUE != xSemaphoreTake(h_sema, ticks_to_wait))
     {
         return false;
@@ -47,6 +48,7 @@ os_sema_wait_with_timeout(os_sema_t h_sema, const os_delta_ticks_t ticks_to_wait
 void
 os_sema_wait_infinite(os_sema_t h_sema)
 {
+    assert(NULL != h_sema);
     if (!os_sema_wait_with_timeout(h_sema, OS_DELTA_TICKS_INFINITE))
     {
         assert(0);
@@ -56,11 +58,13 @@ os_sema_wait_infinite(os_sema_t h_sema)
 bool
 os_sema_wait_immediate(os_sema_t h_sema)
 {
+    assert(NULL != h_sema);
     return os_sema_wait_with_timeout(h_sema, OS_DELTA_TICKS_IMMEDIATE);
 }
 
 void
 os_sema_signal(os_sema_t h_sema)
 {
+    assert(NULL != h_sema);
     xSemaphoreGive(h_sema);
 }
