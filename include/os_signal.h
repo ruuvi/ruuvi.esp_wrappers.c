@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "os_wrapper_types.h"
+#include "attribs.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -81,6 +82,8 @@ os_signal_create(void);
  * @brief Create new os_signal_t object using pre-allocated memory.
  * @return ptr to the instance of os_signal_t object.
  */
+ATTR_RETURNS_NONNULL
+ATTR_NONNULL(1)
 os_signal_t *
 os_signal_create_static(os_signal_static_t *const p_signal_mem);
 
@@ -90,6 +93,7 @@ os_signal_create_static(os_signal_static_t *const p_signal_mem);
  * @note the passed ptr to the object will be set to NULL.
  * @return None.
  */
+ATTR_NONNULL(1)
 void
 os_signal_delete(os_signal_t **pp_signal);
 
@@ -140,6 +144,7 @@ os_signal_send(os_signal_t *const p_signal, const os_signal_num_e sig_num);
  * @param[OUT] p_sig_events - ptr to @ref os_signal_events_t.
  * @return true if success.
  */
+ATTR_NONNULL(4)
 bool
 os_signal_wait_with_sig_mask(
     os_signal_t *const         p_signal,
@@ -154,6 +159,7 @@ os_signal_wait_with_sig_mask(
  * @param[OUT] p_sig_events - ptr to @ref os_signal_events_t
  * @return true if success
  */
+ATTR_NONNULL(3)
 bool
 os_signal_wait_with_timeout(
     os_signal_t *const        p_signal,
@@ -166,9 +172,11 @@ os_signal_wait_with_timeout(
  * @param[OUT] p_sig_events - ptr to @ref os_signal_events_t
  * @return true if success
  */
+ATTR_NONNULL(2)
 void
 os_signal_wait(os_signal_t *const p_signal, os_signal_events_t *const p_sig_events);
 
+ATTR_NONNULL(1)
 os_signal_num_e
 os_signal_num_get_next(os_signal_events_t *const p_sig_events);
 

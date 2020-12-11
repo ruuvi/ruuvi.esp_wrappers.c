@@ -8,6 +8,7 @@
 #include "os_sema.h"
 #include <assert.h>
 
+ATTR_WARN_UNUSED_RESULT
 os_sema_t
 os_sema_create(void)
 {
@@ -16,6 +17,9 @@ os_sema_create(void)
 }
 
 #if configSUPPORT_STATIC_ALLOCATION
+ATTR_WARN_UNUSED_RESULT
+ATTR_NONNULL(1)
+ATTR_RETURNS_NONNULL
 os_sema_t
 os_sema_create_static(os_sema_static_t *const p_sema_static)
 {
@@ -24,6 +28,7 @@ os_sema_create_static(os_sema_static_t *const p_sema_static)
 }
 #endif
 
+ATTR_NONNULL(1)
 void
 os_sema_delete(os_sema_t *const ph_sema)
 {

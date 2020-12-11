@@ -274,13 +274,14 @@ cmdHandlerTask(void *p_param)
                 break;
             case MainTaskCmd_RunSignalHandlerTask1:
             {
+                os_task_handle_t h_task              = nullptr;
                 pObj->result_run_signal_handler_task = os_task_create(
                     &signalHandlerTask1,
                     "SignalHandler",
                     configMINIMAL_STACK_SIZE,
                     pObj,
                     tskIDLE_PRIORITY + 1,
-                    nullptr);
+                    &h_task);
                 break;
             }
             case MainTaskCmd_TimerSigPeriodicCreate:

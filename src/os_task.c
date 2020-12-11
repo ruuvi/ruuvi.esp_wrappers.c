@@ -24,6 +24,7 @@ typedef struct os_task_arg_finite_with_const_param_t
 
 static const char *TAG = "os_task";
 
+ATTR_NONNULL(1, 6)
 static bool
 os_task_create_internal(
     const os_task_func_t     p_func,
@@ -42,6 +43,8 @@ os_task_create_internal(
     return true;
 }
 
+ATTR_NONNULL(1, 4, 6)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create(
     const os_task_func_t     p_func,
@@ -54,6 +57,8 @@ os_task_create(
     return os_task_create_internal(p_func, p_name, stack_depth, p_param, priority, ph_task);
 }
 
+ATTR_NONNULL(1, 4, 6)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_with_const_param(
     const os_task_func_const_param_t p_func,
@@ -76,6 +81,8 @@ os_task_thread_func_wrapper_without_param(void *p_arg)
     assert(0);
 }
 
+ATTR_NONNULL(1, 5)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_without_param(
     const os_task_func_without_param_t p_func,
@@ -106,6 +113,8 @@ os_task_thread_func_wrapper_finite_with_param(void *p_arg)
     assert(0);
 }
 
+ATTR_NONNULL(1)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_finite(
     const os_task_finite_func_with_param_t p_func,
@@ -145,6 +154,8 @@ os_task_thread_func_wrapper_finite_with_const_param(void *p_arg)
     assert(0);
 }
 
+ATTR_NONNULL(1)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_finite_with_const_param(
     const os_task_finite_func_with_const_param_t p_func,
@@ -183,6 +194,8 @@ os_task_thread_func_wrapper_finite_without_param(void *p_arg)
     assert(0);
 }
 
+ATTR_NONNULL(1)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_finite_without_param(
     const os_task_finite_func_without_param_t p_func,
@@ -200,6 +213,7 @@ os_task_create_finite_without_param(
         &h_task);
 }
 
+ATTR_NONNULL(1, 3, 7, 8)
 static bool
 os_task_create_static_internal(
     const os_task_func_t        p_func,
@@ -221,6 +235,8 @@ os_task_create_static_internal(
     return true;
 }
 
+ATTR_NONNULL(1, 3, 7, 8)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static(
     const os_task_func_t        p_func,
@@ -243,6 +259,8 @@ os_task_create_static(
         ph_task);
 }
 
+ATTR_NONNULL(1, 3, 7, 8)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static_with_const_param(
     const os_task_func_const_param_t p_func,
@@ -265,6 +283,8 @@ os_task_create_static_with_const_param(
         ph_task);
 }
 
+ATTR_NONNULL(1, 3, 6, 7)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static_without_param(
     const os_task_func_without_param_t p_func,
@@ -286,6 +306,8 @@ os_task_create_static_without_param(
         ph_task);
 }
 
+ATTR_NONNULL(1, 3, 7)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static_finite(
     const os_task_finite_func_with_param_t p_func,
@@ -316,6 +338,8 @@ os_task_create_static_finite(
         &h_task);
 }
 
+ATTR_NONNULL(1, 3, 7)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static_finite_with_const_param(
     const os_task_finite_func_with_const_param_t p_func,
@@ -346,6 +370,8 @@ os_task_create_static_finite_with_const_param(
         &h_task);
 }
 
+ATTR_NONNULL(1, 3, 6)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static_finite_without_param(
     const os_task_finite_func_without_param_t p_func,
@@ -367,6 +393,7 @@ os_task_create_static_finite_without_param(
         &h_task);
 }
 
+ATTR_NONNULL(1)
 void
 os_task_delete(os_task_handle_t *const ph_task)
 {
@@ -374,6 +401,7 @@ os_task_delete(os_task_handle_t *const ph_task)
     *ph_task = NULL;
 }
 
+ATTR_WARN_UNUSED_RESULT
 const char *
 os_task_get_name(void)
 {
@@ -385,6 +413,7 @@ os_task_get_name(void)
     return task_name;
 }
 
+ATTR_WARN_UNUSED_RESULT
 os_task_handle_t
 os_task_get_cur_task_handle(void)
 {

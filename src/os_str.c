@@ -11,6 +11,7 @@
 typedef unsigned long os_strtoul_result_t;
 typedef long          os_strtol_result_t;
 
+ATTR_NONNULL(1)
 uint32_t
 os_str_to_uint32_cptr(
     const char *__restrict const p_str,
@@ -25,6 +26,7 @@ os_str_to_uint32_cptr(
     return (uint32_t)result;
 }
 
+ATTR_NONNULL(1)
 uint32_t
 os_str_to_uint32(char *__restrict const p_str, char **__restrict const pp_end, const os_str2num_base_t base)
 {
@@ -36,6 +38,7 @@ os_str_to_uint32(char *__restrict const p_str, char **__restrict const pp_end, c
     return (uint32_t)result;
 }
 
+ATTR_NONNULL(1)
 int32_t
 os_str_to_int32_cptr(
     const char *__restrict const p_str,
@@ -59,6 +62,7 @@ os_str_to_int32_cptr(
     return (int32_t)result;
 }
 
+ATTR_NONNULL(1)
 int32_t
 os_str_to_int32(char *__restrict const p_str, char **__restrict const pp_end, const os_str2num_base_t base)
 {

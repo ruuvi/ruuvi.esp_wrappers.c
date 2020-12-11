@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "os_malloc.h"
 
+ATTR_NONNULL(1)
 str_buf_t
 str_buf_init(char *const p_buf, const str_buf_size_t buf_size)
 {
@@ -23,6 +24,7 @@ str_buf_init_null(void)
     return str_buf;
 }
 
+ATTR_NONNULL(1)
 bool
 str_buf_init_with_alloc(str_buf_t *const p_str_buf)
 {
@@ -36,12 +38,16 @@ str_buf_init_with_alloc(str_buf_t *const p_str_buf)
     return true;
 }
 
+ATTR_NONNULL(1)
+ATTR_PURE
 str_buf_size_t
 str_buf_get_len(const str_buf_t *const p_str_buf)
 {
     return p_str_buf->idx;
 }
 
+ATTR_NONNULL(1)
+ATTR_PURE
 bool
 str_buf_is_overflow(const str_buf_t *const p_str_buf)
 {
@@ -56,6 +62,7 @@ str_buf_is_overflow(const str_buf_t *const p_str_buf)
     return false;
 }
 
+ATTR_NONNULL(1, 2)
 bool
 str_buf_vprintf(str_buf_t *const p_str_buf, const char *const fmt, va_list args)
 {
@@ -109,6 +116,8 @@ str_buf_vprintf(str_buf_t *const p_str_buf, const char *const fmt, va_list args)
     return true;
 }
 
+ATTR_PRINTF(2, 3)
+ATTR_NONNULL(1, 2)
 bool
 str_buf_printf(str_buf_t *const p_str_buf, const char *const fmt, ...)
 {
@@ -119,6 +128,7 @@ str_buf_printf(str_buf_t *const p_str_buf, const char *const fmt, ...)
     return res;
 }
 
+ATTR_NONNULL(1)
 str_buf_t
 str_buf_vprintf_with_alloc(const char *const fmt, va_list args)
 {
@@ -139,6 +149,8 @@ str_buf_vprintf_with_alloc(const char *const fmt, va_list args)
     return str_buf;
 }
 
+ATTR_PRINTF(1, 2)
+ATTR_NONNULL(1)
 str_buf_t
 str_buf_printf_with_alloc(const char *const fmt, ...)
 {
@@ -149,6 +161,7 @@ str_buf_printf_with_alloc(const char *const fmt, ...)
     return str_buf;
 }
 
+ATTR_NONNULL(1)
 void
 str_buf_free_buf(str_buf_t *const p_str_buf)
 {

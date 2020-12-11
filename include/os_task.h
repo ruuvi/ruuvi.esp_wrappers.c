@@ -39,6 +39,8 @@ typedef StaticTask_t os_task_static_t;
  * @param[out] ph_task - pointer to the variable to return task handle
  * @return true if successful
  */
+ATTR_NONNULL(1, 6)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create(
     const os_task_func_t     p_func,
@@ -58,6 +60,8 @@ os_task_create(
  * @param[out] ph_task - pointer to the variable to return task handle
  * @return true if successful
  */
+ATTR_NONNULL(1, 4, 6)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_with_const_param(
     const os_task_func_const_param_t p_func,
@@ -76,6 +80,8 @@ os_task_create_with_const_param(
  * @param[out] ph_task - pointer to the variable to return task handle
  * @return true if successful
  */
+ATTR_NONNULL(1, 5)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_without_param(
     const os_task_func_without_param_t p_func,
@@ -93,6 +99,8 @@ os_task_create_without_param(
  * @param priority - task priority
  * @return true if successful
  */
+ATTR_NONNULL(1)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_finite(
     const os_task_finite_func_with_param_t p_func,
@@ -110,6 +118,8 @@ os_task_create_finite(
  * @param priority - task priority
  * @return true if successful
  */
+ATTR_NONNULL(1)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_finite_with_const_param(
     const os_task_finite_func_with_const_param_t p_func,
@@ -126,6 +136,8 @@ os_task_create_finite_with_const_param(
  * @param priority - task priority
  * @return true if successful
  */
+ATTR_NONNULL(1)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_finite_without_param(
     const os_task_finite_func_without_param_t p_func,
@@ -145,6 +157,8 @@ os_task_create_finite_without_param(
  * @param[out] ph_task - pointer to the variable to return task handle
  * @return true if successful
  */
+ATTR_NONNULL(1, 3, 7, 8)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static(
     const os_task_func_t        p_func,
@@ -168,6 +182,8 @@ os_task_create_static(
  * @param[out] ph_task - pointer to the variable to return task handle
  * @return true if successful
  */
+ATTR_NONNULL(1, 3, 7, 8)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static_with_const_param(
     const os_task_func_const_param_t p_func,
@@ -190,6 +206,8 @@ os_task_create_static_with_const_param(
  * @param[out] ph_task - pointer to the variable to return task handle
  * @return true if successful
  */
+ATTR_NONNULL(1, 3, 6, 7)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static_without_param(
     const os_task_func_without_param_t p_func,
@@ -211,6 +229,8 @@ os_task_create_static_without_param(
  * @param p_task_mem - pointer to the statically allocated buffer for @ref os_task_static_t
  * @return true if successful
  */
+ATTR_NONNULL(1, 3, 7)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static_finite(
     const os_task_finite_func_with_param_t p_func,
@@ -232,6 +252,8 @@ os_task_create_static_finite(
  * @param p_task_mem - pointer to the statically allocated buffer for @ref os_task_static_t
  * @return true if successful
  */
+ATTR_NONNULL(1, 3, 7)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static_finite_with_const_param(
     const os_task_finite_func_with_const_param_t p_func,
@@ -252,6 +274,8 @@ os_task_create_static_finite_with_const_param(
  * @param p_task_mem - pointer to the statically allocated buffer for @ref os_task_static_t
  * @return true if successful
  */
+ATTR_NONNULL(1, 3, 6)
+ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static_finite_without_param(
     const os_task_finite_func_without_param_t p_func,
@@ -266,6 +290,7 @@ os_task_create_static_finite_without_param(
  * @note All resources (dynamic memory, sockets, file descriptors, ...) allocated by the task will remain allocated.
  * @param ph_task - ptr to variable which contains the task handle, this variable will be automatically cleared.
  */
+ATTR_NONNULL(1)
 void
 os_task_delete(os_task_handle_t *const ph_task);
 
@@ -273,6 +298,7 @@ os_task_delete(os_task_handle_t *const ph_task);
  * Get task name for the current thread.
  * @return pointer to the string with the current task name.
  */
+ATTR_WARN_UNUSED_RESULT
 const char *
 os_task_get_name(void);
 
@@ -287,6 +313,7 @@ os_task_delay(const os_delta_ticks_t delay_ticks);
  * Get the handle of the current task.
  * @return handle of the current task - @ref os_task_handle_t
  */
+ATTR_WARN_UNUSED_RESULT
 os_task_handle_t
 os_task_get_cur_task_handle(void);
 

@@ -61,6 +61,7 @@ os_timer_callback_one_shot(TimerHandle_t h_timer)
     p_timer->cb_func(p_timer, p_timer->p_arg);
 }
 
+ATTR_WARN_UNUSED_RESULT
 os_timer_periodic_t *
 os_timer_periodic_create(
     const char *const                  p_timer_name,
@@ -85,6 +86,9 @@ os_timer_periodic_create(
     return p_timer;
 }
 
+ATTR_WARN_UNUSED_RESULT
+ATTR_NONNULL(1)
+ATTR_RETURNS_NONNULL
 os_timer_periodic_t *
 os_timer_periodic_create_static(
     os_timer_periodic_static_t *const  p_mem,
@@ -107,6 +111,7 @@ os_timer_periodic_create_static(
     return p_timer;
 }
 
+ATTR_WARN_UNUSED_RESULT
 os_timer_one_shot_t *
 os_timer_one_shot_create(
     const char *const                  p_timer_name,
@@ -131,6 +136,9 @@ os_timer_one_shot_create(
     return p_timer;
 }
 
+ATTR_WARN_UNUSED_RESULT
+ATTR_NONNULL(1)
+ATTR_RETURNS_NONNULL
 os_timer_one_shot_t *
 os_timer_one_shot_create_static(
     os_timer_one_shot_static_t *const  p_mem,
@@ -182,6 +190,7 @@ os_timer_one_shot_is_active(os_timer_one_shot_t *const p_timer)
     return true;
 }
 
+ATTR_NONNULL(1)
 void
 os_timer_periodic_delete(os_timer_periodic_t **const pp_timer)
 {
@@ -203,6 +212,7 @@ os_timer_periodic_delete(os_timer_periodic_t **const pp_timer)
     }
 }
 
+ATTR_NONNULL(1)
 void
 os_timer_one_shot_delete(os_timer_one_shot_t **const pp_timer)
 {

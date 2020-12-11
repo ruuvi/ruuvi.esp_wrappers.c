@@ -12,6 +12,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/timers.h"
 #include "os_wrapper_types.h"
+#include "attribs.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -51,6 +52,7 @@ typedef struct os_timer_one_shot_static_t
 typedef void (*os_timer_callback_periodic_t)(os_timer_periodic_t *p_timer, void *p_arg);
 typedef void (*os_timer_callback_one_shot_t)(os_timer_one_shot_t *p_timer, void *p_arg);
 
+ATTR_WARN_UNUSED_RESULT
 os_timer_periodic_t *
 os_timer_periodic_create(
     const char *const                  p_timer_name,
@@ -58,6 +60,9 @@ os_timer_periodic_create(
     const os_timer_callback_periodic_t cb_func,
     void *const                        p_arg);
 
+ATTR_WARN_UNUSED_RESULT
+ATTR_NONNULL(1)
+ATTR_RETURNS_NONNULL
 os_timer_periodic_t *
 os_timer_periodic_create_static(
     os_timer_periodic_static_t *const  p_mem,
@@ -66,6 +71,7 @@ os_timer_periodic_create_static(
     const os_timer_callback_periodic_t cb_func,
     void *const                        p_arg);
 
+ATTR_WARN_UNUSED_RESULT
 os_timer_one_shot_t *
 os_timer_one_shot_create(
     const char *const                  p_timer_name,
@@ -73,6 +79,9 @@ os_timer_one_shot_create(
     const os_timer_callback_one_shot_t cb_func,
     void *const                        p_arg);
 
+ATTR_WARN_UNUSED_RESULT
+ATTR_NONNULL(1)
+ATTR_RETURNS_NONNULL
 os_timer_one_shot_t *
 os_timer_one_shot_create_static(
     os_timer_one_shot_static_t *const  p_mem,
@@ -81,9 +90,11 @@ os_timer_one_shot_create_static(
     const os_timer_callback_one_shot_t cb_func,
     void *const                        p_arg);
 
+ATTR_NONNULL(1)
 void
 os_timer_periodic_delete(os_timer_periodic_t **const pp_timer);
 
+ATTR_NONNULL(1)
 void
 os_timer_one_shot_delete(os_timer_one_shot_t **const pp_timer);
 

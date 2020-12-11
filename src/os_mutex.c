@@ -8,6 +8,7 @@
 #include "os_mutex.h"
 #include <assert.h>
 
+ATTR_WARN_UNUSED_RESULT
 os_mutex_t
 os_mutex_create(void)
 {
@@ -16,6 +17,9 @@ os_mutex_create(void)
 }
 
 #if configSUPPORT_STATIC_ALLOCATION
+ATTR_WARN_UNUSED_RESULT
+ATTR_NONNULL(1)
+ATTR_RETURNS_NONNULL
 os_mutex_t
 os_mutex_create_static(os_mutex_static_t *const p_mutex_static)
 {
@@ -24,6 +28,7 @@ os_mutex_create_static(os_mutex_static_t *const p_mutex_static)
 }
 #endif
 
+ATTR_NONNULL(1)
 void
 os_mutex_delete(os_mutex_t *const ph_mutex)
 {
