@@ -21,7 +21,7 @@ os_str_to_uint32_cptr(
     os_strtoul_result_t result = strtoul(p_str, (char **)pp_end, base);
     if (result >= UINT32_MAX)
     {
-        result = UINT32_MAX;
+        return UINT32_MAX;
     }
     return (uint32_t)result;
 }
@@ -33,7 +33,7 @@ os_str_to_uint32(char *__restrict const p_str, char **__restrict const pp_end, c
     os_strtoul_result_t result = strtoul(p_str, pp_end, base);
     if (result >= UINT32_MAX)
     {
-        result = UINT32_MAX;
+        return UINT32_MAX;
     }
     return (uint32_t)result;
 }
@@ -48,16 +48,11 @@ os_str_to_int32_cptr(
     os_strtol_result_t result = strtol(p_str, (char **)pp_end, base);
     if (result >= INT32_MAX)
     {
-        result = INT32_MAX;
+        return INT32_MAX;
     }
-    else if (result <= INT32_MIN)
+    if (result <= INT32_MIN)
     {
-        result = INT32_MIN;
-    }
-    else
-    {
-        // MISRA C:2004, 14.10 - All if...else if constructs shall be terminated with an else clause.
-        // MISRA C:2012, 15.7 - All if...else if constructs shall be terminated with an else statement
+        return INT32_MIN;
     }
     return (int32_t)result;
 }
@@ -69,16 +64,11 @@ os_str_to_int32(char *__restrict const p_str, char **__restrict const pp_end, co
     os_strtol_result_t result = strtol(p_str, pp_end, base);
     if (result >= INT32_MAX)
     {
-        result = INT32_MAX;
+        return INT32_MAX;
     }
-    else if (result <= INT32_MIN)
+    if (result <= INT32_MIN)
     {
-        result = INT32_MIN;
-    }
-    else
-    {
-        // MISRA C:2004, 14.10 - All if...else if constructs shall be terminated with an else clause.
-        // MISRA C:2012, 15.7 - All if...else if constructs shall be terminated with an else statement
+        return INT32_MIN;
     }
     return (int32_t)result;
 }
