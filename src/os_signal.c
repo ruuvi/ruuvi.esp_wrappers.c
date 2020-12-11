@@ -33,7 +33,7 @@ os_signal_init(os_signal_t *p_signal, const bool is_static)
 os_signal_t *
 os_signal_create(void)
 {
-    os_signal_t *p_signal = app_calloc(1, sizeof(*p_signal));
+    os_signal_t *const p_signal = os_calloc(1, sizeof(*p_signal));
     if (NULL == p_signal)
     {
         return NULL;
@@ -63,7 +63,7 @@ os_signal_delete(os_signal_t **pp_signal)
     *pp_signal            = NULL;
     if (!p_signal->is_static)
     {
-        app_free(p_signal);
+        os_free(p_signal);
     }
 }
 

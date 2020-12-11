@@ -52,7 +52,7 @@ TestStrBuf::~TestStrBuf() = default;
 extern "C" {
 
 void *
-app_malloc(size_t size)
+os_malloc(size_t size)
 {
     if (g_pTestClass->m_flag_malloc_fail)
     {
@@ -63,16 +63,9 @@ app_malloc(size_t size)
 }
 
 void
-app_free(void *p_buf)
+os_free_internal(void *p_buf)
 {
     free(p_buf);
-}
-
-void
-app_free_pptr(void **pp_buf)
-{
-    free(*pp_buf);
-    *pp_buf = nullptr;
 }
 
 } // extern "C"

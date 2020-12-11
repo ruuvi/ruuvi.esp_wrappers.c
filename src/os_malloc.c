@@ -8,34 +8,39 @@
 #include "os_malloc.h"
 #include <stdlib.h>
 
+ATTR_MALLOC
+ATTR_MALLOC_SIZE(1)
 void *
-app_malloc(const size_t size)
+os_malloc(const size_t size)
 {
     return malloc(size);
 }
 
 void
-app_free(void *ptr)
+os_free_internal(void *ptr)
 {
     free(ptr);
 }
 
-void
-app_free_pptr(void **p_ptr)
-{
-    free(*p_ptr);
-    *p_ptr = NULL;
-}
-
-void
-app_free_const_pptr(const void **p_ptr)
-{
-    free((void *)*p_ptr);
-    *p_ptr = NULL;
-}
-
+ATTR_MALLOC
+ATTR_CALLOC_SIZE(1, 2)
 void *
-app_calloc(const size_t nmemb, const size_t size)
+os_calloc(const size_t nmemb, const size_t size)
 {
     return calloc(nmemb, size);
+}
+
+ATTR_WARN_UNUSED_RESULT
+ATTR_NONNULL(1)
+bool
+os_realloc_safe(void **const p_ptr, const size_t size)
+{
+    void *ptr       = *p_ptr;
+    void *p_new_ptr = realloc(ptr, size);
+    if (NULL == p_new_ptr)
+    {
+        return false;
+    }
+    *p_ptr = p_new_ptr;
+    return true;
 }

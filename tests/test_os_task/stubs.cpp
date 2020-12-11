@@ -20,13 +20,13 @@ TestOsTask *g_pTestClass;
 extern "C" {
 
 void *
-app_calloc(const size_t nmemb, const size_t size)
+os_calloc(const size_t nmemb, const size_t size)
 {
     return calloc(nmemb, size);
 }
 
 void
-app_free(void *ptr)
+os_free_internal(void *ptr)
 {
     free(ptr);
 }

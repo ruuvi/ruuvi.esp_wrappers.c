@@ -99,8 +99,9 @@ static void
 os_task_thread_func_wrapper_finite_with_param(void *p_arg)
 {
     const os_task_arg_finite_with_param_t *p_param = p_arg;
+    p_arg                                          = NULL;
     p_param->p_func(p_param->p_arg);
-    app_free(p_arg);
+    os_free(p_param);
     vTaskDelete(NULL);
     assert(0);
 }
@@ -113,7 +114,7 @@ os_task_create_finite(
     void *                           p_param,
     const os_task_priority_t         priority)
 {
-    os_task_arg_finite_with_param_t *p_arg = app_calloc(1, sizeof(*p_arg));
+    os_task_arg_finite_with_param_t *const p_arg = os_calloc(1, sizeof(*p_arg));
     if (NULL == p_arg)
     {
         return false;
@@ -138,7 +139,7 @@ os_task_thread_func_wrapper_finite_with_const_param(void *p_arg)
 {
     const os_task_arg_finite_with_const_param_t *p_param = p_arg;
     p_param->p_func(p_param->p_arg);
-    app_free(p_arg);
+    os_free(p_param);
     vTaskDelete(NULL);
     assert(0);
 }
@@ -151,7 +152,7 @@ os_task_create_finite_with_const_param(
     const void *                           p_param,
     const os_task_priority_t               priority)
 {
-    os_task_arg_finite_with_const_param_t *p_arg = app_calloc(1, sizeof(*p_arg));
+    os_task_arg_finite_with_const_param_t *const p_arg = os_calloc(1, sizeof(*p_arg));
     if (NULL == p_arg)
     {
         return false;
@@ -293,7 +294,7 @@ os_task_create_static_finite(
     const os_task_priority_t         priority,
     os_task_static_t *               p_task_mem)
 {
-    os_task_arg_finite_with_param_t *p_arg = app_calloc(1, sizeof(*p_arg));
+    os_task_arg_finite_with_param_t *p_arg = os_calloc(1, sizeof(*p_arg));
     if (NULL == p_arg)
     {
         return false;
@@ -323,7 +324,7 @@ os_task_create_static_finite_with_const_param(
     const os_task_priority_t               priority,
     os_task_static_t *                     p_task_mem)
 {
-    os_task_arg_finite_with_const_param_t *p_arg = app_calloc(1, sizeof(*p_arg));
+    os_task_arg_finite_with_const_param_t *p_arg = os_calloc(1, sizeof(*p_arg));
     if (NULL == p_arg)
     {
         return false;
