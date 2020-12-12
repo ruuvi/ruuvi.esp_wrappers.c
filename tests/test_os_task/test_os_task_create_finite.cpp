@@ -37,9 +37,10 @@ TEST_F(TestOsTask, os_task_create_finite_ok) // NOLINT
     ASSERT_EQ(g_pTestClass->m_createdTaskStackDepth, stack_depth);
     ASSERT_NE(nullptr, g_pTestClass->m_createdTaskParam);
     ASSERT_EQ(g_pTestClass->m_createdTaskPriority, priority);
-    TEST_CHECK_LOG_RECORD(
+    TEST_CHECK_LOG_RECORD_WITH_THREAD(
         ESP_LOG_INFO,
-        "[my_task_name2] Start thread 'my_task_name2' with priority 3, stack size 2048 bytes");
+        "my_task_name2",
+        "Start thread 'my_task_name2' with priority 3, stack size 2048 bytes");
     ASSERT_TRUE(esp_log_wrapper_is_empty());
 }
 
@@ -51,9 +52,10 @@ TEST_F(TestOsTask, os_task_create_finite_fail) // NOLINT
     this->m_taskName.assign(task_name);
     this->m_createdTaskHandle = nullptr;
     ASSERT_FALSE(os_task_create_finite(&task_func, task_name, stack_depth, &this->m_taskParam, priority));
-    TEST_CHECK_LOG_RECORD(
+    TEST_CHECK_LOG_RECORD_WITH_THREAD(
         ESP_LOG_INFO,
-        "[my_task_name2] Start thread 'my_task_name2' with priority 3, stack size 2048 bytes");
-    TEST_CHECK_LOG_RECORD_NO_FILE(ESP_LOG_ERROR, "Failed to start thread 'my_task_name2'");
+        "my_task_name2",
+        "Start thread 'my_task_name2' with priority 3, stack size 2048 bytes");
+    TEST_CHECK_LOG_RECORD(ESP_LOG_ERROR, "Failed to start thread 'my_task_name2'");
     ASSERT_TRUE(esp_log_wrapper_is_empty());
 }

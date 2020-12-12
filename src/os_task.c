@@ -8,6 +8,8 @@
 #include "os_task.h"
 #include <assert.h>
 #include "os_malloc.h"
+
+#define LOG_LOCAL_LEVEL LOG_LEVEL_INFO
 #include "log.h"
 
 typedef struct os_task_arg_finite_with_param_t
