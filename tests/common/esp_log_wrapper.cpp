@@ -30,7 +30,7 @@ esp_log_wrapper_deinit()
 }
 
 void
-esp_log_wrapper(esp_log_level_t level, const char *tag, const char *fmt, ...)
+esp_log_write(esp_log_level_t level, const char *tag, const char *fmt, ...)
 {
     va_list args;
     va_start(args, fmt);

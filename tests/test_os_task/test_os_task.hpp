@@ -49,52 +49,30 @@ public:
         , m_createdTaskStackDepth(0)
         , m_createdTaskParam(nullptr)
         , m_createdTaskPriority(0)
+        , stack_mem({})
+        , task_mem({})
     {
     }
 
-    ~TestOsTask() = default;
+    ~TestOsTask() override = default;
 
     string m_taskName;
     int    m_taskParam;
 
-    TaskHandle_t           m_createdTaskHandle;
-    TaskFunction_t         m_createdTaskFunc;
-    bool                   m_is_static;
-    string                 m_createdTaskName;
-    configSTACK_DEPTH_TYPE m_createdTaskStackDepth;
-    void *                 m_createdTaskParam;
-    UBaseType_t            m_createdTaskPriority;
-    os_task_stack_type_t   stack_mem[2048];
-    os_task_static_t       task_mem;
+    TaskHandle_t                           m_createdTaskHandle;
+    TaskFunction_t                         m_createdTaskFunc;
+    bool                                   m_is_static;
+    string                                 m_createdTaskName;
+    configSTACK_DEPTH_TYPE                 m_createdTaskStackDepth;
+    void *                                 m_createdTaskParam;
+    UBaseType_t                            m_createdTaskPriority;
+    std::array<os_task_stack_type_t, 2048> stack_mem;
+    os_task_static_t                       task_mem;
 };
 
-#define TEST_CHECK_LOG_RECORD_EX(tag_, level_, msg_, flag_skip_file_info_) \
-    do \
-    { \
-        ASSERT_FALSE(esp_log_wrapper_is_empty()); \
-        const LogRecord log_record = esp_log_wrapper_pop(); \
-        ASSERT_EQ(level_, log_record.level); \
-        ASSERT_EQ(string(tag_), log_record.tag); \
-        if (flag_skip_file_info_) \
-        { \
-            const char *p = strchr(log_record.message.c_str(), ' '); \
-            assert(NULL != p); \
-            p += 1; \
-            p = strchr(p, ' '); \
-            assert(NULL != p); \
-            p += 1; \
-            p = strchr(p, ' '); \
-            assert(NULL != p); \
-            p += 1; \
-            ASSERT_EQ(string(msg_), p); \
-        } \
-        else \
-        { \
-            ASSERT_EQ(string(msg_), log_record.message); \
-        } \
-    } while (0)
+#define TEST_CHECK_LOG_RECORD(level_, msg_) ESP_LOG_WRAPPER_TEST_CHECK_LOG_RECORD("os_task", level_, msg_);
 
-#define TEST_CHECK_LOG_RECORD(level_, msg_)         TEST_CHECK_LOG_RECORD_EX("os_task", level_, msg_, false);
-#define TEST_CHECK_LOG_RECORD_NO_FILE(level_, msg_) TEST_CHECK_LOG_RECORD_EX("os_task", level_, msg_, true);
+#define TEST_CHECK_LOG_RECORD_WITH_THREAD(level_, thread_, msg_) \
+    ESP_LOG_WRAPPER_TEST_CHECK_LOG_RECORD_WITH_THREAD("os_task", level_, thread_, msg_);
 
 #endif // TEST_OS_TASK_HPP

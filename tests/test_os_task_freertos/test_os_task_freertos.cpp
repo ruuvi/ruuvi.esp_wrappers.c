@@ -61,17 +61,18 @@ protected:
     }
 
 public:
-    sem_t                 semaFreeRTOS;
-    TQueue<MainTaskCmd_e> cmdQueue;
-    volatile uint32_t     m_counter;
-    os_task_stack_type_t  m_stack_mem[1024];
-    os_task_static_t      m_task_mem;
+    sem_t                                  semaFreeRTOS;
+    TQueue<MainTaskCmd_e>                  cmdQueue;
+    volatile uint32_t                      m_counter;
+    std::array<os_task_stack_type_t, 2048> m_stack_mem;
+    os_task_static_t                       m_task_mem;
 
     TestOsTaskFreertos()
         : Test()
         , pid(0)
         , semaFreeRTOS({})
         , m_counter(0)
+        , m_stack_mem({})
         , m_task_mem({})
     {
     }

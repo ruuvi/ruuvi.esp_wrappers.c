@@ -8,9 +8,13 @@
 #ifndef ESP_LOG_H
 #define ESP_LOG_H
 
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define LOG_FORMAT(letter, format) #letter " (%d) %s: " format
 
 typedef enum
 {
@@ -23,13 +27,13 @@ typedef enum
 } esp_log_level_t;
 
 void
-esp_log_wrapper(esp_log_level_t level, const char *tag, const char *fmt, ...);
+esp_log_write(esp_log_level_t level, const char *tag, const char *fmt, ...);
 
-#define ESP_LOGE(tag, fmt, ...) esp_log_wrapper(ESP_LOG_ERROR, tag, fmt, ##__VA_ARGS__)
-#define ESP_LOGW(tag, fmt, ...) esp_log_wrapper(ESP_LOG_WARN, tag, fmt, ##__VA_ARGS__)
-#define ESP_LOGI(tag, fmt, ...) esp_log_wrapper(ESP_LOG_INFO, tag, fmt, ##__VA_ARGS__)
-#define ESP_LOGD(tag, fmt, ...) esp_log_wrapper(ESP_LOG_DEBUG, tag, fmt, ##__VA_ARGS__)
-#define ESP_LOGV(tag, fmt, ...) esp_log_wrapper(ESP_LOG_VERBOSE, tag, fmt, ##__VA_ARGS__)
+static inline uint32_t
+esp_log_timestamp(void)
+{
+    return 0;
+}
 
 #ifdef __cplusplus
 }
