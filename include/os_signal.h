@@ -80,6 +80,7 @@ os_signal_create(void);
 
 /**
  * @brief Create new os_signal_t object using pre-allocated memory.
+ * @param p_signal_mem - pointer to the pre-allocated memory.
  * @return ptr to the instance of os_signal_t object.
  */
 ATTR_RETURNS_NONNULL

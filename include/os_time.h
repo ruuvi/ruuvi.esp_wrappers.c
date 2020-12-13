@@ -15,6 +15,10 @@
 extern "C" {
 #endif
 
+/**
+ * This is a wrap for 'time' function.
+ * @return Current UNIX time in seconds since 1970.
+ */
 time_t
 os_time_get(void);
 
