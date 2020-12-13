@@ -1,5 +1,5 @@
 /**
- * @file test_os_sema.cpp
+ * @file test_os_signal_freertos.cpp
  * @author TheSomeMan
  * @date 2020-12-06
  * @copyright Ruuvi Innovations Ltd, license BSD-3-Clause.
