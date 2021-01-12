@@ -100,10 +100,13 @@ os_signal_delete(os_signal_t **pp_signal);
 
 /**
  * @brief Register the current task in os_signal_t object.
- * @param None.
+ * @param true if the current task was registered successfully, false - if some other task was already registered.
  */
-void
+bool
 os_signal_register_cur_thread(os_signal_t *const p_signal);
+
+void
+os_signal_unregister_cur_thread(os_signal_t *const p_signal);
 
 /**
  * @brief Check if any task registered in os_signal_t object.

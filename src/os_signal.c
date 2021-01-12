@@ -67,14 +67,29 @@ os_signal_delete(os_signal_t **const pp_signal)
     }
 }
 
-void
+bool
 os_signal_register_cur_thread(os_signal_t *const p_signal)
+{
+    if (NULL == p_signal)
+    {
+        return false;
+    }
+    if (NULL != p_signal->task_handle)
+    {
+        return false;
+    }
+    p_signal->task_handle = os_task_get_cur_task_handle();
+    return true;
+}
+
+void
+os_signal_unregister_cur_thread(os_signal_t *const p_signal)
 {
     if (NULL == p_signal)
     {
         return;
     }
-    p_signal->task_handle = os_task_get_cur_task_handle();
+    p_signal->task_handle = NULL;
 }
 
 bool
