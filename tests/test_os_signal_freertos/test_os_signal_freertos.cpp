@@ -237,6 +237,7 @@ signalHandlerTask1(void *p_param)
             }
         }
     }
+    os_signal_unregister_cur_thread(pObj->p_signal);
     os_signal_delete(&pObj->p_signal);
     pObj->testEvents.push_back(new TestEventThreadExit(1));
     vTaskDelete(nullptr);
@@ -287,6 +288,7 @@ signalHandlerTask2(void *p_param)
             }
         }
     }
+    os_signal_unregister_cur_thread(pObj->p_signal2);
     os_signal_delete(&pObj->p_signal2);
     pObj->testEvents.push_back(new TestEventThreadExit(2));
     vTaskDelete(nullptr);
