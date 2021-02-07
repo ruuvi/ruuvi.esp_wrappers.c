@@ -16,6 +16,7 @@ set(RUUVI_ESP_WRAPPERS_SRC
         include/os_wrapper_types.h
         include/time_units.h
         include/str_buf.h
+        src/log_dump.c
         src/os_malloc.c
         src/os_mutex.c
         src/os_sema.c

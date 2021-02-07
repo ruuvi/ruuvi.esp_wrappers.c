@@ -84,6 +84,7 @@ private:
         else
         {
             // "E (0) SWD: [main] ruuvi.gateway_esp.c/main/nrf52swd.c:79 {nrf52swd_init_gpio_cfg_nreset}:
+            // "E (0) test: [thread_name] 0000: 30                                              | 0"
             const std::regex msg_regex(
                 R"(([EWIDV]) \([0-9]+\) ([^ ]+): \[([^ ]+)\] ([^ ]+):([0-9]+) \{([^ ]+)\}: (.*))",
                 std::regex::extended);
@@ -91,24 +92,46 @@ private:
             std::regex_match(this->message, match, msg_regex);
             const size_t exp_num_regexp_matches = 8U;
             const size_t num_regexp_matched     = match.size();
+            bool         flag_log_dump          = false;
             if (num_regexp_matched != exp_num_regexp_matches)
             {
-                std::stringstream ss;
-                ss << "Expected ";
-                ss << exp_num_regexp_matches;
-                ss << ", but found ";
-                ss << num_regexp_matched;
-                ss << " regex matches in log record: ";
-                ss << this->message;
-                throw std::runtime_error(ss.str());
+                const std::regex msg_regex_log_dump(
+                    R"(([EWIDV]) \([0-9]+\) ([^ ]+): \[([^ ]+)\] ([0-9A-F]+: [0-9A-F]+.*))",
+                    std::regex::extended);
+                std::regex_match(this->message, match, msg_regex_log_dump);
+                if (5U == match.size())
+                {
+                    flag_log_dump = true;
+                }
+                else
+                {
+                    std::stringstream ss;
+                    ss << "Expected ";
+                    ss << exp_num_regexp_matches;
+                    ss << ", but found ";
+                    ss << num_regexp_matched;
+                    ss << " regex matches in log record: ";
+                    ss << this->message;
+                    throw std::runtime_error(ss.str());
+                }
             }
-            msg_parsed.log_level = match[1].str();
-            msg_parsed.tag       = match[2].str();
-            msg_parsed.thread    = match[3].str();
-            msg_parsed.file      = match[4].str();
-            msg_parsed.line      = std::stoi(match[5].str());
-            msg_parsed.func      = match[6].str();
-            msg_parsed.msg       = match[7].str();
+            if (!flag_log_dump)
+            {
+                msg_parsed.log_level = match[1].str();
+                msg_parsed.tag       = match[2].str();
+                msg_parsed.thread    = match[3].str();
+                msg_parsed.file      = match[4].str();
+                msg_parsed.line      = std::stoi(match[5].str());
+                msg_parsed.func      = match[6].str();
+                msg_parsed.msg       = match[7].str();
+            }
+            else
+            {
+                msg_parsed.log_level = match[1].str();
+                msg_parsed.tag       = match[2].str();
+                msg_parsed.thread    = match[3].str();
+                msg_parsed.msg       = match[4].str();
+            }
         }
         return msg_parsed;
     }
