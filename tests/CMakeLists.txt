@@ -33,6 +33,7 @@ add_subdirectory(${RUUVI_ESP_WRAPPERS_TESTS_COMMON})
 add_subdirectory(esp_simul)
 
 add_subdirectory(test_log_dump)
+add_subdirectory(test_mac_addr)
 add_subdirectory(test_os_malloc)
 add_subdirectory(test_os_str)
 add_subdirectory(test_os_mutex)
@@ -48,6 +49,11 @@ add_subdirectory(test_time_units)
 add_test(NAME test_log_dump
         COMMAND ruuvi_esp_wrappers-test-log_dump
             --gtest_output=xml:$<TARGET_FILE_DIR:ruuvi_esp_wrappers-test-log_dump>/gtestresults.xml
+)
+
+add_test(NAME test_mac_addr
+        COMMAND ruuvi_esp_wrappers-test-mac_addr
+            --gtest_output=xml:$<TARGET_FILE_DIR:ruuvi_esp_wrappers-test-mac_addr>/gtestresults.xml
 )
 
 add_test(NAME test_os_malloc
