@@ -199,8 +199,8 @@ str_buf_bin_to_hex(str_buf_t *const p_str_buf, const uint8_t *const p_input_buf,
     char *       p_buf   = (NULL != p_str_buf->buf) ? &p_str_buf->buf[p_str_buf->idx] : NULL;
     const size_t max_len = (0 != p_str_buf->size) ? (p_str_buf->size - p_str_buf->idx) : 0;
 
-    bool flag_overflow = false;
-    size_t len = 0;
+    bool   flag_overflow = false;
+    size_t len           = 0;
     if (NULL == p_buf)
     {
         len = input_buf_size * 2;
@@ -242,8 +242,8 @@ ATTR_NONNULL(1)
 str_buf_t
 str_buf_bin_to_hex_with_alloc(const uint8_t *const p_input_buf, const size_t input_buf_size)
 {
-    str_buf_t str_buf = str_buf_init_null();
-    const bool res = str_buf_bin_to_hex(&str_buf, p_input_buf, input_buf_size);
+    str_buf_t  str_buf = str_buf_init_null();
+    const bool res     = str_buf_bin_to_hex(&str_buf, p_input_buf, input_buf_size);
     if (!res)
     {
         return str_buf_init_null();
