@@ -329,3 +329,105 @@ TEST_F(TestStrBuf, test_printf_negative_snprintf) // NOLINT
     str_buf_t str_buf = str_buf_printf_with_alloc("TestABC %ls", L"\U10FFFFFF");
     ASSERT_EQ(nullptr, str_buf.buf);
 }
+
+TEST_F(TestStrBuf, test_bin_to_hex) // NOLINT
+{
+    std::array<char, 11> tmp_buf = { 'q', '\0' };
+
+    std::array<uint8_t, 5> bin_buf = { 0x11U, 0xaaU, 0xffU, 0x00U, 0x80U };
+    str_buf_t              str_buf = STR_BUF_INIT(tmp_buf.begin(), tmp_buf.size());
+    ASSERT_TRUE(str_buf_bin_to_hex(&str_buf, bin_buf.cbegin(), bin_buf.size()));
+    const string exp_str("11aaff0080");
+    ASSERT_EQ(string(str_buf.buf), exp_str);
+    ASSERT_EQ(str_buf.idx, exp_str.length());
+}
+
+TEST_F(TestStrBuf, test_bin_to_hex_insufficient_output_buf_1) // NOLINT
+{
+    std::array<char, 10> tmp_buf = { 'q', '\0' };
+
+    std::array<uint8_t, 5> bin_buf = { 0x11U, 0xaaU, 0xffU, 0x00U, 0x80U };
+    str_buf_t              str_buf = STR_BUF_INIT(tmp_buf.begin(), tmp_buf.size());
+    ASSERT_FALSE(str_buf_bin_to_hex(&str_buf, bin_buf.cbegin(), bin_buf.size()));
+    const string exp_str("11aaff00");
+    ASSERT_EQ(string(str_buf.buf), exp_str);
+    ASSERT_EQ(str_buf.idx, exp_str.length());
+}
+
+TEST_F(TestStrBuf, test_bin_to_hex_insufficient_output_buf_2) // NOLINT
+{
+    std::array<char, 9> tmp_buf = { 'q', '\0' };
+
+    std::array<uint8_t, 5> bin_buf = { 0x11U, 0xaaU, 0xffU, 0x00U, 0x80U };
+    str_buf_t              str_buf = STR_BUF_INIT(tmp_buf.begin(), tmp_buf.size());
+    ASSERT_FALSE(str_buf_bin_to_hex(&str_buf, bin_buf.cbegin(), bin_buf.size()));
+    const string exp_str("11aaff00");
+    ASSERT_EQ(string(str_buf.buf), exp_str);
+    ASSERT_EQ(str_buf.idx, exp_str.length());
+}
+
+TEST_F(TestStrBuf, test_bin_to_hex_with_prefix_and_suffix) // NOLINT
+{
+    std::array<char, 19> tmp_buf = { 'q', '\0' };
+
+    std::array<uint8_t, 5> bin_buf = { 0x11U, 0xaaU, 0xffU, 0x00U, 0x80U };
+    str_buf_t              str_buf = STR_BUF_INIT(tmp_buf.begin(), tmp_buf.size());
+    ASSERT_TRUE(str_buf_printf(&str_buf, "pre:"));
+    ASSERT_TRUE(str_buf_bin_to_hex(&str_buf, bin_buf.cbegin(), bin_buf.size()));
+    ASSERT_TRUE(str_buf_printf(&str_buf, ":sfx"));
+    const string exp_str("pre:11aaff0080:sfx");
+    ASSERT_EQ(string(str_buf.buf), exp_str);
+    ASSERT_EQ(str_buf.idx, exp_str.length());
+}
+
+TEST_F(TestStrBuf, test_bin_to_hex_null_buf_nonzero_size) // NOLINT
+{
+    std::array<char, 11> tmp_buf = { 'q', '\0' };
+
+    std::array<uint8_t, 5> bin_buf = { 0x11U, 0xaaU, 0xffU, 0x00U, 0x80U };
+    str_buf_t              str_buf = STR_BUF_INIT(nullptr, tmp_buf.size());
+    ASSERT_FALSE(str_buf_bin_to_hex(&str_buf, bin_buf.cbegin(), bin_buf.size()));
+    ASSERT_EQ(nullptr, str_buf.buf);
+    ASSERT_EQ(0, str_buf.idx);
+}
+
+TEST_F(TestStrBuf, test_bin_to_hex_nonnull_buf_zero_size) // NOLINT
+{
+    std::array<char, 11> tmp_buf = { 'q', '\0' };
+
+    std::array<uint8_t, 5> bin_buf = { 0x11U, 0xaaU, 0xffU, 0x00U, 0x80U };
+    str_buf_t              str_buf = STR_BUF_INIT(tmp_buf.begin(), 0);
+    ASSERT_FALSE(str_buf_bin_to_hex(&str_buf, bin_buf.cbegin(), bin_buf.size()));
+    ASSERT_EQ(0, str_buf.idx);
+}
+
+TEST_F(TestStrBuf, test_bin_to_hex_overflow) // NOLINT
+{
+    std::array<char, 11> tmp_buf = { 'q', '\0' };
+
+    std::array<uint8_t, 5> bin_buf = { 0x11U, 0xaaU, 0xffU, 0x00U, 0x80U };
+    str_buf_t              str_buf = STR_BUF_INIT(tmp_buf.begin(), tmp_buf.size());
+    ASSERT_FALSE(str_buf_printf(&str_buf, "12345678901"));
+    const string exp_str("1234567890");
+    ASSERT_EQ(exp_str, string(str_buf.buf));
+    ASSERT_EQ(exp_str.length() + 1, str_buf.idx);
+
+    ASSERT_FALSE(str_buf_bin_to_hex(&str_buf, bin_buf.cbegin(), bin_buf.size()));
+    ASSERT_EQ(exp_str, string(str_buf.buf));
+    ASSERT_EQ(exp_str.length() + 1, str_buf.idx);
+}
+
+TEST_F(TestStrBuf, test_bin_to_hex_with_alloc) // NOLINT
+{
+    std::array<uint8_t, 5> bin_buf = { 0x11U, 0xaaU, 0xffU, 0x00U, 0x80U };
+    str_buf_t              str_buf = str_buf_bin_to_hex_with_alloc(bin_buf.begin(), bin_buf.size());
+    ASSERT_NE(nullptr, str_buf.buf);
+    const string exp_str("11aaff0080");
+    ASSERT_EQ(string(str_buf.buf), exp_str);
+    ASSERT_EQ(str_buf.idx, exp_str.length());
+    ASSERT_EQ(str_buf.size, exp_str.length() + 1);
+    str_buf_free_buf(&str_buf);
+    ASSERT_EQ(nullptr, str_buf.buf);
+    ASSERT_EQ(0, str_buf.size);
+    ASSERT_EQ(0, str_buf.idx);
+}

@@ -127,6 +127,26 @@ str_buf_t
 str_buf_printf_with_alloc(const char *const fmt, ...);
 
 /**
+ * Convert binary buffer to a hex-string.
+ * @param p_str_buf - pointer to str_buf_t object
+ * @param p_input_buf - pointer to the binary buffer
+ * @param input_buf_size - the binary buffer size
+ */
+ATTR_NONNULL(1, 2)
+bool
+str_buf_bin_to_hex(str_buf_t *const p_str_buf, const uint8_t *const p_input_buf, const size_t input_buf_size);
+
+/**
+ * Allocate buffer for a new string and convert binary buffer to hex-string there.
+ * @note The allocated buffer can be deallocated using str_buf_free_buf
+ * @param p_input_buf - pointer to the binary buffer
+ * @param input_buf_size - the binary buffer size
+ */
+ATTR_NONNULL(1)
+str_buf_t
+str_buf_bin_to_hex_with_alloc(const uint8_t *const p_input_buf, const size_t input_buf_size);
+
+/**
  * Free the buffer to which the str_buf_t object points to.
  * @param p_str_buf - pointer to str_buf_t object
  */
