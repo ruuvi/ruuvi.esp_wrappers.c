@@ -6,6 +6,7 @@ set(RUUVI_ESP_WRAPPERS_SRC
         include/esp_type_wrapper.h
         include/log.h
         include/mac_addr.h
+        include/os_mkgmtime.h
         include/os_mutex.h
         include/os_sema.h
         include/os_signal.h
@@ -19,6 +20,7 @@ set(RUUVI_ESP_WRAPPERS_SRC
         include/str_buf.h
         src/log_dump.c
         src/mac_addr.c
+        src/os_mkgmtime.c
         src/os_malloc.c
         src/os_mutex.c
         src/os_sema.c
