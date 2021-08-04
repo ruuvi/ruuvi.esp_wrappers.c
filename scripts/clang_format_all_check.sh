@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./scripts/run-clang-format.sh --recursive ./src ./tests/test* ./tests/common
+./scripts/run-clang-format.sh --recursive ./src ./include ./tests/test* ./tests/common
