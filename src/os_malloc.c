@@ -44,3 +44,19 @@ os_realloc_safe(void **const p_ptr, const size_t size)
     *p_ptr = p_new_ptr;
     return true;
 }
+
+ATTR_WARN_UNUSED_RESULT
+ATTR_NONNULL(1)
+bool
+os_realloc_safe_and_clean(void **const p_ptr, const size_t size)
+{
+    void *ptr       = *p_ptr;
+    void *p_new_ptr = realloc(ptr, size);
+    if (NULL == p_new_ptr)
+    {
+        os_free(*p_ptr);
+        return false;
+    }
+    *p_ptr = p_new_ptr;
+    return true;
+}

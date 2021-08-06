@@ -39,7 +39,8 @@ void *
 os_calloc(const size_t nmemb, const size_t size);
 
 /**
- * This is a safer wrap for realloc, it changes the size of the memory block and checks the result of the reallocation.
+ * @brief This is a safer wrap for realloc,
+ *        it changes the size of the memory block and checks the result of the reallocation.
  * @note This function checks if realloc returns NULL and overwrites value in p_ptr if a new memory block was allocated.
  * @param[IN,OUT] p_ptr - ptr to a variable which points to the memory block,
  * the pointer to the new memory block will be saved to p_ptr.
@@ -50,6 +51,22 @@ os_calloc(const size_t nmemb, const size_t size);
 ATTR_WARN_UNUSED_RESULT
 bool
 os_realloc_safe(void **const p_ptr, const size_t size);
+
+/**
+ * @brief This is a safer wrap for realloc,
+ *        it changes the size of the memory block and checks the result of the reallocation,
+ *        it automatically frees the original memory pointer in case if realloc fails.
+ * @note This function checks if realloc returns NULL and overwrites value in p_ptr if a new memory block was allocated.
+ * @param[IN,OUT] p_ptr - ptr to a variable which points to the memory block,
+ * the pointer to the new memory block will be saved to p_ptr.
+ * In case if the reallocation failed, then the value in p_ptr will not be changed.
+ * @param size - new size of the memory block.
+ * @return true if the reallocation was successful.
+ */
+ATTR_WARN_UNUSED_RESULT
+ATTR_NONNULL(1)
+bool
+os_realloc_safe_and_clean(void **const p_ptr, const size_t size);
 
 /**
  * This is a wrap for 'free' - it deallocates a block of memory
@@ -63,11 +80,11 @@ os_free_internal(void *ptr);
  * @brief os_free - is a wrap for 'free' which automatically sets pointer to NULL after the memory freeing.
  */
 #define os_free(ptr) \
-    do \
+    if (NULL != (ptr)) \
     { \
         os_free_internal((void *)(ptr)); \
         ptr = NULL; \
-    } while (0)
+    }
 
 #ifdef __cplusplus
 }
