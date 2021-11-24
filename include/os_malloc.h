@@ -80,11 +80,14 @@ os_free_internal(void *ptr);
  * @brief os_free - is a wrap for 'free' which automatically sets pointer to NULL after the memory freeing.
  */
 #define os_free(ptr) \
-    if (NULL != (ptr)) \
+    do \
     { \
-        os_free_internal((void *)(ptr)); \
-        ptr = NULL; \
-    }
+        if (NULL != (ptr)) \
+        { \
+            os_free_internal((void *)(ptr)); \
+            ptr = NULL; \
+        } \
+    } while (0)
 
 #ifdef __cplusplus
 }
