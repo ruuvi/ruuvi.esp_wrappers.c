@@ -30,6 +30,16 @@ extern "C" {
 #define ATTR_PRINTF(idx_fmt, idx_args) ATTRIBUTE((format(printf, idx_fmt, idx_args)))
 #define ATTR_NONNULL(arg_idx, ...)     ATTRIBUTE((nonnull(arg_idx, ##__VA_ARGS__)))
 
+#if !defined(__clang__)
+#if defined(__GNUC__) && (__GNUC__ >= 7)
+#define ATTR_FALLTHROUGH __attribute__((fallthrough))
+#else
+#define ATTR_FALLTHROUGH (void)0
+#endif
+#else
+#define ATTR_FALLTHROUGH (void)0
+#endif
+
 #ifdef __cplusplus
 }
 #endif
