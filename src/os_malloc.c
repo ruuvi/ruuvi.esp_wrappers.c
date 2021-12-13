@@ -19,7 +19,10 @@ os_malloc(const size_t size)
 void
 os_free_internal(void *ptr)
 {
-    free(ptr);
+    if (NULL != ptr)
+    {
+        free(ptr);
+    }
 }
 
 ATTR_MALLOC
