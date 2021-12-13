@@ -82,11 +82,8 @@ os_free_internal(void *ptr);
 #define os_free(ptr) \
     do \
     { \
-        if (NULL != (ptr)) \
-        { \
-            os_free_internal((void *)(ptr)); \
-            ptr = NULL; \
-        } \
+        os_free_internal((void *)(ptr)); \
+        ptr = NULL; \
     } while (0)
 
 #ifdef __cplusplus
