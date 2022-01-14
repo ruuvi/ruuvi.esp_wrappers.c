@@ -12,11 +12,13 @@
 extern "C" {
 #endif
 
-typedef int           printf_int_t;
-typedef unsigned      printf_uint_t;
-typedef long          printf_long_t;
-typedef unsigned long printf_ulong_t;
-typedef int           printf_precision_t;
+typedef int                printf_int_t;
+typedef unsigned           printf_uint_t;
+typedef long               printf_long_t;
+typedef unsigned long      printf_ulong_t;
+typedef long long          printf_long_long_t;
+typedef unsigned long long printf_ulong_long_t;
+typedef int                printf_precision_t;
 
 typedef int socket_t;
 #define SOCKET_INVALID ((socket_t)(-1))
