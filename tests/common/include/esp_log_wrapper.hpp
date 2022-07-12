@@ -22,6 +22,7 @@ public:
     string log_level;
     string tag;
     string thread;
+    int    priority;
     string file;
     int    line {};
     string func;
@@ -59,11 +60,13 @@ private:
         LogRecordParsed msg_parsed = {};
         if (flag_skip_file_info)
         {
-            // "I (0) SWD: [main] nRF52 SWD init"
-            const std::regex msg_regex(R"(([EWIDV]) \([0-9]+\) ([^ ]+): \[([^ ]+)\] (.*))", std::regex::extended);
-            std::smatch      match;
+            // "I (0) SWD: [main/1] nRF52 SWD init"
+            const std::regex msg_regex(
+                R"(([EWIDV]) \([0-9]+\) ([^ ]+): \[([^ ]+)\/([0-9]+)\] (.*))",
+                std::regex::extended);
+            std::smatch match;
             std::regex_match(this->message, match, msg_regex);
-            const size_t exp_num_regexp_matches = 5U;
+            const size_t exp_num_regexp_matches = 6U;
             const size_t num_regexp_matched     = match.size();
             if (num_regexp_matched != exp_num_regexp_matches)
             {
@@ -79,27 +82,28 @@ private:
             msg_parsed.log_level = match[1].str();
             msg_parsed.tag       = match[2].str();
             msg_parsed.thread    = match[3].str();
-            msg_parsed.msg       = match[4].str();
+            msg_parsed.priority  = std::stoi(match[4].str());
+            msg_parsed.msg       = match[5].str();
         }
         else
         {
-            // "E (0) SWD: [main] ruuvi.gateway_esp.c/main/nrf52swd.c:79 {nrf52swd_init_gpio_cfg_nreset}:
-            // "E (0) test: [thread_name] 0000: 30                                              | 0"
+            // "E (0) SWD: [main/1] ruuvi.gateway_esp.c/main/nrf52swd.c:79 {nrf52swd_init_gpio_cfg_nreset}:
+            // "E (0) test: [thread_name/priority] 0000: 30                                              | 0"
             const std::regex msg_regex(
-                R"(([EWIDV]) \([0-9]+\) ([^ ]+): \[([^ ]+)\] ([^ ]+):([0-9]+) \{([^ ]+)\}: (.*))",
+                R"(([EWIDV]) \([0-9]+\) ([^ ]+): \[([^ ]+)\/([0-9]+)\] ([^ ]+):([0-9]+) \{([^ ]+)\}: (.*))",
                 std::regex::extended);
             std::smatch match;
             std::regex_match(this->message, match, msg_regex);
-            const size_t exp_num_regexp_matches = 8U;
+            const size_t exp_num_regexp_matches = 9U;
             const size_t num_regexp_matched     = match.size();
             bool         flag_log_dump          = false;
             if (num_regexp_matched != exp_num_regexp_matches)
             {
                 const std::regex msg_regex_log_dump(
-                    R"(([EWIDV]) \([0-9]+\) ([^ ]+): \[([^ ]+)\] ([0-9A-F]+: [0-9A-F]+.*))",
+                    R"(([EWIDV]) \([0-9]+\) ([^ ]+): \[([^ ]+)/([0-9]+)\] ([0-9A-F]+: [0-9A-F]+.*))",
                     std::regex::extended);
                 std::regex_match(this->message, match, msg_regex_log_dump);
-                if (5U == match.size())
+                if (6U == match.size())
                 {
                     flag_log_dump = true;
                 }
@@ -120,17 +124,19 @@ private:
                 msg_parsed.log_level = match[1].str();
                 msg_parsed.tag       = match[2].str();
                 msg_parsed.thread    = match[3].str();
-                msg_parsed.file      = match[4].str();
-                msg_parsed.line      = std::stoi(match[5].str());
-                msg_parsed.func      = match[6].str();
-                msg_parsed.msg       = match[7].str();
+                msg_parsed.priority  = std::stoi(match[4].str());
+                msg_parsed.file      = match[5].str();
+                msg_parsed.line      = std::stoi(match[6].str());
+                msg_parsed.func      = match[7].str();
+                msg_parsed.msg       = match[8].str();
             }
             else
             {
                 msg_parsed.log_level = match[1].str();
                 msg_parsed.tag       = match[2].str();
                 msg_parsed.thread    = match[3].str();
-                msg_parsed.msg       = match[4].str();
+                msg_parsed.priority  = std::stoi(match[4].str());
+                msg_parsed.msg       = match[5].str();
             }
         }
         return msg_parsed;
@@ -196,7 +202,7 @@ esp_log_wrapper_clear();
         ASSERT_EQ(string(msg_), log_record.parsed.msg); \
     } while (0)
 
-#define ESP_LOG_WRAPPER_TEST_CHECK_LOG_RECORD_WITH_THREAD(tag_, level_, thread_, msg_) \
+#define ESP_LOG_WRAPPER_TEST_CHECK_LOG_RECORD_WITH_THREAD(tag_, level_, thread_, priority_, msg_) \
     do \
     { \
         ASSERT_FALSE(esp_log_wrapper_is_empty()); \
@@ -204,6 +210,7 @@ esp_log_wrapper_clear();
         ASSERT_EQ(level_, log_record.level); \
         ASSERT_EQ(string(tag_), log_record.tag); \
         ASSERT_EQ(string(thread_), log_record.parsed.thread); \
+        ASSERT_EQ(priority_, log_record.parsed.priority); \
         ASSERT_EQ(string(msg_), log_record.parsed.msg); \
     } while (0)
 

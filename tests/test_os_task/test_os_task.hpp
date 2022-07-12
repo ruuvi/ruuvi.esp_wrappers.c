@@ -72,7 +72,7 @@ public:
 
 #define TEST_CHECK_LOG_RECORD(level_, msg_) ESP_LOG_WRAPPER_TEST_CHECK_LOG_RECORD("os_task", level_, msg_);
 
-#define TEST_CHECK_LOG_RECORD_WITH_THREAD(level_, thread_, msg_) \
-    ESP_LOG_WRAPPER_TEST_CHECK_LOG_RECORD_WITH_THREAD("os_task", level_, thread_, msg_);
+#define TEST_CHECK_LOG_RECORD_WITH_THREAD(level_, thread_, priority_, msg_) \
+    ESP_LOG_WRAPPER_TEST_CHECK_LOG_RECORD_WITH_THREAD("os_task", level_, thread_, priority_, msg_);
 
 #endif // TEST_OS_TASK_HPP

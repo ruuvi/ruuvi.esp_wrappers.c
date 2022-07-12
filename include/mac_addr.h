@@ -26,7 +26,7 @@ typedef struct mac_address_str_t
     char str_buf[(MAC_ADDRESS_NUM_BYTES * 2) + (MAC_ADDRESS_NUM_BYTES - 1) + 1]; // format: XX:XX:XX:XX:XX:XX
 } mac_address_str_t;
 
-#define MAC_ADDR_STR_BYTE_OFFSET(idx_) ((idx_) * 3)
+#define MAC_ADDR_STR_BYTE_OFFSET(idx_) ((idx_)*3)
 
 #define MAC_ADDR_INIT(mac1, mac2, mac3, mac4, mac5, mac6) \
     (mac_address_bin_t) \
