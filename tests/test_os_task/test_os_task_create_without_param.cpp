@@ -45,6 +45,7 @@ TEST_F(TestOsTask, os_task_create_with_without_param_ok) // NOLINT
     TEST_CHECK_LOG_RECORD_WITH_THREAD(
         ESP_LOG_INFO,
         "my_task_name2",
+        0,
         "Start thread 'my_task_name2' with priority 3, stack size 2048 bytes");
     ASSERT_TRUE(esp_log_wrapper_is_empty());
 }
@@ -61,6 +62,7 @@ TEST_F(TestOsTask, os_task_create_without_param_fail) // NOLINT
     TEST_CHECK_LOG_RECORD_WITH_THREAD(
         ESP_LOG_INFO,
         "my_task_name2",
+        0,
         "Start thread 'my_task_name2' with priority 3, stack size 2048 bytes");
     TEST_CHECK_LOG_RECORD(ESP_LOG_ERROR, "Failed to start thread 'my_task_name2'");
     ASSERT_TRUE(esp_log_wrapper_is_empty());

@@ -416,6 +416,13 @@ os_task_get_name(void)
 }
 
 ATTR_WARN_UNUSED_RESULT
+os_task_priority_t
+os_task_get_priority(void)
+{
+    return (os_task_priority_t)uxTaskPriorityGet(NULL);
+}
+
+ATTR_WARN_UNUSED_RESULT
 os_task_handle_t
 os_task_get_cur_task_handle(void)
 {

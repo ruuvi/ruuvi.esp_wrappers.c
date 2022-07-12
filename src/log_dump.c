@@ -82,11 +82,12 @@ log_print_dump(
         esp_log_write(
             level,
             p_tag,
-            "%s (%d) %s: [%s] %s\n",
+            "%s (%d) %s: [%s/%d] %s\n",
             p_log_prefix,
             esp_log_timestamp(),
             p_tag,
             os_task_get_name(),
+            (printf_int_t)os_task_get_priority(),
             log_dump_line_buf);
     }
 }

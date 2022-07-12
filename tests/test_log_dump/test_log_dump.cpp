@@ -82,6 +82,12 @@ os_task_get_name(void)
     return const_cast<char *>(g_task_name);
 }
 
+os_task_priority_t
+os_task_get_priority(void)
+{
+    return 0;
+}
+
 } // extern "C"
 
 /*** Unit-Tests *******************************************************************************************************/

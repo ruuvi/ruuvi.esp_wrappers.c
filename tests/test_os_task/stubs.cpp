@@ -42,6 +42,13 @@ pcTaskGetName(TaskHandle_t xTaskToQuery)
     return const_cast<char *>(g_pTestClass->m_taskName.c_str());
 }
 
+UBaseType_t
+uxTaskPriorityGet(const TaskHandle_t xTask)
+{
+    assert(nullptr == xTask);
+    return g_pTestClass->m_createdTaskPriority;
+}
+
 TaskHandle_t
 xTaskGetCurrentTaskHandle(void)
 {

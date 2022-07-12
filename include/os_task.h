@@ -303,6 +303,14 @@ const char *
 os_task_get_name(void);
 
 /**
+ * Get task priority for the current thread.
+ * @return task priority for the current task.
+ */
+ATTR_WARN_UNUSED_RESULT
+os_task_priority_t
+os_task_get_priority(void);
+
+/**
  * Delay a task for a given number of ticks.
  * @param delay_ticks
  */
