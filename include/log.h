@@ -60,10 +60,11 @@ log_print_dump(
     esp_log_write( \
         ESP_LOG_ERROR, \
         TAG, \
-        LOG_FORMAT(E, "[%s] %s:%d {%s}: " fmt), \
+        LOG_FORMAT(E, "[%s/%d] %s:%d {%s}: " fmt), \
         esp_log_timestamp(), \
         TAG, \
         os_task_get_name(), \
+        uxTaskPriorityGet(NULL), \
         __FILE__, \
         __LINE__, \
         __func__, \
@@ -73,10 +74,11 @@ log_print_dump(
     esp_log_write( \
         ESP_LOG_ERROR, \
         TAG, \
-        LOG_FORMAT(E, "[%s] %s:%d {%s}: " fmt ", err=%d (%s)"), \
+        LOG_FORMAT(E, "[%s/%d] %s:%d {%s}: " fmt ", err=%d (%s)"), \
         esp_log_timestamp(), \
         TAG, \
         os_task_get_name(), \
+        uxTaskPriorityGet(NULL), \
         __FILE__, \
         __LINE__, \
         __func__, \
@@ -88,10 +90,11 @@ log_print_dump(
     esp_log_write( \
         ESP_LOG_ERROR, \
         TAG, \
-        LOG_FORMAT(E, "[%s] %s:%d {%s}: " fmt ", err=%d"), \
+        LOG_FORMAT(E, "[%s/%d] %s:%d {%s}: " fmt ", err=%d"), \
         esp_log_timestamp(), \
         TAG, \
         os_task_get_name(), \
+        uxTaskPriorityGet(NULL), \
         __FILE__, \
         __LINE__, \
         __func__, \
@@ -104,10 +107,11 @@ log_print_dump(
         esp_log_write( \
             ESP_LOG_ERROR, \
             TAG, \
-            LOG_FORMAT(E, "[%s] %s:%d {%s}: " fmt ":"), \
+            LOG_FORMAT(E, "[%s/%d] %s:%d {%s}: " fmt ":"), \
             esp_log_timestamp(), \
             TAG, \
             os_task_get_name(), \
+            uxTaskPriorityGet(NULL), \
             __FILE__, \
             __LINE__, \
             __func__, \
@@ -127,20 +131,22 @@ log_print_dump(
     esp_log_write( \
         ESP_LOG_WARN, \
         TAG, \
-        LOG_FORMAT(W, "[%s] " fmt), \
+        LOG_FORMAT(W, "[%s/%d] " fmt), \
         esp_log_timestamp(), \
         TAG, \
         os_task_get_name(), \
+        uxTaskPriorityGet(NULL), \
         ##__VA_ARGS__)
 
 #define LOG_WARN_ESP(err, fmt, ...) \
     esp_log_write( \
         ESP_LOG_WARN, \
         TAG, \
-        LOG_FORMAT(W, "[%s] " fmt ", err=%d (%s)"), \
+        LOG_FORMAT(W, "[%s/%d] " fmt ", err=%d (%s)"), \
         esp_log_timestamp(), \
         TAG, \
         os_task_get_name(), \
+        uxTaskPriorityGet(NULL), \
         ##__VA_ARGS__, \
         err, \
         esp_err_to_name(err))
@@ -149,10 +155,11 @@ log_print_dump(
     esp_log_write( \
         ESP_LOG_WARN, \
         TAG, \
-        LOG_FORMAT(W, "[%s] " fmt ", err=%d"), \
+        LOG_FORMAT(W, "[%s/%d] " fmt ", err=%d"), \
         esp_log_timestamp(), \
         TAG, \
         os_task_get_name(), \
+        uxTaskPriorityGet(NULL), \
         ##__VA_ARGS__, \
         err)
 
@@ -162,10 +169,11 @@ log_print_dump(
         esp_log_write( \
             ESP_LOG_WARN, \
             TAG, \
-            LOG_FORMAT(W, "[%s] " fmt ":"), \
+            LOG_FORMAT(W, "[%s/%d] " fmt ":"), \
             esp_log_timestamp(), \
             TAG, \
             os_task_get_name(), \
+            uxTaskPriorityGet(NULL), \
             ##__VA_ARGS__); \
         log_print_dump(ESP_LOG_WARN, TAG, "W", p_buf, buf_size); \
     } while (0)
@@ -181,10 +189,11 @@ log_print_dump(
     esp_log_write( \
         ESP_LOG_INFO, \
         TAG, \
-        LOG_FORMAT(I, "[%s] " fmt), \
+        LOG_FORMAT(I, "[%s/%d] " fmt), \
         esp_log_timestamp(), \
         TAG, \
         os_task_get_name(), \
+        uxTaskPriorityGet(NULL), \
         ##__VA_ARGS__)
 
 #define LOG_DUMP_INFO(p_buf, buf_size, fmt, ...) \
@@ -193,10 +202,11 @@ log_print_dump(
         esp_log_write( \
             ESP_LOG_INFO, \
             TAG, \
-            LOG_FORMAT(I, "[%s] " fmt ":"), \
+            LOG_FORMAT(I, "[%s/%d] " fmt ":"), \
             esp_log_timestamp(), \
             TAG, \
             os_task_get_name(), \
+            uxTaskPriorityGet(NULL), \
             ##__VA_ARGS__); \
         log_print_dump(ESP_LOG_INFO, TAG, "I", p_buf, buf_size); \
     } while (0)
@@ -210,10 +220,11 @@ log_print_dump(
     esp_log_write( \
         ESP_LOG_DEBUG, \
         TAG, \
-        LOG_FORMAT(D, "[%s] %s:%d {%s}: " fmt), \
+        LOG_FORMAT(D, "[%s/%d] %s:%d {%s}: " fmt), \
         esp_log_timestamp(), \
         TAG, \
         os_task_get_name(), \
+        uxTaskPriorityGet(NULL), \
         __FILE__, \
         __LINE__, \
         __func__, \
@@ -225,10 +236,11 @@ log_print_dump(
         esp_log_write( \
             ESP_LOG_DEBUG, \
             TAG, \
-            LOG_FORMAT(D, "[%s] %s:%d {%s}: " fmt ":"), \
+            LOG_FORMAT(D, "[%s/%d] %s:%d {%s}: " fmt ":"), \
             esp_log_timestamp(), \
             TAG, \
             os_task_get_name(), \
+            uxTaskPriorityGet(NULL), \
             __FILE__, \
             __LINE__, \
             __func__, \
