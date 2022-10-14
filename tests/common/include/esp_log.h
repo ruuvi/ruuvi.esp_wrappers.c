@@ -27,7 +27,7 @@ typedef enum
 } esp_log_level_t;
 
 void
-esp_log_write(esp_log_level_t level, const char *tag, const char *fmt, ...);
+esp_log_write(esp_log_level_t level, const char* tag, const char* fmt, ...);
 
 static inline uint32_t
 esp_log_timestamp(void)

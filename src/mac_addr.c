@@ -10,7 +10,7 @@
 #include "str_buf.h"
 
 void
-mac_address_bin_init(mac_address_bin_t *p_mac, const uint8_t mac[MAC_ADDRESS_NUM_BYTES])
+mac_address_bin_init(mac_address_bin_t* p_mac, const uint8_t mac[MAC_ADDRESS_NUM_BYTES])
 {
     _Static_assert(
         MAC_ADDRESS_NUM_BYTES == sizeof(p_mac->mac),
@@ -19,13 +19,13 @@ mac_address_bin_init(mac_address_bin_t *p_mac, const uint8_t mac[MAC_ADDRESS_NUM
 }
 
 mac_address_str_t
-mac_address_to_str(const mac_address_bin_t *p_mac)
+mac_address_to_str(const mac_address_bin_t* p_mac)
 {
     mac_address_str_t mac_str = { 0 };
     str_buf_t         str_buf = {
-        .buf  = mac_str.str_buf,
-        .size = sizeof(mac_str.str_buf),
-        .idx  = 0,
+                .buf  = mac_str.str_buf,
+                .size = sizeof(mac_str.str_buf),
+                .idx  = 0,
     };
     for (size_t i = 0; i < sizeof(p_mac->mac); ++i)
     {

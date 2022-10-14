@@ -31,7 +31,7 @@ typedef size_t str_buf_size_t;
 
 typedef struct str_buf_t
 {
-    char *         buf;
+    char*          buf;
     str_buf_size_t size;
     str_buf_size_t idx;
 } str_buf_t;
@@ -42,7 +42,7 @@ typedef struct str_buf_t
  */
 ATTR_NONNULL(1)
 str_buf_t
-str_buf_init(char *const p_buf, const str_buf_size_t buf_size);
+str_buf_init(char* const p_buf, const str_buf_size_t buf_size);
 
 /**
  * Init str_buf_t object with NULL pointer to buffer.
@@ -58,7 +58,7 @@ str_buf_init_null(void);
  */
 ATTR_NONNULL(1)
 bool
-str_buf_init_with_alloc(str_buf_t *const p_str_buf);
+str_buf_init_with_alloc(str_buf_t* const p_str_buf);
 
 /**
  * Get the accumulated length of string.
@@ -68,7 +68,7 @@ str_buf_init_with_alloc(str_buf_t *const p_str_buf);
 ATTR_NONNULL(1)
 ATTR_PURE
 str_buf_size_t
-str_buf_get_len(const str_buf_t *const p_str_buf);
+str_buf_get_len(const str_buf_t* const p_str_buf);
 
 /**
  * Check if buffer overflow occurred during last call to str_buf_vprintf or str_buf_printf.
@@ -78,7 +78,7 @@ str_buf_get_len(const str_buf_t *const p_str_buf);
 ATTR_NONNULL(1)
 ATTR_PURE
 bool
-str_buf_is_overflow(const str_buf_t *const p_str_buf);
+str_buf_is_overflow(const str_buf_t* const p_str_buf);
 
 /**
  * Print string to buffer or calculate size of string if the p_str_buf->buf is NULL.
@@ -89,7 +89,7 @@ str_buf_is_overflow(const str_buf_t *const p_str_buf);
  */
 ATTR_NONNULL(1, 2)
 bool
-str_buf_vprintf(str_buf_t *const p_str_buf, const char *const fmt, va_list args);
+str_buf_vprintf(str_buf_t* const p_str_buf, const char* const fmt, va_list args);
 
 /**
  * Print string to buffer or calculate size of string if the p_str_buf->buf is NULL.
@@ -101,7 +101,7 @@ str_buf_vprintf(str_buf_t *const p_str_buf, const char *const fmt, va_list args)
 ATTR_PRINTF(2, 3)
 ATTR_NONNULL(1, 2)
 bool
-str_buf_printf(str_buf_t *const p_str_buf, const char *const fmt, ...);
+str_buf_printf(str_buf_t* const p_str_buf, const char* const fmt, ...);
 
 /**
  * Allocate buffer for a new string and print it there.
@@ -112,7 +112,7 @@ str_buf_printf(str_buf_t *const p_str_buf, const char *const fmt, ...);
  */
 ATTR_NONNULL(1)
 str_buf_t
-str_buf_vprintf_with_alloc(const char *const fmt, va_list args);
+str_buf_vprintf_with_alloc(const char* const fmt, va_list args);
 
 /**
  * Allocate buffer for a new string and print it there.
@@ -124,7 +124,7 @@ str_buf_vprintf_with_alloc(const char *const fmt, va_list args);
 ATTR_PRINTF(1, 2)
 ATTR_NONNULL(1)
 str_buf_t
-str_buf_printf_with_alloc(const char *const fmt, ...);
+str_buf_printf_with_alloc(const char* const fmt, ...);
 
 /**
  * Convert binary buffer to a hex-string.
@@ -134,7 +134,7 @@ str_buf_printf_with_alloc(const char *const fmt, ...);
  */
 ATTR_NONNULL(1, 2)
 bool
-str_buf_bin_to_hex(str_buf_t *const p_str_buf, const uint8_t *const p_input_buf, const size_t input_buf_size);
+str_buf_bin_to_hex(str_buf_t* const p_str_buf, const uint8_t* const p_input_buf, const size_t input_buf_size);
 
 /**
  * Allocate buffer for a new string and convert binary buffer to hex-string there.
@@ -144,7 +144,7 @@ str_buf_bin_to_hex(str_buf_t *const p_str_buf, const uint8_t *const p_input_buf,
  */
 ATTR_NONNULL(1)
 str_buf_t
-str_buf_bin_to_hex_with_alloc(const uint8_t *const p_input_buf, const size_t input_buf_size);
+str_buf_bin_to_hex_with_alloc(const uint8_t* const p_input_buf, const size_t input_buf_size);
 
 /**
  * Free the buffer to which the str_buf_t object points to.
@@ -152,7 +152,7 @@ str_buf_bin_to_hex_with_alloc(const uint8_t *const p_input_buf, const size_t inp
  */
 ATTR_NONNULL(1)
 void
-str_buf_free_buf(str_buf_t *const p_str_buf);
+str_buf_free_buf(str_buf_t* const p_str_buf);
 
 #ifdef __cplusplus
 }

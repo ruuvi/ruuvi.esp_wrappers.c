@@ -46,7 +46,7 @@ TestOsMalloc::~TestOsMalloc() = default;
 
 TEST_F(TestOsMalloc, test_os_malloc_os_free) // NOLINT
 {
-    void *ptr = os_malloc(1000);
+    void* ptr = os_malloc(1000);
     ASSERT_NE(nullptr, ptr);
     os_free(ptr);
     ASSERT_EQ(nullptr, ptr);
@@ -54,7 +54,7 @@ TEST_F(TestOsMalloc, test_os_malloc_os_free) // NOLINT
 
 TEST_F(TestOsMalloc, test_os_calloc) // NOLINT
 {
-    void *ptr = os_calloc(sizeof(uint32_t), 1000);
+    void* ptr = os_calloc(sizeof(uint32_t), 1000);
     ASSERT_NE(nullptr, ptr);
     os_free(ptr);
     ASSERT_EQ(nullptr, ptr);
@@ -62,12 +62,12 @@ TEST_F(TestOsMalloc, test_os_calloc) // NOLINT
 
 TEST_F(TestOsMalloc, test_os_realloc) // NOLINT
 {
-    void *ptr = os_malloc(4);
+    void* ptr = os_malloc(4);
     ASSERT_NE(nullptr, ptr);
-    void *ptr2 = os_malloc(4);
+    void* ptr2 = os_malloc(4);
     ASSERT_NE(nullptr, ptr2);
-    const void *const saved_ptr = ptr;
-    ASSERT_TRUE(os_realloc_safe((void **)&ptr, 1 * 1024));
+    const void* const saved_ptr = ptr;
+    ASSERT_TRUE(os_realloc_safe((void**)&ptr, 1 * 1024));
     ASSERT_NE(nullptr, ptr);
     ASSERT_NE(saved_ptr, ptr);
     os_free(ptr);

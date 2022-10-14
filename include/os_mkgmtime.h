@@ -29,7 +29,7 @@ extern "C" {
  * @return time_t - calendar time (or unix-time - seconds since the Epoch 1970) or (time_t)-1 if a error was detected.
  */
 time_t
-os_mkgmtime(struct tm *const p_tm_time_utc);
+os_mkgmtime(struct tm* const p_tm_time_utc);
 
 #ifdef __cplusplus
 }

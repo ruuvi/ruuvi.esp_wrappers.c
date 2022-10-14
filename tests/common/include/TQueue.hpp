@@ -48,7 +48,7 @@ public:
     }
 
     void
-    pop(T &item)
+    pop(T& item)
     {
         std::unique_lock<std::mutex> mlock(mutex_);
         while (queue_.empty())
@@ -60,7 +60,7 @@ public:
     }
 
     void
-    push(const T &item)
+    push(const T& item)
     {
         std::unique_lock<std::mutex> mlock(mutex_);
         handled_ = false;
@@ -70,7 +70,7 @@ public:
     }
 
     void
-    push(T &&item)
+    push(T&& item)
     {
         std::unique_lock<std::mutex> mlock(mutex_);
         handled_ = false;
@@ -80,7 +80,7 @@ public:
     }
 
     void
-    push_and_wait(const T &item)
+    push_and_wait(const T& item)
     {
         std::unique_lock<std::mutex> mlock(mutex_);
         handled_ = false;
@@ -91,7 +91,7 @@ public:
     }
 
     void
-    push_and_wait(T &&item)
+    push_and_wait(T&& item)
     {
         std::unique_lock<std::mutex> mlock(mutex_);
         handled_ = false;

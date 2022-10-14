@@ -66,7 +66,7 @@ os_time_tm_mon_to_month(const int tm_mon)
  * @return os_time_month_e
  */
 static inline os_time_month_e
-os_time_get_tm_mon(const struct tm *const p_tm)
+os_time_get_tm_mon(const struct tm* const p_tm)
 {
     return os_time_tm_mon_to_month(p_tm->tm_mon);
 }
@@ -88,7 +88,7 @@ os_time_tm_wday_to_wday(const int tm_wday)
  * @return os_time_wday_e
  */
 static inline os_time_wday_e
-os_time_get_tm_wday(const struct tm *const p_tm)
+os_time_get_tm_wday(const struct tm* const p_tm)
 {
     return os_time_tm_wday_to_wday(p_tm->tm_wday);
 }
@@ -98,7 +98,7 @@ os_time_get_tm_wday(const struct tm *const p_tm)
  * @param month - month.
  * @return a string with a three-character abbreviation of the month.
  */
-const char *
+const char*
 os_time_month_name_short(const os_time_month_e month);
 
 /**
@@ -106,7 +106,7 @@ os_time_month_name_short(const os_time_month_e month);
  * @param month - month.
  * @return a string with a full name of the month.
  */
-const char *
+const char*
 os_time_month_name_long(const os_time_month_e month);
 
 /**
@@ -114,7 +114,7 @@ os_time_month_name_long(const os_time_month_e month);
  * @param day_of_the_week - day of the week.
  * @return a string with a two-character abbreviation of the day of the week.
  */
-const char *
+const char*
 os_time_wday_name_short(const os_time_wday_e day_of_the_week);
 
 /**
@@ -122,7 +122,7 @@ os_time_wday_name_short(const os_time_wday_e day_of_the_week);
  * @param day_of_the_week - day of the week.
  * @return a string with a three-character abbreviation of the day of the week.
  */
-const char *
+const char*
 os_time_wday_name_mid(const os_time_wday_e day_of_the_week);
 
 /**
@@ -130,7 +130,7 @@ os_time_wday_name_mid(const os_time_wday_e day_of_the_week);
  * @param day_of_the_week - day of the week.
  * @return a string with a full name of the day of the week.
  */
-const char *
+const char*
 os_time_wday_name_long(const os_time_wday_e day_of_the_week);
 
 #ifdef __cplusplus

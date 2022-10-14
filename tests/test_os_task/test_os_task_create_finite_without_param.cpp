@@ -23,7 +23,7 @@ task_func_without_param()
 
 TEST_F(TestOsTask, os_task_create_finite_with_without_param_ok) // NOLINT
 {
-    const char *             task_name   = "my_task_name2";
+    const char*              task_name   = "my_task_name2";
     const uint32_t           stack_depth = 2048;
     const os_task_priority_t priority    = 3;
     this->m_taskName.assign(task_name);
@@ -45,7 +45,7 @@ TEST_F(TestOsTask, os_task_create_finite_with_without_param_ok) // NOLINT
 
 TEST_F(TestOsTask, os_task_create_finite_without_param_fail) // NOLINT
 {
-    const char *             task_name   = "my_task_name2";
+    const char*              task_name   = "my_task_name2";
     const uint32_t           stack_depth = 2048;
     const os_task_priority_t priority    = 3;
     this->m_taskName.assign(task_name);

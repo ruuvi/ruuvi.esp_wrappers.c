@@ -39,7 +39,7 @@ ATTR_WARN_UNUSED_RESULT
 ATTR_NONNULL(1)
 ATTR_RETURNS_NONNULL
 os_mutex_recursive_t
-os_mutex_recursive_create_static(os_mutex_recursive_static_t *const p_mutex_static);
+os_mutex_recursive_create_static(os_mutex_recursive_static_t* const p_mutex_static);
 #endif
 
 /**
@@ -49,7 +49,7 @@ os_mutex_recursive_create_static(os_mutex_recursive_static_t *const p_mutex_stat
  */
 ATTR_NONNULL(1)
 void
-os_mutex_recursive_delete(os_mutex_recursive_t *const ph_mutex);
+os_mutex_recursive_delete(os_mutex_recursive_t* const ph_mutex);
 
 /**
  * @brief Lock the mutex (wait until it will be locked).

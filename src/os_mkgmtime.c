@@ -45,7 +45,7 @@ check_is_leap_year(const uint16_t year)
 }
 
 static uint16_t
-calc_elapsed_years_since_1900(struct tm *const p_tm_time_utc)
+calc_elapsed_years_since_1900(struct tm* const p_tm_time_utc)
 {
     if ((p_tm_time_utc->tm_year < (OS_TIME_EPOCH_REL_BASE_YEAR - 1))
         || (p_tm_time_utc->tm_year > (OS_TIME_EPOCH_REL_MAX_YEAR + 1)))
@@ -74,7 +74,7 @@ calc_elapsed_years_since_1900(struct tm *const p_tm_time_utc)
 }
 
 time_t
-os_mkgmtime(struct tm *const p_tm_time_utc)
+os_mkgmtime(struct tm* const p_tm_time_utc)
 {
     const uint16_t num_of_elapsed_years_since_1900 = calc_elapsed_years_since_1900(p_tm_time_utc);
     if ((uint16_t)(-1) == num_of_elapsed_years_since_1900)
@@ -93,13 +93,10 @@ os_mkgmtime(struct tm *const p_tm_time_utc)
      * Calculate elapsed days since base date (midnight, 1970-01-01, UTC)
      * 365 days for each elapsed year since 1970, plus one more day for each elapsed leap year.
      */
-    const int32_t num_days_elapsed_since_1970_till_cur_month = (int32_t)(
-                                                                   num_of_elapsed_years_since_1900
-                                                                   - OS_TIME_EPOCH_REL_BASE_YEAR)
-                                                                   * OS_TIME_NUM_DAYS_PER_YEAR
-                                                               + ((num_of_elapsed_years_since_1900 - 1) / 4)
-                                                               - OS_TIME_NUM_LEAP_YEARS_IN_RANGE_1900_1970
-                                                               + days_elapsed_minus_one_since_year_to_month;
+    const int32_t num_days_elapsed_since_1970_till_cur_month
+        = (int32_t)(num_of_elapsed_years_since_1900 - OS_TIME_EPOCH_REL_BASE_YEAR) * OS_TIME_NUM_DAYS_PER_YEAR
+          + ((num_of_elapsed_years_since_1900 - 1) / 4) - OS_TIME_NUM_LEAP_YEARS_IN_RANGE_1900_1970
+          + days_elapsed_minus_one_since_year_to_month;
 
     const int32_t num_days_elapsed_since_1970 = num_days_elapsed_since_1970_till_cur_month + p_tm_time_utc->tm_mday;
     if (num_days_elapsed_since_1970 < 0)

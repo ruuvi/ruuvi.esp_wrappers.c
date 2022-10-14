@@ -37,10 +37,10 @@ typedef enum MainTaskCmd_Tag
  * *********************************************************************************/
 
 class TestOsTimerFreertos;
-static TestOsTimerFreertos *g_pTestClass;
+static TestOsTimerFreertos* g_pTestClass;
 
-static void *
-freertosStartup(void *arg);
+static void*
+freertosStartup(void* arg);
 
 class TestOsTimerFreertos : public ::testing::Test
 {
@@ -66,7 +66,7 @@ protected:
     {
         cmdQueue.push_and_wait(MainTaskCmd_Exit);
         vTaskEndScheduler();
-        void *ret_code = nullptr;
+        void* ret_code = nullptr;
         pthread_join(pid, &ret_code);
         sem_destroy(&semaFreeRTOS);
         esp_log_wrapper_deinit();
@@ -78,8 +78,8 @@ public:
     TQueue<MainTaskCmd_e>      cmdQueue;
     os_timer_periodic_static_t timer_periodic_static;
     os_timer_one_shot_static_t timer_one_shot_static;
-    os_timer_periodic_t *      p_timer_periodic;
-    os_timer_one_shot_t *      p_timer_one_shot;
+    os_timer_periodic_t*       p_timer_periodic;
+    os_timer_one_shot_t*       p_timer_one_shot;
     uint32_t                   counter;
 
     TestOsTimerFreertos();
@@ -128,7 +128,7 @@ get_uptime_ms(void)
 }
 
 static struct timespec
-timespec_diff(const struct timespec *p_t2, const struct timespec *p_t1)
+timespec_diff(const struct timespec* p_t2, const struct timespec* p_t1)
 {
     struct timespec result = {
         .tv_sec  = p_t2->tv_sec - p_t1->tv_sec,
@@ -143,7 +143,7 @@ timespec_diff(const struct timespec *p_t2, const struct timespec *p_t1)
 }
 
 static uint32_t
-timespec_diff_ms(const struct timespec *p_t2, const struct timespec *p_t1)
+timespec_diff_ms(const struct timespec* p_t2, const struct timespec* p_t1)
 {
     struct timespec diff = timespec_diff(p_t2, p_t1);
     return diff.tv_sec * 1000 + diff.tv_nsec / 1000000;
@@ -185,25 +185,25 @@ TestOsTimerFreertos::delay_ms(const uint32_t timeout_ms)
 }
 
 static void
-timer_callback_periodic(os_timer_periodic_t *p_timer, void *p_arg)
+timer_callback_periodic(os_timer_periodic_t* p_timer, void* p_arg)
 {
     (void)p_timer;
-    auto *pObj = static_cast<TestOsTimerFreertos *>(p_arg);
+    auto* pObj = static_cast<TestOsTimerFreertos*>(p_arg);
     pObj->counter += 1;
 }
 
 static void
-timer_callback_one_shot(os_timer_one_shot_t *p_timer, void *p_arg)
+timer_callback_one_shot(os_timer_one_shot_t* p_timer, void* p_arg)
 {
     (void)p_timer;
-    auto *pObj = static_cast<TestOsTimerFreertos *>(p_arg);
+    auto* pObj = static_cast<TestOsTimerFreertos*>(p_arg);
     pObj->counter += 1;
 }
 
 static void
-cmdHandlerTask(void *p_param)
+cmdHandlerTask(void* p_param)
 {
-    auto *pObj     = static_cast<TestOsTimerFreertos *>(p_param);
+    auto* pObj     = static_cast<TestOsTimerFreertos*>(p_param);
     bool  flagExit = false;
     sem_post(&pObj->semaFreeRTOS);
     while (!flagExit)
@@ -271,10 +271,10 @@ cmdHandlerTask(void *p_param)
     vTaskDelete(nullptr);
 }
 
-static void *
-freertosStartup(void *arg)
+static void*
+freertosStartup(void* arg)
 {
-    auto *     pObj = static_cast<TestOsTimerFreertos *>(arg);
+    auto*      pObj = static_cast<TestOsTimerFreertos*>(arg);
     const bool res
         = xTaskCreate(&cmdHandlerTask, "cmdHandlerTask", configMINIMAL_STACK_SIZE, pObj, tskIDLE_PRIORITY + 1, nullptr);
     assert(res);

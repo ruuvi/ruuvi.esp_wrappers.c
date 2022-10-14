@@ -16,7 +16,7 @@ using namespace std;
 
 class TestOsTask;
 
-extern TestOsTask *g_pTestClass;
+extern TestOsTask* g_pTestClass;
 
 /*** Google-test class implementation
  * *********************************************************************************/
@@ -64,7 +64,7 @@ public:
     bool                                   m_is_static;
     string                                 m_createdTaskName;
     configSTACK_DEPTH_TYPE                 m_createdTaskStackDepth;
-    void *                                 m_createdTaskParam;
+    void*                                  m_createdTaskParam;
     UBaseType_t                            m_createdTaskPriority;
     std::array<os_task_stack_type_t, 2048> stack_mem;
     os_task_static_t                       task_mem;

@@ -17,7 +17,7 @@ using namespace std;
  * *********************************************************************************/
 
 class TestOsSema;
-static TestOsSema *g_pTestClass;
+static TestOsSema* g_pTestClass;
 
 extern "C" {
 
@@ -47,7 +47,7 @@ protected:
     void
     SetUp() override
     {
-        for (auto &sema : this->arrOfSemaphores)
+        for (auto& sema : this->arrOfSemaphores)
         {
 #if ((configSUPPORT_STATIC_ALLOCATION == 1) && (configSUPPORT_DYNAMIC_ALLOCATION == 1))
             sema.isStaticallyAllocated = false;
@@ -88,7 +88,7 @@ TestOsSema::~TestOsSema() = default;
 
 extern "C" {
 
-char *
+char*
 pcTaskGetName(TaskHandle_t xTaskToQuery)
 {
     assert(nullptr == xTaskToQuery);
@@ -96,18 +96,18 @@ pcTaskGetName(TaskHandle_t xTaskToQuery)
     {
         return nullptr;
     }
-    return const_cast<char *>(g_pTestClass->m_taskName.c_str());
+    return const_cast<char*>(g_pTestClass->m_taskName.c_str());
 }
 
 static void
-prvInitialiseSema(struct QueueDefinition *p_sema, const bool isStaticallyAllocated)
+prvInitialiseSema(struct QueueDefinition* p_sema, const bool isStaticallyAllocated)
 {
     p_sema->isUsed                = true;
     p_sema->isStaticallyAllocated = isStaticallyAllocated;
 }
 
 static void
-prvDeinitialiseSema(struct QueueDefinition *p_sema)
+prvDeinitialiseSema(struct QueueDefinition* p_sema)
 {
     p_sema->isUsed = false;
 }
@@ -118,10 +118,10 @@ xQueueGenericCreate(const UBaseType_t uxQueueLength, const UBaseType_t uxItemSiz
     assert(queueQUEUE_TYPE_BINARY_SEMAPHORE == ucQueueType);
     assert(1 == uxQueueLength);
     assert(semSEMAPHORE_QUEUE_ITEM_LENGTH == uxItemSize);
-    struct QueueDefinition *p_sema = std::find_if(
+    struct QueueDefinition* p_sema = std::find_if(
         std::begin(g_pTestClass->arrOfSemaphores),
         std::end(g_pTestClass->arrOfSemaphores),
-        [&](const struct QueueDefinition &x) { return !x.isUsed; });
+        [&](const struct QueueDefinition& x) { return !x.isUsed; });
     if (std::end(g_pTestClass->arrOfSemaphores) == p_sema)
     {
         return nullptr;
@@ -134,8 +134,8 @@ QueueHandle_t
 xQueueGenericCreateStatic(
     const UBaseType_t uxQueueLength,
     const UBaseType_t uxItemSize,
-    uint8_t *         pucQueueStorage,
-    StaticQueue_t *   pxStaticQueue,
+    uint8_t*          pucQueueStorage,
+    StaticQueue_t*    pxStaticQueue,
     const uint8_t     ucQueueType)
 {
     assert(queueQUEUE_TYPE_BINARY_SEMAPHORE == ucQueueType);
@@ -143,7 +143,7 @@ xQueueGenericCreateStatic(
     assert(semSEMAPHORE_QUEUE_ITEM_LENGTH == uxItemSize);
     assert(nullptr == pucQueueStorage);
     assert(nullptr != pxStaticQueue);
-    auto *p_sema = reinterpret_cast<struct QueueDefinition *>(pxStaticQueue);
+    auto* p_sema = reinterpret_cast<struct QueueDefinition*>(pxStaticQueue);
     prvInitialiseSema(p_sema, true);
     return p_sema;
 }
@@ -151,13 +151,13 @@ xQueueGenericCreateStatic(
 void
 vQueueDelete(QueueHandle_t xQueue)
 {
-    auto *p_sema = reinterpret_cast<struct QueueDefinition *>(xQueue);
+    auto* p_sema = reinterpret_cast<struct QueueDefinition*>(xQueue);
     if (!p_sema->isStaticallyAllocated)
     {
-        struct QueueDefinition *p_sema2 = std::find_if(
+        struct QueueDefinition* p_sema2 = std::find_if(
             std::begin(g_pTestClass->arrOfSemaphores),
             std::end(g_pTestClass->arrOfSemaphores),
-            [&](const struct QueueDefinition &x) { return &x == xQueue; });
+            [&](const struct QueueDefinition& x) { return &x == xQueue; });
         assert(std::end(g_pTestClass->arrOfSemaphores) != p_sema2);
         assert(p_sema == p_sema2);
     }
@@ -169,14 +169,14 @@ xQueueSemaphoreTake(QueueHandle_t xQueue, TickType_t xTicksToWait)
 {
     (void)xTicksToWait;
 
-    auto *p_sema = reinterpret_cast<struct QueueDefinition *>(xQueue);
+    auto* p_sema = reinterpret_cast<struct QueueDefinition*>(xQueue);
 
     if (!p_sema->isStaticallyAllocated)
     {
-        struct QueueDefinition *p_sema2 = std::find_if(
+        struct QueueDefinition* p_sema2 = std::find_if(
             std::begin(g_pTestClass->arrOfSemaphores),
             std::end(g_pTestClass->arrOfSemaphores),
-            [&](const struct QueueDefinition &x) { return &x == xQueue; });
+            [&](const struct QueueDefinition& x) { return &x == xQueue; });
         assert(std::end(g_pTestClass->arrOfSemaphores) != p_sema2);
         assert(p_sema == p_sema2);
     }
@@ -193,7 +193,7 @@ xQueueSemaphoreTake(QueueHandle_t xQueue, TickType_t xTicksToWait)
 BaseType_t
 xQueueGenericSend(
     QueueHandle_t     xQueue,
-    const void *const pvItemToQueue,
+    const void* const pvItemToQueue,
     TickType_t        xTicksToWait,
     const BaseType_t  xCopyPosition)
 {
@@ -201,14 +201,14 @@ xQueueGenericSend(
     assert(semGIVE_BLOCK_TIME == xTicksToWait);
     assert(queueSEND_TO_BACK == xCopyPosition);
 
-    auto *p_sema = reinterpret_cast<struct QueueDefinition *>(xQueue);
+    auto* p_sema = reinterpret_cast<struct QueueDefinition*>(xQueue);
 
     if (!p_sema->isStaticallyAllocated)
     {
-        struct QueueDefinition *p_sema2 = std::find_if(
+        struct QueueDefinition* p_sema2 = std::find_if(
             std::begin(g_pTestClass->arrOfSemaphores),
             std::end(g_pTestClass->arrOfSemaphores),
-            [&](const struct QueueDefinition &x) { return &x == xQueue; });
+            [&](const struct QueueDefinition& x) { return &x == xQueue; });
         assert(std::end(g_pTestClass->arrOfSemaphores) != p_sema2);
         assert(p_sema == p_sema2);
     }
@@ -261,7 +261,7 @@ TEST_F(TestOsSema, os_sema_create_delete_static_only) // NOLINT
 {
     static StaticSemaphore_t static_sema1;
     os_sema_t                h_sema1 = os_sema_create_static(&static_sema1);
-    ASSERT_EQ(reinterpret_cast<void *>(&static_sema1), reinterpret_cast<void *>(h_sema1));
+    ASSERT_EQ(reinterpret_cast<void*>(&static_sema1), reinterpret_cast<void*>(h_sema1));
 
     os_sema_delete(&h_sema1);
     ASSERT_EQ(nullptr, h_sema1);
@@ -276,13 +276,13 @@ TEST_F(TestOsSema, os_sema_create_delete_static_and_dynamic) // NOLINT
     ASSERT_EQ(&this->arrOfSemaphores[0], h_sema_dyn1);
 
     os_sema_t h_sema_sta1 = os_sema_create_static(&static_sema1);
-    ASSERT_EQ(reinterpret_cast<void *>(&static_sema1), reinterpret_cast<void *>(h_sema_sta1));
+    ASSERT_EQ(reinterpret_cast<void*>(&static_sema1), reinterpret_cast<void*>(h_sema_sta1));
 
     os_sema_t h_sema_dyn2 = os_sema_create();
     ASSERT_EQ(&this->arrOfSemaphores[1], h_sema_dyn2);
 
     os_sema_t h_sema_sta2 = os_sema_create_static(&static_sema2);
-    ASSERT_EQ(reinterpret_cast<void *>(&static_sema2), reinterpret_cast<void *>(h_sema_sta2));
+    ASSERT_EQ(reinterpret_cast<void*>(&static_sema2), reinterpret_cast<void*>(h_sema_sta2));
 
     os_sema_t h_sema_dyn3 = os_sema_create();
     ASSERT_EQ(nullptr, h_sema_dyn3);
@@ -313,7 +313,7 @@ TEST_F(TestOsSema, os_sema_create_delete_static_and_dynamic) // NOLINT
 TEST_F(TestOsSema, os_sema_wait_infinite) // NOLINT
 {
     os_sema_t               h_sema = os_sema_create();
-    struct QueueDefinition *p_sema = &this->arrOfSemaphores[0];
+    struct QueueDefinition* p_sema = &this->arrOfSemaphores[0];
     ASSERT_EQ(p_sema, h_sema);
     ASSERT_FALSE(p_sema->isLocked);
 
@@ -332,8 +332,8 @@ TEST_F(TestOsSema, os_sema_wait_infinite_static) // NOLINT
 {
     static StaticSemaphore_t static_sema1;
     os_sema_t                h_sema = os_sema_create_static(&static_sema1);
-    ASSERT_EQ(reinterpret_cast<void *>(&static_sema1), reinterpret_cast<void *>(h_sema));
-    struct QueueDefinition *p_sema = h_sema;
+    ASSERT_EQ(reinterpret_cast<void*>(&static_sema1), reinterpret_cast<void*>(h_sema));
+    struct QueueDefinition* p_sema = h_sema;
     ASSERT_FALSE(p_sema->isLocked);
 
     os_sema_wait_infinite(h_sema);
@@ -350,7 +350,7 @@ TEST_F(TestOsSema, os_sema_wait_infinite_static) // NOLINT
 TEST_F(TestOsSema, os_sema_wait_immediate) // NOLINT
 {
     os_sema_t               h_sema = os_sema_create();
-    struct QueueDefinition *p_sema = &this->arrOfSemaphores[0];
+    struct QueueDefinition* p_sema = &this->arrOfSemaphores[0];
     ASSERT_EQ(p_sema, h_sema);
     ASSERT_FALSE(p_sema->isLocked);
 
@@ -370,7 +370,7 @@ TEST_F(TestOsSema, os_sema_wait_immediate) // NOLINT
 TEST_F(TestOsSema, os_sema_wait_with_timeout) // NOLINT
 {
     os_sema_t               h_sema = os_sema_create();
-    struct QueueDefinition *p_sema = &this->arrOfSemaphores[0];
+    struct QueueDefinition* p_sema = &this->arrOfSemaphores[0];
     ASSERT_EQ(p_sema, h_sema);
     ASSERT_FALSE(p_sema->isLocked);
 

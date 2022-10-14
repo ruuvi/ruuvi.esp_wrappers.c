@@ -10,14 +10,14 @@
 
 ATTR_MALLOC
 ATTR_MALLOC_SIZE(1)
-void *
+void*
 os_malloc(const size_t size)
 {
     return malloc(size);
 }
 
 void
-os_free_internal(void *ptr)
+os_free_internal(void* ptr)
 {
     if (NULL != ptr)
     {
@@ -27,7 +27,7 @@ os_free_internal(void *ptr)
 
 ATTR_MALLOC
 ATTR_CALLOC_SIZE(1, 2)
-void *
+void*
 os_calloc(const size_t nmemb, const size_t size)
 {
     return calloc(nmemb, size);
@@ -36,10 +36,10 @@ os_calloc(const size_t nmemb, const size_t size)
 ATTR_WARN_UNUSED_RESULT
 ATTR_NONNULL(1)
 bool
-os_realloc_safe(void **const p_ptr, const size_t size)
+os_realloc_safe(void** const p_ptr, const size_t size)
 {
-    void *ptr       = *p_ptr;
-    void *p_new_ptr = realloc(ptr, size);
+    void* ptr       = *p_ptr;
+    void* p_new_ptr = realloc(ptr, size);
     if (NULL == p_new_ptr)
     {
         return false;
@@ -51,10 +51,10 @@ os_realloc_safe(void **const p_ptr, const size_t size)
 ATTR_WARN_UNUSED_RESULT
 ATTR_NONNULL(1)
 bool
-os_realloc_safe_and_clean(void **const p_ptr, const size_t size)
+os_realloc_safe_and_clean(void** const p_ptr, const size_t size)
 {
-    void *ptr       = *p_ptr;
-    void *p_new_ptr = realloc(ptr, size);
+    void* ptr       = *p_ptr;
+    void* p_new_ptr = realloc(ptr, size);
     if (NULL == p_new_ptr)
     {
         os_free(*p_ptr);

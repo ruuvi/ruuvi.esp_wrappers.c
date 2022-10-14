@@ -15,7 +15,7 @@ struct tskTaskControlBlock
 };
 
 static ATTR_NORETURN void
-task_func(const void *p_param)
+task_func(const void* p_param)
 {
     (void)p_param;
     while (true)
@@ -27,7 +27,7 @@ task_func(const void *p_param)
 
 TEST_F(TestOsTask, os_task_create_static_with_const_param_ok) // NOLINT
 {
-    const char *             task_name   = "my_task_name2";
+    const char*              task_name   = "my_task_name2";
     const uint32_t           stack_depth = sizeof(this->stack_mem) / sizeof(this->stack_mem[0]);
     const os_task_priority_t priority    = 3;
     this->m_taskName.assign(task_name);
@@ -45,7 +45,7 @@ TEST_F(TestOsTask, os_task_create_static_with_const_param_ok) // NOLINT
         &h_task));
     ASSERT_EQ(&taskControlBlock, h_task);
     ASSERT_TRUE(g_pTestClass->m_is_static);
-    ASSERT_EQ(reinterpret_cast<void *>(g_pTestClass->m_createdTaskFunc), reinterpret_cast<void *>(&task_func));
+    ASSERT_EQ(reinterpret_cast<void*>(g_pTestClass->m_createdTaskFunc), reinterpret_cast<void*>(&task_func));
     ASSERT_EQ(g_pTestClass->m_createdTaskName, task_name);
     ASSERT_EQ(g_pTestClass->m_createdTaskStackDepth, stack_depth);
     ASSERT_EQ(g_pTestClass->m_createdTaskParam, &this->m_taskParam);
@@ -60,7 +60,7 @@ TEST_F(TestOsTask, os_task_create_static_with_const_param_ok) // NOLINT
 
 TEST_F(TestOsTask, os_task_create_static_with_const_param_fail) // NOLINT
 {
-    const char *             task_name   = "my_task_name2";
+    const char*              task_name   = "my_task_name2";
     const uint32_t           stack_depth = 2048;
     const os_task_priority_t priority    = 3;
     this->m_taskName.assign(task_name);

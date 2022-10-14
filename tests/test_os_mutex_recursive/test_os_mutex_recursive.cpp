@@ -18,7 +18,7 @@ using namespace std;
  * *********************************************************************************/
 
 class TestOsMutexRecursive;
-static TestOsMutexRecursive *g_pTestClass;
+static TestOsMutexRecursive* g_pTestClass;
 
 extern "C" {
 
@@ -48,7 +48,7 @@ protected:
     void
     SetUp() override
     {
-        for (auto &mutex : this->arrOfMutexes)
+        for (auto& mutex : this->arrOfMutexes)
         {
 #if ((configSUPPORT_STATIC_ALLOCATION == 1) && (configSUPPORT_DYNAMIC_ALLOCATION == 1))
             mutex.isStaticallyAllocated = false;
@@ -89,7 +89,7 @@ TestOsMutexRecursive::~TestOsMutexRecursive() = default;
 
 extern "C" {
 
-char *
+char*
 pcTaskGetName(TaskHandle_t xTaskToQuery)
 {
     assert(nullptr == xTaskToQuery);
@@ -97,18 +97,18 @@ pcTaskGetName(TaskHandle_t xTaskToQuery)
     {
         return nullptr;
     }
-    return const_cast<char *>(g_pTestClass->m_taskName.c_str());
+    return const_cast<char*>(g_pTestClass->m_taskName.c_str());
 }
 
 static void
-prvInitialiseMutex(struct QueueDefinition *p_mutex, const bool isStaticallyAllocated)
+prvInitialiseMutex(struct QueueDefinition* p_mutex, const bool isStaticallyAllocated)
 {
     p_mutex->isUsed                = true;
     p_mutex->isStaticallyAllocated = isStaticallyAllocated;
 }
 
 static void
-prvDeinitialiseMutex(struct QueueDefinition *p_mutex)
+prvDeinitialiseMutex(struct QueueDefinition* p_mutex)
 {
     p_mutex->isUsed = false;
 }
@@ -117,10 +117,10 @@ QueueHandle_t
 xQueueCreateMutex(const uint8_t ucQueueType)
 {
     assert(queueQUEUE_TYPE_RECURSIVE_MUTEX == ucQueueType);
-    struct QueueDefinition *p_mutex = std::find_if(
+    struct QueueDefinition* p_mutex = std::find_if(
         std::begin(g_pTestClass->arrOfMutexes),
         std::end(g_pTestClass->arrOfMutexes),
-        [&](const struct QueueDefinition &x) { return !x.isUsed; });
+        [&](const struct QueueDefinition& x) { return !x.isUsed; });
     if (std::end(g_pTestClass->arrOfMutexes) == p_mutex)
     {
         return nullptr;
@@ -130,11 +130,11 @@ xQueueCreateMutex(const uint8_t ucQueueType)
 }
 
 QueueHandle_t
-xQueueCreateMutexStatic(const uint8_t ucQueueType, StaticQueue_t *pxStaticQueue)
+xQueueCreateMutexStatic(const uint8_t ucQueueType, StaticQueue_t* pxStaticQueue)
 {
     assert(queueQUEUE_TYPE_RECURSIVE_MUTEX == ucQueueType);
     assert(nullptr != pxStaticQueue);
-    auto *p_mutex = reinterpret_cast<struct QueueDefinition *>(pxStaticQueue);
+    auto* p_mutex = reinterpret_cast<struct QueueDefinition*>(pxStaticQueue);
     prvInitialiseMutex(p_mutex, true);
     return p_mutex;
 }
@@ -142,13 +142,13 @@ xQueueCreateMutexStatic(const uint8_t ucQueueType, StaticQueue_t *pxStaticQueue)
 void
 vQueueDelete(QueueHandle_t xQueue)
 {
-    auto *p_mutex = reinterpret_cast<struct QueueDefinition *>(xQueue);
+    auto* p_mutex = reinterpret_cast<struct QueueDefinition*>(xQueue);
     if (!p_mutex->isStaticallyAllocated)
     {
-        struct QueueDefinition *p_mutex2 = std::find_if(
+        struct QueueDefinition* p_mutex2 = std::find_if(
             std::begin(g_pTestClass->arrOfMutexes),
             std::end(g_pTestClass->arrOfMutexes),
-            [&](const struct QueueDefinition &x) { return &x == xQueue; });
+            [&](const struct QueueDefinition& x) { return &x == xQueue; });
         assert(std::end(g_pTestClass->arrOfMutexes) != p_mutex2);
         assert(p_mutex == p_mutex2);
     }
@@ -160,14 +160,14 @@ xQueueTakeMutexRecursive(QueueHandle_t xMutex, TickType_t xTicksToWait)
 {
     (void)xTicksToWait;
 
-    auto *p_mutex = reinterpret_cast<struct QueueDefinition *>(xMutex);
+    auto* p_mutex = reinterpret_cast<struct QueueDefinition*>(xMutex);
 
     if (!p_mutex->isStaticallyAllocated)
     {
-        struct QueueDefinition *p_mutex2 = std::find_if(
+        struct QueueDefinition* p_mutex2 = std::find_if(
             std::begin(g_pTestClass->arrOfMutexes),
             std::end(g_pTestClass->arrOfMutexes),
-            [&](const struct QueueDefinition &x) { return &x == xMutex; });
+            [&](const struct QueueDefinition& x) { return &x == xMutex; });
         assert(std::end(g_pTestClass->arrOfMutexes) != p_mutex2);
         assert(p_mutex == p_mutex2);
     }
@@ -180,14 +180,14 @@ xQueueTakeMutexRecursive(QueueHandle_t xMutex, TickType_t xTicksToWait)
 BaseType_t
 xQueueGiveMutexRecursive(QueueHandle_t xMutex)
 {
-    auto *p_mutex = reinterpret_cast<struct QueueDefinition *>(xMutex);
+    auto* p_mutex = reinterpret_cast<struct QueueDefinition*>(xMutex);
 
     if (!p_mutex->isStaticallyAllocated)
     {
-        struct QueueDefinition *p_mutex2 = std::find_if(
+        struct QueueDefinition* p_mutex2 = std::find_if(
             std::begin(g_pTestClass->arrOfMutexes),
             std::end(g_pTestClass->arrOfMutexes),
-            [&](const struct QueueDefinition &x) { return &x == xMutex; });
+            [&](const struct QueueDefinition& x) { return &x == xMutex; });
         assert(std::end(g_pTestClass->arrOfMutexes) != p_mutex2);
         assert(p_mutex == p_mutex2);
     }
@@ -237,7 +237,7 @@ TEST_F(TestOsMutexRecursive, os_mutex_recursive_create_delete_static_only) // NO
 {
     static StaticSemaphore_t static_sema1;
     os_mutex_recursive_t     h_mutex1 = os_mutex_recursive_create_static(&static_sema1);
-    ASSERT_EQ(reinterpret_cast<void *>(&static_sema1), reinterpret_cast<void *>(h_mutex1));
+    ASSERT_EQ(reinterpret_cast<void*>(&static_sema1), reinterpret_cast<void*>(h_mutex1));
 
     os_mutex_recursive_delete(&h_mutex1);
     ASSERT_EQ(nullptr, h_mutex1);
@@ -252,13 +252,13 @@ TEST_F(TestOsMutexRecursive, os_mutex_recursive_create_delete_static_and_dynamic
     ASSERT_EQ(&this->arrOfMutexes[0], h_mutex_dyn1);
 
     os_mutex_recursive_t h_mutex_sta1 = os_mutex_recursive_create_static(&static_sema1);
-    ASSERT_EQ(reinterpret_cast<void *>(&static_sema1), reinterpret_cast<void *>(h_mutex_sta1));
+    ASSERT_EQ(reinterpret_cast<void*>(&static_sema1), reinterpret_cast<void*>(h_mutex_sta1));
 
     os_mutex_recursive_t h_mutex_dyn2 = os_mutex_recursive_create();
     ASSERT_EQ(&this->arrOfMutexes[1], h_mutex_dyn2);
 
     os_mutex_recursive_t h_mutex_sta2 = os_mutex_recursive_create_static(&static_sema2);
-    ASSERT_EQ(reinterpret_cast<void *>(&static_sema2), reinterpret_cast<void *>(h_mutex_sta2));
+    ASSERT_EQ(reinterpret_cast<void*>(&static_sema2), reinterpret_cast<void*>(h_mutex_sta2));
 
     os_mutex_recursive_t h_mutex_dyn3 = os_mutex_recursive_create();
     ASSERT_EQ(nullptr, h_mutex_dyn3);
@@ -289,7 +289,7 @@ TEST_F(TestOsMutexRecursive, os_mutex_recursive_create_delete_static_and_dynamic
 TEST_F(TestOsMutexRecursive, os_mutex_recursive_lock_unlock) // NOLINT
 {
     os_mutex_recursive_t    h_mutex = os_mutex_recursive_create();
-    struct QueueDefinition *p_mutex = &this->arrOfMutexes[0];
+    struct QueueDefinition* p_mutex = &this->arrOfMutexes[0];
     ASSERT_EQ(p_mutex, h_mutex);
     ASSERT_EQ(0, p_mutex->uxRecursiveCallCount);
 
@@ -308,8 +308,8 @@ TEST_F(TestOsMutexRecursive, os_mutex_recursive_lock_unlock_static) // NOLINT
 {
     static StaticSemaphore_t static_sema1;
     os_mutex_recursive_t     h_mutex = os_mutex_recursive_create_static(&static_sema1);
-    ASSERT_EQ(reinterpret_cast<void *>(&static_sema1), reinterpret_cast<void *>(h_mutex));
-    struct QueueDefinition *p_mutex = h_mutex;
+    ASSERT_EQ(reinterpret_cast<void*>(&static_sema1), reinterpret_cast<void*>(h_mutex));
+    struct QueueDefinition* p_mutex = h_mutex;
     ASSERT_EQ(0, p_mutex->uxRecursiveCallCount);
 
     os_mutex_recursive_lock(h_mutex);
@@ -326,7 +326,7 @@ TEST_F(TestOsMutexRecursive, os_mutex_recursive_lock_unlock_static) // NOLINT
 TEST_F(TestOsMutexRecursive, os_mutex_recursive_try_lock_unlock) // NOLINT
 {
     os_mutex_recursive_t    h_mutex = os_mutex_recursive_create();
-    struct QueueDefinition *p_mutex = &this->arrOfMutexes[0];
+    struct QueueDefinition* p_mutex = &this->arrOfMutexes[0];
     ASSERT_EQ(p_mutex, h_mutex);
     ASSERT_EQ(0, p_mutex->uxRecursiveCallCount);
 
@@ -350,7 +350,7 @@ TEST_F(TestOsMutexRecursive, os_mutex_recursive_try_lock_unlock) // NOLINT
 TEST_F(TestOsMutexRecursive, os_mutex_recursive_lock_with_timeout_unlock) // NOLINT
 {
     os_mutex_recursive_t    h_mutex = os_mutex_recursive_create();
-    struct QueueDefinition *p_mutex = &this->arrOfMutexes[0];
+    struct QueueDefinition* p_mutex = &this->arrOfMutexes[0];
     ASSERT_EQ(p_mutex, h_mutex);
     ASSERT_EQ(0, p_mutex->uxRecursiveCallCount);
 
