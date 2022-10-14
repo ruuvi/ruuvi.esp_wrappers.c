@@ -20,13 +20,13 @@
 #define LOG_DUMP_BYTES_PER_LINE (16U)
 
 static void
-print_ascii_char(str_buf_t *p_str_buf, const char ch)
+print_ascii_char(str_buf_t* p_str_buf, const char ch)
 {
     str_buf_printf(p_str_buf, "%c", (char)(isprint((int)(unsigned char)ch) ? ch : '.'));
 }
 
 static void
-print_bytes(str_buf_t *p_str_buf, const uint8_t *p_buf, const size_t buf_size)
+print_bytes(str_buf_t* p_str_buf, const uint8_t* p_buf, const size_t buf_size)
 {
     for (size_t j = 0; j < buf_size; ++j, p_buf++)
     {
@@ -35,7 +35,7 @@ print_bytes(str_buf_t *p_str_buf, const uint8_t *p_buf, const size_t buf_size)
 }
 
 static void
-print_chars(str_buf_t *p_str_buf, const uint8_t *p_buf, const size_t buf_size)
+print_chars(str_buf_t* p_str_buf, const uint8_t* p_buf, const size_t buf_size)
 {
     for (size_t j = 0; j < buf_size; j++)
     {
@@ -46,9 +46,9 @@ print_chars(str_buf_t *p_str_buf, const uint8_t *p_buf, const size_t buf_size)
 void
 log_print_dump(
     esp_log_level_t level,
-    const char *    p_tag,
-    const char *    p_log_prefix,
-    const uint8_t * p_buf,
+    const char*     p_tag,
+    const char*     p_log_prefix,
+    const uint8_t*  p_buf,
     const uint32_t  buf_size)
 {
     char log_dump_line_buf[LOG_DUMP_LINE_BUF];

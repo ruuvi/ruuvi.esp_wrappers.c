@@ -33,12 +33,12 @@ class LogRecord
 {
 private:
     void
-    init_message(const char *fmt, va_list args)
+    init_message(const char* fmt, va_list args)
     {
         va_list args2;
         va_copy(args2, args);
         const int len = vsnprintf(nullptr, 0, fmt, args);
-        char *    buf { new char[len + 1] {} };
+        char*     buf { new char[len + 1] {} };
         vsnprintf(buf, len + 1, fmt, args2);
         va_end(args2);
         this->message = string(buf);
@@ -148,14 +148,14 @@ public:
     string          message;
     LogRecordParsed parsed;
 
-    LogRecord(esp_log_level_t level, const char *tag, const char *fmt, va_list args)
+    LogRecord(esp_log_level_t level, const char* tag, const char* fmt, va_list args)
         : level(level)
         , tag(string(tag))
     {
         this->init_message(fmt, args);
     }
 
-    LogRecord(esp_log_level_t level, const char *tag, const char *fmt, ...)
+    LogRecord(esp_log_level_t level, const char* tag, const char* fmt, ...)
         : level(level)
         , tag(string(tag))
     {

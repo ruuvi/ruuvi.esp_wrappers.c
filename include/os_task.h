@@ -18,11 +18,11 @@
 extern "C" {
 #endif
 
-typedef ATTR_NORETURN void (*os_task_func_t)(void *p_param);
-typedef ATTR_NORETURN void (*os_task_func_const_param_t)(const void *p_param);
+typedef ATTR_NORETURN void (*os_task_func_t)(void* p_param);
+typedef ATTR_NORETURN void (*os_task_func_const_param_t)(const void* p_param);
 typedef ATTR_NORETURN void (*os_task_func_without_param_t)(void);
-typedef void (*os_task_finite_func_with_param_t)(void *p_param);
-typedef void (*os_task_finite_func_with_const_param_t)(const void *p_param);
+typedef void (*os_task_finite_func_with_param_t)(void* p_param);
+typedef void (*os_task_finite_func_with_const_param_t)(const void* p_param);
 typedef void (*os_task_finite_func_without_param_t)(void);
 typedef UBaseType_t  os_task_priority_t;
 typedef TaskHandle_t os_task_handle_t;
@@ -44,11 +44,11 @@ ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create(
     const os_task_func_t     p_func,
-    const char *const        p_name,
+    const char* const        p_name,
     const uint32_t           stack_depth,
-    void *const              p_param,
+    void* const              p_param,
     const os_task_priority_t priority,
-    os_task_handle_t *const  ph_task);
+    os_task_handle_t* const  ph_task);
 
 /**
  * Create a new task thread.
@@ -65,11 +65,11 @@ ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_with_const_param(
     const os_task_func_const_param_t p_func,
-    const char *const                p_name,
+    const char* const                p_name,
     const uint32_t                   stack_depth,
-    const void *const                p_param,
+    const void* const                p_param,
     const os_task_priority_t         priority,
-    os_task_handle_t *const          ph_task);
+    os_task_handle_t* const          ph_task);
 
 /**
  * Create a new task thread.
@@ -85,10 +85,10 @@ ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_without_param(
     const os_task_func_without_param_t p_func,
-    const char *const                  p_name,
+    const char* const                  p_name,
     const uint32_t                     stack_depth,
     const os_task_priority_t           priority,
-    os_task_handle_t *const            ph_task);
+    os_task_handle_t* const            ph_task);
 
 /**
  * Create a new task thread.
@@ -104,9 +104,9 @@ ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_finite(
     const os_task_finite_func_with_param_t p_func,
-    const char *const                      p_name,
+    const char* const                      p_name,
     const uint32_t                         stack_depth,
-    void *const                            p_param,
+    void* const                            p_param,
     const os_task_priority_t               priority);
 
 /**
@@ -123,9 +123,9 @@ ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_finite_with_const_param(
     const os_task_finite_func_with_const_param_t p_func,
-    const char *const                            p_name,
+    const char* const                            p_name,
     const uint32_t                               stack_depth,
-    const void *const                            p_param,
+    const void* const                            p_param,
     const os_task_priority_t                     priority);
 
 /**
@@ -141,7 +141,7 @@ ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_finite_without_param(
     const os_task_finite_func_without_param_t p_func,
-    const char *const                         p_name,
+    const char* const                         p_name,
     const uint32_t                            stack_depth,
     const os_task_priority_t                  priority);
 
@@ -162,13 +162,13 @@ ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static(
     const os_task_func_t        p_func,
-    const char *const           p_name,
-    os_task_stack_type_t *const p_stack_mem,
+    const char* const           p_name,
+    os_task_stack_type_t* const p_stack_mem,
     const uint32_t              stack_depth,
-    void *const                 p_param,
+    void* const                 p_param,
     const os_task_priority_t    priority,
-    os_task_static_t *const     p_task_mem,
-    os_task_handle_t *const     ph_task);
+    os_task_static_t* const     p_task_mem,
+    os_task_handle_t* const     ph_task);
 
 /**
  * Create a new task thread without using memory allocation from the heap.
@@ -187,13 +187,13 @@ ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static_with_const_param(
     const os_task_func_const_param_t p_func,
-    const char *const                p_name,
-    os_task_stack_type_t *const      p_stack_mem,
+    const char* const                p_name,
+    os_task_stack_type_t* const      p_stack_mem,
     const uint32_t                   stack_depth,
-    const void *const                p_param,
+    const void* const                p_param,
     const os_task_priority_t         priority,
-    os_task_static_t *const          p_task_mem,
-    os_task_handle_t *const          ph_task);
+    os_task_static_t* const          p_task_mem,
+    os_task_handle_t* const          ph_task);
 
 /**
  * Create a new task thread without using memory allocation from the heap.
@@ -211,12 +211,12 @@ ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static_without_param(
     const os_task_func_without_param_t p_func,
-    const char *const                  p_name,
-    os_task_stack_type_t *const        p_stack_mem,
+    const char* const                  p_name,
+    os_task_stack_type_t* const        p_stack_mem,
     const uint32_t                     stack_depth,
     const os_task_priority_t           priority,
-    os_task_static_t *const            p_task_mem,
-    os_task_handle_t *const            ph_task);
+    os_task_static_t* const            p_task_mem,
+    os_task_handle_t* const            ph_task);
 
 /**
  * Create a new task thread without using memory allocation from the heap.
@@ -234,12 +234,12 @@ ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static_finite(
     const os_task_finite_func_with_param_t p_func,
-    const char *const                      p_name,
-    os_task_stack_type_t *const            p_stack_mem,
+    const char* const                      p_name,
+    os_task_stack_type_t* const            p_stack_mem,
     const uint32_t                         stack_depth,
-    void *const                            p_param,
+    void* const                            p_param,
     const os_task_priority_t               priority,
-    os_task_static_t *const                p_task_mem);
+    os_task_static_t* const                p_task_mem);
 
 /**
  * Create a new task thread without using memory allocation from the heap.
@@ -257,12 +257,12 @@ ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static_finite_with_const_param(
     const os_task_finite_func_with_const_param_t p_func,
-    const char *const                            p_name,
-    os_task_stack_type_t *const                  p_stack_mem,
+    const char* const                            p_name,
+    os_task_stack_type_t* const                  p_stack_mem,
     const uint32_t                               stack_depth,
-    const void *const                            p_param,
+    const void* const                            p_param,
     const os_task_priority_t                     priority,
-    os_task_static_t *const                      p_task_mem);
+    os_task_static_t* const                      p_task_mem);
 
 /**
  * Create a new task thread without using memory allocation from the heap.
@@ -279,11 +279,11 @@ ATTR_WARN_UNUSED_RESULT
 bool
 os_task_create_static_finite_without_param(
     const os_task_finite_func_without_param_t p_func,
-    const char *const                         p_name,
-    os_task_stack_type_t *const               p_stack_mem,
+    const char* const                         p_name,
+    os_task_stack_type_t* const               p_stack_mem,
     const uint32_t                            stack_depth,
     const os_task_priority_t                  priority,
-    os_task_static_t *const                   p_task_mem);
+    os_task_static_t* const                   p_task_mem);
 
 /**
  * Remove the task from the RTOS kernel's scheduler.
@@ -292,14 +292,14 @@ os_task_create_static_finite_without_param(
  */
 ATTR_NONNULL(1)
 void
-os_task_delete(os_task_handle_t *const ph_task);
+os_task_delete(os_task_handle_t* const ph_task);
 
 /**
  * Get task name for the current thread.
  * @return pointer to the string with the current task name.
  */
 ATTR_WARN_UNUSED_RESULT
-const char *
+const char*
 os_task_get_name(void);
 
 /**

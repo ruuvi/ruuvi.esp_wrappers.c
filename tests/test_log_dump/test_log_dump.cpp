@@ -12,14 +12,14 @@
 #define LOG_LOCAL_LEVEL LOG_LEVEL_VERBOSE
 #include "log.h"
 
-static const char *TAG = "test";
+static const char* TAG = "test";
 
 using namespace std;
 
 /*** Google-test class implementation *********************************************************************************/
 
 class TestLogDump;
-static TestLogDump *g_pTestClass;
+static TestLogDump* g_pTestClass;
 
 class TestLogDump : public ::testing::Test
 {
@@ -58,28 +58,28 @@ TestLogDump::~TestLogDump() = default;
 
 extern "C" {
 
-void *
+void*
 os_malloc(size_t size)
 {
     if (g_pTestClass->m_flag_malloc_fail)
     {
         return nullptr;
     }
-    void *p_buf = malloc(size);
+    void* p_buf = malloc(size);
     return p_buf;
 }
 
 void
-os_free_internal(void *p_buf)
+os_free_internal(void* p_buf)
 {
     free(p_buf);
 }
 
-const char *
+const char*
 os_task_get_name(void)
 {
     static const char g_task_name[] = "thread_name";
-    return const_cast<char *>(g_task_name);
+    return const_cast<char*>(g_task_name);
 }
 
 os_task_priority_t

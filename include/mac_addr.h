@@ -37,10 +37,10 @@ typedef struct mac_address_str_t
     }
 
 void
-mac_address_bin_init(mac_address_bin_t *p_mac, const uint8_t mac[MAC_ADDRESS_NUM_BYTES]);
+mac_address_bin_init(mac_address_bin_t* p_mac, const uint8_t mac[MAC_ADDRESS_NUM_BYTES]);
 
 mac_address_str_t
-mac_address_to_str(const mac_address_bin_t *p_mac);
+mac_address_to_str(const mac_address_bin_t* p_mac);
 
 #ifdef __cplusplus
 }

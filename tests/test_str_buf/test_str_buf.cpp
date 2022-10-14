@@ -14,7 +14,7 @@ using namespace std;
 /*** Google-test class implementation *********************************************************************************/
 
 class TestStrBuf;
-static TestStrBuf *g_pTestClass;
+static TestStrBuf* g_pTestClass;
 
 class TestStrBuf : public ::testing::Test
 {
@@ -51,19 +51,19 @@ TestStrBuf::~TestStrBuf() = default;
 
 extern "C" {
 
-void *
+void*
 os_malloc(size_t size)
 {
     if (g_pTestClass->m_flag_malloc_fail)
     {
         return nullptr;
     }
-    void *p_buf = malloc(size);
+    void* p_buf = malloc(size);
     return p_buf;
 }
 
 void
-os_free_internal(void *p_buf)
+os_free_internal(void* p_buf)
 {
     free(p_buf);
 }
@@ -132,9 +132,9 @@ TEST_F(TestStrBuf, test_str_buf_init_with_alloc_and_free_buf) // NOLINT
 {
     const size_t len_of_str = 10;
     str_buf_t    str_buf    = {
-        .buf  = nullptr,
-        .size = 0,
-        .idx  = len_of_str,
+              .buf  = nullptr,
+              .size = 0,
+              .idx  = len_of_str,
     };
     ASSERT_TRUE(str_buf_init_with_alloc(&str_buf));
     ASSERT_NE(nullptr, str_buf.buf);
@@ -151,9 +151,9 @@ TEST_F(TestStrBuf, test_str_buf_init_with_alloc_failed) // NOLINT
 {
     const size_t len_of_str = 10;
     str_buf_t    str_buf    = {
-        .buf  = nullptr,
-        .size = 0,
-        .idx  = len_of_str,
+              .buf  = nullptr,
+              .size = 0,
+              .idx  = len_of_str,
     };
     this->m_flag_malloc_fail = true;
     ASSERT_FALSE(str_buf_init_with_alloc(&str_buf));
@@ -250,7 +250,7 @@ TEST_F(TestStrBuf, test_calc_length) // NOLINT
 
 TEST_F(TestStrBuf, test_null_str_buf) // NOLINT
 {
-    str_buf_t *p_str_buf = nullptr;
+    str_buf_t* p_str_buf = nullptr;
     ASSERT_FALSE(str_buf_printf(p_str_buf, "abc"));
 }
 
@@ -281,7 +281,7 @@ TEST_F(TestStrBuf, test_fmt_null) // NOLINT
     char tmp_buf[10] = "undef";
 
     str_buf_t   str_buf  = STR_BUF_INIT(tmp_buf, sizeof(tmp_buf));
-    const char *fmt_null = nullptr;
+    const char* fmt_null = nullptr;
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-security"
     ASSERT_FALSE(str_buf_printf(&str_buf, fmt_null));

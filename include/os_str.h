@@ -27,8 +27,8 @@ typedef int os_str2num_base_t;
 ATTR_NONNULL(1)
 uint32_t
 os_str_to_uint32_cptr(
-    const char *__restrict const p_str,
-    const char **__restrict const pp_end,
+    const char* __restrict const p_str,
+    const char** __restrict const pp_end,
     const os_str2num_base_t base);
 
 /**
@@ -40,7 +40,7 @@ os_str_to_uint32_cptr(
  */
 ATTR_NONNULL(1)
 uint32_t
-os_str_to_uint32(char *__restrict const p_str, char **__restrict const pp_end, const os_str2num_base_t base);
+os_str_to_uint32(char* __restrict const p_str, char** __restrict const pp_end, const os_str2num_base_t base);
 
 /**
  * @brief This is a wrapper for stdlib strtol which implements const-correctness and fixes portability issues (MISRA)
@@ -52,8 +52,8 @@ os_str_to_uint32(char *__restrict const p_str, char **__restrict const pp_end, c
 ATTR_NONNULL(1)
 int32_t
 os_str_to_int32_cptr(
-    const char *__restrict const p_str,
-    const char **__restrict const pp_end,
+    const char* __restrict const p_str,
+    const char** __restrict const pp_end,
     const os_str2num_base_t base);
 
 /**
@@ -65,7 +65,7 @@ os_str_to_int32_cptr(
  */
 ATTR_NONNULL(1)
 int32_t
-os_str_to_int32(char *__restrict const p_str, char **__restrict const pp_end, const os_str2num_base_t base);
+os_str_to_int32(char* __restrict const p_str, char** __restrict const pp_end, const os_str2num_base_t base);
 
 #ifdef __cplusplus
 }

@@ -24,10 +24,10 @@ typedef enum MainTaskCmd_Tag
  * *********************************************************************************/
 
 class TestOsTaskFreertos;
-static TestOsTaskFreertos *g_pTestClass;
+static TestOsTaskFreertos* g_pTestClass;
 
-static void *
-freertosStartup(void *arg);
+static void*
+freertosStartup(void* arg);
 
 class TestOsTaskFreertos : public ::testing::Test
 {
@@ -53,7 +53,7 @@ protected:
     {
         cmdQueue.push_and_wait(MainTaskCmd_Exit);
         vTaskEndScheduler();
-        void *ret_code = nullptr;
+        void* ret_code = nullptr;
         pthread_join(pid, &ret_code);
         sem_destroy(&semaFreeRTOS);
         esp_log_wrapper_deinit();
@@ -100,9 +100,9 @@ sleep_ms(uint32_t msec)
 } // extern "C"
 
 static void
-cmdHandlerTask(void *p_param)
+cmdHandlerTask(void* p_param)
 {
-    auto *pObj     = static_cast<TestOsTaskFreertos *>(p_param);
+    auto* pObj     = static_cast<TestOsTaskFreertos*>(p_param);
     bool  flagExit = false;
     sem_post(&pObj->semaFreeRTOS);
     while (!flagExit)
@@ -123,10 +123,10 @@ cmdHandlerTask(void *p_param)
     vTaskDelete(nullptr);
 }
 
-static void *
-freertosStartup(void *arg)
+static void*
+freertosStartup(void* arg)
 {
-    auto *     pObj = static_cast<TestOsTaskFreertos *>(arg);
+    auto*      pObj = static_cast<TestOsTaskFreertos*>(arg);
     const bool res
         = xTaskCreate(&cmdHandlerTask, "cmdHandlerTask", configMINIMAL_STACK_SIZE, pObj, tskIDLE_PRIORITY + 1, nullptr);
     assert(res);
@@ -138,9 +138,9 @@ freertosStartup(void *arg)
  * *******************************************************************************************************/
 
 static ATTR_NORETURN void
-task_func_infinite_with_param(void *p_arg)
+task_func_infinite_with_param(void* p_arg)
 {
-    auto *p_counter = reinterpret_cast<volatile uint32_t *>(p_arg);
+    auto* p_counter = reinterpret_cast<volatile uint32_t*>(p_arg);
     for (;;)
     {
         *p_counter += 1;
@@ -149,23 +149,23 @@ task_func_infinite_with_param(void *p_arg)
 }
 
 static void
-task_func_finite_with_param(void *p_arg)
+task_func_finite_with_param(void* p_arg)
 {
-    auto *p_counter = reinterpret_cast<volatile uint32_t *>(p_arg);
+    auto* p_counter = reinterpret_cast<volatile uint32_t*>(p_arg);
     *p_counter += 1;
     os_task_delay(10);
 }
 
 typedef struct PtrToCounter_t
 {
-    volatile uint32_t *p_counter;
+    volatile uint32_t* p_counter;
 } PtrToCounter_t;
 
 static ATTR_NORETURN void
-task_func_infinite_with_const_param(const void *p_arg)
+task_func_infinite_with_const_param(const void* p_arg)
 {
-    auto *             p_param   = reinterpret_cast<const PtrToCounter_t *>(p_arg);
-    volatile uint32_t *p_counter = p_param->p_counter;
+    auto*              p_param   = reinterpret_cast<const PtrToCounter_t*>(p_arg);
+    volatile uint32_t* p_counter = p_param->p_counter;
     for (;;)
     {
         *p_counter += 1;
@@ -174,10 +174,10 @@ task_func_infinite_with_const_param(const void *p_arg)
 }
 
 static void
-task_func_finite_with_const_param(const void *p_arg)
+task_func_finite_with_const_param(const void* p_arg)
 {
-    auto *             p_param   = reinterpret_cast<const PtrToCounter_t *>(p_arg);
-    volatile uint32_t *p_counter = p_param->p_counter;
+    auto*              p_param   = reinterpret_cast<const PtrToCounter_t*>(p_arg);
+    volatile uint32_t* p_counter = p_param->p_counter;
     *p_counter += 1;
     os_task_delay(10);
 }
@@ -185,7 +185,7 @@ task_func_finite_with_const_param(const void *p_arg)
 static ATTR_NORETURN void
 task_func_infinite_without_param()
 {
-    auto *p_counter = &g_pTestClass->m_counter;
+    auto* p_counter = &g_pTestClass->m_counter;
     for (;;)
     {
         *p_counter += 1;
@@ -196,7 +196,7 @@ task_func_infinite_without_param()
 static void
 task_func_finite_without_param()
 {
-    auto *p_counter = &g_pTestClass->m_counter;
+    auto* p_counter = &g_pTestClass->m_counter;
     *p_counter += 1;
     os_task_delay(10);
 }
@@ -212,7 +212,7 @@ TEST_F(TestOsTaskFreertos, test1) // NOLINT
             &task_func_infinite_with_param,
             "dyn_with_param",
             stack_depth,
-            reinterpret_cast<void *>(const_cast<uint32_t *>(&this->m_counter)),
+            reinterpret_cast<void*>(const_cast<uint32_t*>(&this->m_counter)),
             priority,
             &h_task));
         sleep_ms(50);
@@ -239,7 +239,7 @@ TEST_F(TestOsTaskFreertos, test1) // NOLINT
             &task_func_infinite_with_const_param,
             "dyn_with_cparam",
             stack_depth,
-            reinterpret_cast<const void *>(&ptrToCounter),
+            reinterpret_cast<const void*>(&ptrToCounter),
             priority,
             &h_task));
         sleep_ms(50);
@@ -284,7 +284,7 @@ TEST_F(TestOsTaskFreertos, test1) // NOLINT
             &task_func_finite_with_param,
             "dyn_fin_with_param",
             stack_depth,
-            reinterpret_cast<void *>(const_cast<uint32_t *>(&this->m_counter)),
+            reinterpret_cast<void*>(const_cast<uint32_t*>(&this->m_counter)),
             priority));
         sleep_ms(50);
         const uint32_t saved_counter = this->m_counter;
@@ -302,7 +302,7 @@ TEST_F(TestOsTaskFreertos, test1) // NOLINT
             &task_func_finite_with_const_param,
             "dyn_fin_with_cparam",
             stack_depth,
-            reinterpret_cast<const void *>(&ptrToCounter),
+            reinterpret_cast<const void*>(&ptrToCounter),
             priority));
         sleep_ms(50);
         const uint32_t saved_counter = this->m_counter;
@@ -332,7 +332,7 @@ TEST_F(TestOsTaskFreertos, test1) // NOLINT
             "dyn_with_param",
             &this->m_stack_mem[0],
             sizeof(this->m_stack_mem) / sizeof(this->m_stack_mem[0]),
-            reinterpret_cast<void *>(const_cast<uint32_t *>(&this->m_counter)),
+            reinterpret_cast<void*>(const_cast<uint32_t*>(&this->m_counter)),
             priority,
             &this->m_task_mem,
             &h_task));
@@ -360,7 +360,7 @@ TEST_F(TestOsTaskFreertos, test1) // NOLINT
             "dyn_with_cparam",
             &this->m_stack_mem[0],
             sizeof(this->m_stack_mem) / sizeof(this->m_stack_mem[0]),
-            reinterpret_cast<const void *>(&ptrToCounter),
+            reinterpret_cast<const void*>(&ptrToCounter),
             priority,
             &this->m_task_mem,
             &h_task));
@@ -407,7 +407,7 @@ TEST_F(TestOsTaskFreertos, test1) // NOLINT
             "dyn_fin_with_param",
             &this->m_stack_mem[0],
             sizeof(this->m_stack_mem) / sizeof(this->m_stack_mem[0]),
-            reinterpret_cast<void *>(const_cast<uint32_t *>(&this->m_counter)),
+            reinterpret_cast<void*>(const_cast<uint32_t*>(&this->m_counter)),
             priority,
             &this->m_task_mem));
         sleep_ms(50);
@@ -426,7 +426,7 @@ TEST_F(TestOsTaskFreertos, test1) // NOLINT
             "dyn_fin_with_cparam",
             &this->m_stack_mem[0],
             sizeof(this->m_stack_mem) / sizeof(this->m_stack_mem[0]),
-            reinterpret_cast<const void *>(&ptrToCounter),
+            reinterpret_cast<const void*>(&ptrToCounter),
             priority,
             &this->m_task_mem));
         sleep_ms(50);

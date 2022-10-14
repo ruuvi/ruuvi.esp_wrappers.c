@@ -13,7 +13,7 @@ os_time_get(void)
     return time(NULL);
 }
 
-const char *
+const char*
 os_time_month_name_short(const os_time_month_e month)
 {
     switch (month)
@@ -47,7 +47,7 @@ os_time_month_name_short(const os_time_month_e month)
     }
 }
 
-const char *
+const char*
 os_time_month_name_long(const os_time_month_e month)
 {
     switch (month)
@@ -81,7 +81,7 @@ os_time_month_name_long(const os_time_month_e month)
     }
 }
 
-const char *
+const char*
 os_time_wday_name_short(const os_time_wday_e day_of_the_week)
 {
     switch (day_of_the_week)
@@ -105,7 +105,7 @@ os_time_wday_name_short(const os_time_wday_e day_of_the_week)
     }
 }
 
-const char *
+const char*
 os_time_wday_name_mid(const os_time_wday_e day_of_the_week)
 {
     switch (day_of_the_week)
@@ -129,7 +129,7 @@ os_time_wday_name_mid(const os_time_wday_e day_of_the_week)
     }
 }
 
-const char *
+const char*
 os_time_wday_name_long(const os_time_wday_e day_of_the_week)
 {
     switch (day_of_the_week)

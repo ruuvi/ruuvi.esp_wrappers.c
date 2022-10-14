@@ -11,7 +11,7 @@
 #include "TQueue.hpp"
 #include "esp_log_wrapper.hpp"
 
-static TQueue<LogRecord> *gp_esp_log_queue;
+static TQueue<LogRecord>* gp_esp_log_queue;
 
 void
 esp_log_wrapper_init()
@@ -30,7 +30,7 @@ esp_log_wrapper_deinit()
 }
 
 void
-esp_log_write(esp_log_level_t level, const char *tag, const char *fmt, ...)
+esp_log_write(esp_log_level_t level, const char* tag, const char* fmt, ...)
 {
     va_list args;
     va_start(args, fmt);

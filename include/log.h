@@ -51,9 +51,9 @@ esp_log_timestamp(void);
 extern void
 log_print_dump(
     esp_log_level_t level,
-    const char *    p_tag,
-    const char *    p_log_prefix,
-    const uint8_t * p_buf,
+    const char*     p_tag,
+    const char*     p_log_prefix,
+    const uint8_t*  p_buf,
     const uint32_t  buf_size);
 
 #if LOG_LOCAL_LEVEL >= LOG_LEVEL_ERROR

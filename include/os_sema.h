@@ -39,7 +39,7 @@ ATTR_WARN_UNUSED_RESULT
 ATTR_NONNULL(1)
 ATTR_RETURNS_NONNULL
 os_sema_t
-os_sema_create_static(os_sema_static_t *const p_sema_static);
+os_sema_create_static(os_sema_static_t* const p_sema_static);
 #endif
 
 /**
@@ -49,7 +49,7 @@ os_sema_create_static(os_sema_static_t *const p_sema_static);
  */
 ATTR_NONNULL(1)
 void
-os_sema_delete(os_sema_t *const ph_sema);
+os_sema_delete(os_sema_t* const ph_sema);
 
 /**
  * @brief Wait until the semaphore is available and acquire it.

@@ -58,11 +58,11 @@ typedef int32_t esp_err_t;
  * @param code esp_err_t error code
  * @return string error message
  */
-const char *
+const char*
 esp_err_to_name(esp_err_t code);
 
 static inline void
-strlcpy(char *dst, const char *src, const size_t len)
+strlcpy(char* dst, const char* src, const size_t len)
 {
     strncpy(dst, src, len);
 }

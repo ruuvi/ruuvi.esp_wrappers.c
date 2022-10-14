@@ -23,7 +23,7 @@ extern "C" {
  */
 ATTR_MALLOC
 ATTR_MALLOC_SIZE(1)
-void *
+void*
 os_malloc(const size_t size);
 
 /**
@@ -35,7 +35,7 @@ os_malloc(const size_t size);
  */
 ATTR_MALLOC
 ATTR_CALLOC_SIZE(1, 2)
-void *
+void*
 os_calloc(const size_t nmemb, const size_t size);
 
 /**
@@ -50,7 +50,7 @@ os_calloc(const size_t nmemb, const size_t size);
  */
 ATTR_WARN_UNUSED_RESULT
 bool
-os_realloc_safe(void **const p_ptr, const size_t size);
+os_realloc_safe(void** const p_ptr, const size_t size);
 
 /**
  * @brief This is a safer wrap for realloc,
@@ -66,7 +66,7 @@ os_realloc_safe(void **const p_ptr, const size_t size);
 ATTR_WARN_UNUSED_RESULT
 ATTR_NONNULL(1)
 bool
-os_realloc_safe_and_clean(void **const p_ptr, const size_t size);
+os_realloc_safe_and_clean(void** const p_ptr, const size_t size);
 
 /**
  * This is a wrap for 'free' - it deallocates a block of memory
@@ -74,7 +74,7 @@ os_realloc_safe_and_clean(void **const p_ptr, const size_t size);
  * @param ptr  - pointer to the memory block
  */
 void
-os_free_internal(void *ptr);
+os_free_internal(void* ptr);
 
 /**
  * @brief os_free - is a wrap for 'free' which automatically sets pointer to NULL after the memory freeing.
@@ -82,7 +82,7 @@ os_free_internal(void *ptr);
 #define os_free(ptr) \
     do \
     { \
-        os_free_internal((void *)(ptr)); \
+        os_free_internal((void*)(ptr)); \
         ptr = NULL; \
     } while (0)
 

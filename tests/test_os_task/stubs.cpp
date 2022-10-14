@@ -15,23 +15,23 @@
 
 using namespace std;
 
-TestOsTask *g_pTestClass;
+TestOsTask* g_pTestClass;
 
 extern "C" {
 
-void *
+void*
 os_calloc(const size_t nmemb, const size_t size)
 {
     return calloc(nmemb, size);
 }
 
 void
-os_free_internal(void *ptr)
+os_free_internal(void* ptr)
 {
     free(ptr);
 }
 
-char *
+char*
 pcTaskGetName(TaskHandle_t xTaskToQuery)
 {
     assert(nullptr == xTaskToQuery);
@@ -39,7 +39,7 @@ pcTaskGetName(TaskHandle_t xTaskToQuery)
     {
         return nullptr;
     }
-    return const_cast<char *>(g_pTestClass->m_taskName.c_str());
+    return const_cast<char*>(g_pTestClass->m_taskName.c_str());
 }
 
 UBaseType_t
@@ -58,11 +58,11 @@ xTaskGetCurrentTaskHandle(void)
 BaseType_t
 xTaskCreate(
     TaskFunction_t               pxTaskCode,
-    const char *const            pcName,
+    const char* const            pcName,
     const configSTACK_DEPTH_TYPE usStackDepth,
-    void *const                  pvParameters,
+    void* const                  pvParameters,
     UBaseType_t                  uxPriority,
-    TaskHandle_t *const          pxCreatedTask)
+    TaskHandle_t* const          pxCreatedTask)
 {
     if (nullptr == g_pTestClass->m_createdTaskHandle)
     {
@@ -81,12 +81,12 @@ xTaskCreate(
 TaskHandle_t
 xTaskCreateStatic(
     TaskFunction_t      pxTaskCode,
-    const char *const   pcName,
+    const char* const   pcName,
     const uint32_t      ulStackDepth,
-    void *const         pvParameters,
+    void* const         pvParameters,
     UBaseType_t         uxPriority,
-    StackType_t *const  puxStackBuffer,
-    StaticTask_t *const pxTaskBuffer)
+    StackType_t* const  puxStackBuffer,
+    StaticTask_t* const pxTaskBuffer)
 {
     (void)puxStackBuffer;
     (void)pxTaskBuffer;

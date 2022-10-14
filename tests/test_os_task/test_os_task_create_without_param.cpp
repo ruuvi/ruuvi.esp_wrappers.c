@@ -26,7 +26,7 @@ task_func_without_param()
 
 TEST_F(TestOsTask, os_task_create_with_without_param_ok) // NOLINT
 {
-    const char *             task_name   = "my_task_name2";
+    const char*              task_name   = "my_task_name2";
     const uint32_t           stack_depth = 2048;
     const os_task_priority_t priority    = 3;
     this->m_taskName.assign(task_name);
@@ -39,8 +39,8 @@ TEST_F(TestOsTask, os_task_create_with_without_param_ok) // NOLINT
     ASSERT_EQ(g_pTestClass->m_createdTaskName, task_name);
     ASSERT_EQ(g_pTestClass->m_createdTaskStackDepth, stack_depth);
     ASSERT_EQ(
-        reinterpret_cast<void *>(&task_func_without_param),
-        reinterpret_cast<void *>(g_pTestClass->m_createdTaskParam));
+        reinterpret_cast<void*>(&task_func_without_param),
+        reinterpret_cast<void*>(g_pTestClass->m_createdTaskParam));
     ASSERT_EQ(g_pTestClass->m_createdTaskPriority, priority);
     TEST_CHECK_LOG_RECORD_WITH_THREAD(
         ESP_LOG_INFO,
@@ -52,7 +52,7 @@ TEST_F(TestOsTask, os_task_create_with_without_param_ok) // NOLINT
 
 TEST_F(TestOsTask, os_task_create_without_param_fail) // NOLINT
 {
-    const char *             task_name   = "my_task_name2";
+    const char*              task_name   = "my_task_name2";
     const uint32_t           stack_depth = 2048;
     const os_task_priority_t priority    = 3;
     this->m_taskName.assign(task_name);
