@@ -11,6 +11,7 @@
 #include "esp_log.h"
 #include "os_task.h"
 #include "esp_type_wrapper.h"
+#include "snprintf_with_esp_err_desc.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -72,20 +73,25 @@ log_print_dump(
         ##__VA_ARGS__)
 
 #define LOG_ERR_ESP(err, fmt, ...) \
-    esp_log_write( \
-        ESP_LOG_ERROR, \
-        TAG, \
-        LOG_FORMAT(E, "[%s/%d] %s:%d {%s}: " fmt ", err=%d (%s)"), \
-        esp_log_timestamp(), \
-        TAG, \
-        os_task_get_name(), \
-        (printf_int_t)os_task_get_priority(), \
-        __FILE__, \
-        __LINE__, \
-        __func__, \
-        ##__VA_ARGS__, \
-        err, \
-        esp_err_to_name(err))
+    do \
+    { \
+        str_buf_t err_desc = esp_err_to_name_with_alloc_str_buf(err); \
+        esp_log_write( \
+            ESP_LOG_ERROR, \
+            TAG, \
+            LOG_FORMAT(E, "[%s/%d] %s:%d {%s}: " fmt ", err=%d (%s)"), \
+            esp_log_timestamp(), \
+            TAG, \
+            os_task_get_name(), \
+            (printf_int_t)os_task_get_priority(), \
+            __FILE__, \
+            __LINE__, \
+            __func__, \
+            ##__VA_ARGS__, \
+            err, \
+            (NULL != err_desc.buf) ? err_desc.buf : ""); \
+        str_buf_free_buf(&err_desc); \
+    } while (0)
 
 #define LOG_ERR_VAL(err, fmt, ...) \
     esp_log_write( \
@@ -140,17 +146,22 @@ log_print_dump(
         ##__VA_ARGS__)
 
 #define LOG_WARN_ESP(err, fmt, ...) \
-    esp_log_write( \
-        ESP_LOG_WARN, \
-        TAG, \
-        LOG_FORMAT(W, "[%s/%d] " fmt ", err=%d (%s)"), \
-        esp_log_timestamp(), \
-        TAG, \
-        os_task_get_name(), \
-        (printf_int_t)os_task_get_priority(), \
-        ##__VA_ARGS__, \
-        err, \
-        esp_err_to_name(err))
+    do \
+    { \
+        str_buf_t err_desc = esp_err_to_name_with_alloc_str_buf(err); \
+        esp_log_write( \
+            ESP_LOG_ERROR, \
+            TAG, \
+            LOG_FORMAT(W, "[%s/%d] " fmt ", err=%d (%s)"), \
+            esp_log_timestamp(), \
+            TAG, \
+            os_task_get_name(), \
+            (printf_int_t)os_task_get_priority(), \
+            ##__VA_ARGS__, \
+            err, \
+            (NULL != err_desc.buf) ? err_desc.buf : ""); \
+        str_buf_free_buf(&err_desc); \
+    } while (0)
 
 #define LOG_WARN_VAL(err, fmt, ...) \
     esp_log_write( \
