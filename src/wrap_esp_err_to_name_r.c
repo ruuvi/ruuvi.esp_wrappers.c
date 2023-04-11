@@ -7,8 +7,20 @@
 
 #include "wrap_esp_err_to_name_r.h"
 #include <esp_err.h>
+
+#define HAS_MBED_TLS 0
+
+#if defined __has_include
+#if __has_include("mbedtls/error.h")
+#undef HAS_MBED_TLS
+#define HAS_MBED_TLS 1
+#endif
+#endif
+
+#if HAS_MBED_TLS
 #include "mbedtls/error.h"
 #include "esp_tls.h"
+#endif
 
 const char*
 wrap_esp_err_to_name_r(const esp_err_t code, char* const p_buf, const size_t buf_len)
@@ -32,6 +44,7 @@ wrap_esp_err_to_name_r(const esp_err_t code, char* const p_buf, const size_t buf
         return p_buf;
     }
 
+#if HAS_MBED_TLS
     mbedtls_strerror(code, p_buf, buf_len);
 
     const char* const p_unknown_error_code_prefix = "UNKNOWN ERROR CODE (";
@@ -39,6 +52,9 @@ wrap_esp_err_to_name_r(const esp_err_t code, char* const p_buf, const size_t buf
     {
         (void)snprintf(p_buf, buf_len, "%s 0x%x(%d)", g_esp_unknown_msg, code, code);
     }
+#else
+    (void)snprintf(p_buf, buf_len, "%s 0x%x(%d)", g_esp_unknown_msg, code, code);
+#endif
 
     return p_buf;
 }
