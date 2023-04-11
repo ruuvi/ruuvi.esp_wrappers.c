@@ -19,6 +19,7 @@ set(RUUVI_ESP_WRAPPERS_SRC
         include/os_wrapper_types.h
         include/time_units.h
         include/str_buf.h
+        include/wrap_esp_err_to_name_r.h
         src/log_dump.c
         src/mac_addr.c
         src/os_mkgmtime.c
@@ -34,6 +35,7 @@ set(RUUVI_ESP_WRAPPERS_SRC
         src/os_timer.c
         src/os_timer_sig.c
         src/str_buf.c
+        src/wrap_esp_err_to_name_r.c
 )
 
 set(RUUVI_ESP_WRAPPERS_INC
@@ -47,6 +49,8 @@ if(${ESP_PLATFORM})
             ${RUUVI_ESP_WRAPPERS_SRC}
         INCLUDE_DIRS
             ${RUUVI_ESP_WRAPPERS_INC}
+        PRIV_REQUIRES
+            esp-tls
     )
 
     target_compile_options(__idf_ruuvi.esp_wrappers.c PRIVATE -Wall -Werror -Wextra -Wno-error=nonnull-compare)
