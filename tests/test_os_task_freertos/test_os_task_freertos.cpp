@@ -83,18 +83,30 @@ public:
 extern "C" {
 
 static void
-sleep_ms(uint32_t msec)
+sleep_ms_unchecked(uint32_t msec)
 {
-    struct timespec ts = {
-        .tv_sec  = msec / 1000,
-        .tv_nsec = (msec % 1000) * 1000000,
+    struct timespec time_spec = {
+        .tv_sec  = msec / 1000U,
+        .tv_nsec = (msec % 1000U) * 1000000U,
     };
 
-    int res = 0;
-    do
+    (void)nanosleep(&time_spec, &time_spec);
+}
+
+static void
+sleep_ms(uint32_t msec)
+{
+    const TickType_t tick_start = xTaskGetTickCount();
+    while (true)
     {
-        res = nanosleep(&ts, &ts);
-    } while ((0 != res) && (EINTR == errno));
+        const TickType_t delta_ticks = xTaskGetTickCount() - tick_start;
+        if (delta_ticks >= pdMS_TO_TICKS(msec))
+        {
+            break;
+        }
+        const uint32_t remain_msec = (pdMS_TO_TICKS(msec) - delta_ticks) * 1000 / configTICK_RATE_HZ;
+        sleep_ms_unchecked(remain_msec);
+    }
 }
 
 } // extern "C"
@@ -205,7 +217,7 @@ TEST_F(TestOsTaskFreertos, test1) // NOLINT
 {
     const os_task_priority_t priority = 3;
     {
-        const uint32_t   stack_depth = 1024U;
+        const uint32_t   stack_depth = 4096U;
         os_task_handle_t h_task      = nullptr;
         this->m_counter              = 0;
         ASSERT_TRUE(os_task_create(
@@ -229,7 +241,7 @@ TEST_F(TestOsTaskFreertos, test1) // NOLINT
         ASSERT_EQ(saved_counter2, this->m_counter);
     }
     {
-        const uint32_t   stack_depth      = 1024U;
+        const uint32_t   stack_depth      = 4096U;
         os_task_handle_t h_task           = nullptr;
         this->m_counter                   = 0;
         const PtrToCounter_t ptrToCounter = {
@@ -256,7 +268,7 @@ TEST_F(TestOsTaskFreertos, test1) // NOLINT
         ASSERT_EQ(saved_counter2, this->m_counter);
     }
     {
-        const uint32_t   stack_depth = 1024U;
+        const uint32_t   stack_depth = 4096U;
         os_task_handle_t h_task      = nullptr;
         ASSERT_TRUE(os_task_create_without_param(
             &task_func_infinite_without_param,
@@ -278,7 +290,7 @@ TEST_F(TestOsTaskFreertos, test1) // NOLINT
         ASSERT_EQ(saved_counter2, this->m_counter);
     }
     {
-        const uint32_t stack_depth = 1024U;
+        const uint32_t stack_depth = 4096U;
         this->m_counter            = 0;
         ASSERT_TRUE(os_task_create_finite(
             &task_func_finite_with_param,
@@ -293,7 +305,7 @@ TEST_F(TestOsTaskFreertos, test1) // NOLINT
         ASSERT_EQ(saved_counter, this->m_counter);
     }
     {
-        const uint32_t stack_depth        = 1024U;
+        const uint32_t stack_depth        = 4096U;
         this->m_counter                   = 0;
         const PtrToCounter_t ptrToCounter = {
             .p_counter = &this->m_counter,
@@ -311,7 +323,7 @@ TEST_F(TestOsTaskFreertos, test1) // NOLINT
         ASSERT_EQ(saved_counter, this->m_counter);
     }
     {
-        const uint32_t stack_depth = 1024U;
+        const uint32_t stack_depth = 4096U;
         ASSERT_TRUE(os_task_create_finite_without_param(
             &task_func_finite_without_param,
             "dyn_fin_with_param",
