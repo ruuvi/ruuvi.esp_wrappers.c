@@ -18,6 +18,7 @@ set(RUUVI_ESP_WRAPPERS_SRC
         include/os_timer_sig.h
         include/os_wrapper_types.h
         include/time_units.h
+        include/snprintf_with_esp_err_desc.h
         include/str_buf.h
         include/wrap_esp_err_to_name_r.h
         src/log_dump.c
@@ -34,6 +35,7 @@ set(RUUVI_ESP_WRAPPERS_SRC
         src/os_time.c
         src/os_timer.c
         src/os_timer_sig.c
+        src/snprintf_with_esp_err_desc.c
         src/str_buf.c
         src/wrap_esp_err_to_name_r.c
 )
