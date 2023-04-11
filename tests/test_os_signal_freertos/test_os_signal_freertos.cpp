@@ -47,19 +47,17 @@ class TestOsSignalFreertos : public ::testing::Test
 {
 private:
 protected:
-    pthread_t pid;
-
     void
     SetUp() override
     {
         esp_log_wrapper_init();
         sem_init(&semaFreeRTOS, 0, 0);
-        const int err = pthread_create(&pid, nullptr, &freertosStartup, this);
+        pid_test      = pthread_self();
+        const int err = pthread_create(&pid_freertos, nullptr, &freertosStartup, this);
         assert(0 == err);
         while (0 != sem_wait(&semaFreeRTOS))
         {
         }
-        g_pTestClass = this;
     }
 
     void
@@ -68,13 +66,15 @@ protected:
         cmdQueue.push_and_wait(MainTaskCmd_Exit);
         vTaskEndScheduler();
         void* ret_code = nullptr;
-        pthread_join(pid, &ret_code);
+        pthread_join(pid_freertos, &ret_code);
         sem_destroy(&semaFreeRTOS);
         esp_log_wrapper_deinit();
         g_pTestClass = nullptr;
     }
 
 public:
+    pthread_t               pid_test;
+    pthread_t               pid_freertos;
     sem_t                   semaFreeRTOS;
     TQueue<MainTaskCmd_e>   cmdQueue;
     std::vector<TestEvent*> testEvents;
@@ -98,13 +98,20 @@ public:
 
 TestOsSignalFreertos::TestOsSignalFreertos()
     : Test()
+    , pid_test(0)
+    , pid_freertos(0)
+    , semaFreeRTOS({})
     , p_signal(nullptr)
     , p_signal2(nullptr)
     , result_run_signal_handler_task(false)
 {
+    g_pTestClass = this;
 }
 
-TestOsSignalFreertos::~TestOsSignalFreertos() = default;
+TestOsSignalFreertos::~TestOsSignalFreertos()
+{
+    g_pTestClass = nullptr;
+}
 
 extern "C" {
 
@@ -136,6 +143,46 @@ timespec_diff_ms(const struct timespec* p_t2, const struct timespec* p_t1)
 {
     struct timespec diff = timespec_diff(p_t2, p_t1);
     return diff.tv_sec * 1000 + diff.tv_nsec / 1000000;
+}
+
+void
+tdd_assert_trap(void)
+{
+    assert(0);
+}
+
+static volatile int32_t g_flagDisableCheckIsThreadFreeRTOS;
+
+void
+disableCheckingIfCurThreadIsFreeRTOS(void)
+{
+    ++g_flagDisableCheckIsThreadFreeRTOS;
+}
+
+void
+enableCheckingIfCurThreadIsFreeRTOS(void)
+{
+    --g_flagDisableCheckIsThreadFreeRTOS;
+    assert(g_flagDisableCheckIsThreadFreeRTOS >= 0);
+}
+
+int
+checkIfCurThreadIsFreeRTOS(void)
+{
+    if (nullptr == g_pTestClass)
+    {
+        return false;
+    }
+    if (g_flagDisableCheckIsThreadFreeRTOS)
+    {
+        return true;
+    }
+    const pthread_t cur_thread_pid = pthread_self();
+    if (cur_thread_pid == g_pTestClass->pid_test)
+    {
+        return false;
+    }
+    return true;
 }
 
 } // extern "C"
@@ -373,7 +420,8 @@ cmdHandlerTask(void* p_param)
 static void*
 freertosStartup(void* arg)
 {
-    auto*      pObj = static_cast<TestOsSignalFreertos*>(arg);
+    auto* pObj = static_cast<TestOsSignalFreertos*>(arg);
+    disableCheckingIfCurThreadIsFreeRTOS();
     const bool res
         = xTaskCreate(&cmdHandlerTask, "cmdHandlerTask", configMINIMAL_STACK_SIZE, pObj, tskIDLE_PRIORITY + 1, nullptr);
     assert(res);

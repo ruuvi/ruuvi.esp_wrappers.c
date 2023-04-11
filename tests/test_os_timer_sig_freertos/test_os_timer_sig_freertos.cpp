@@ -52,19 +52,17 @@ class TestOsTimerSigFreertos : public ::testing::Test
 {
 private:
 protected:
-    pthread_t pid;
-
     void
     SetUp() override
     {
         esp_log_wrapper_init();
         sem_init(&semaFreeRTOS, 0, 0);
-        const int err = pthread_create(&pid, nullptr, &freertosStartup, this);
+        pid_test      = pthread_self();
+        const int err = pthread_create(&pid_freertos, nullptr, &freertosStartup, this);
         assert(0 == err);
         while (0 != sem_wait(&semaFreeRTOS))
         {
         }
-        g_pTestClass = this;
     }
 
     void
@@ -73,13 +71,15 @@ protected:
         cmdQueue.push_and_wait(MainTaskCmd_Exit);
         vTaskEndScheduler();
         void* ret_code = nullptr;
-        pthread_join(pid, &ret_code);
+        pthread_join(pid_freertos, &ret_code);
         sem_destroy(&semaFreeRTOS);
         esp_log_wrapper_deinit();
         g_pTestClass = nullptr;
     }
 
 public:
+    pthread_t                      pid_test;
+    pthread_t                      pid_freertos;
     sem_t                          semaFreeRTOS;
     TQueue<MainTaskCmd_e>          cmdQueue;
     os_timer_sig_periodic_static_t timer_sig_periodic_mem;
@@ -104,7 +104,8 @@ public:
 
 TestOsTimerSigFreertos::TestOsTimerSigFreertos()
     : Test()
-    , pid(0)
+    , pid_test(0)
+    , pid_freertos(0)
     , semaFreeRTOS({})
     , timer_sig_periodic_mem({})
     , timer_sig_one_shot_mem({})
@@ -115,9 +116,13 @@ TestOsTimerSigFreertos::TestOsTimerSigFreertos()
     , counter0(0)
     , counter1(0)
 {
+    g_pTestClass = this;
 }
 
-TestOsTimerSigFreertos::~TestOsTimerSigFreertos() = default;
+TestOsTimerSigFreertos::~TestOsTimerSigFreertos()
+{
+    g_pTestClass = nullptr;
+}
 
 extern "C" {
 
@@ -165,7 +170,7 @@ timespec_diff_ms(const struct timespec* p_t2, const struct timespec* p_t1)
 }
 
 static void
-sleep_ms(uint32_t msec)
+sleep_ms_unchecked(uint32_t msec)
 {
     struct timespec ts = {
         .tv_sec  = msec / 1000,
@@ -179,10 +184,70 @@ sleep_ms(uint32_t msec)
     } while ((0 != res) && (EINTR == errno));
 }
 
+static void
+sleep_ms(uint32_t msec)
+{
+    disableCheckingIfCurThreadIsFreeRTOS();
+    const TickType_t tick_start = xTaskGetTickCount();
+    enableCheckingIfCurThreadIsFreeRTOS();
+    while (true)
+    {
+        disableCheckingIfCurThreadIsFreeRTOS();
+        const TickType_t delta_ticks = xTaskGetTickCount() - tick_start;
+        enableCheckingIfCurThreadIsFreeRTOS();
+        if (delta_ticks >= pdMS_TO_TICKS(msec))
+        {
+            break;
+        }
+        const uint32_t remain_msec = (pdMS_TO_TICKS(msec) - delta_ticks) * 1000 / configTICK_RATE_HZ;
+        sleep_ms_unchecked(remain_msec);
+    }
+}
+
 void
 os_task_delay(const os_delta_ticks_t delay_ticks)
 {
-    sleep_ms(delay_ticks);
+    vTaskDelay(delay_ticks);
+}
+
+void
+tdd_assert_trap(void)
+{
+    assert(0);
+}
+
+static volatile int32_t g_flagDisableCheckIsThreadFreeRTOS;
+
+void
+disableCheckingIfCurThreadIsFreeRTOS(void)
+{
+    ++g_flagDisableCheckIsThreadFreeRTOS;
+}
+
+void
+enableCheckingIfCurThreadIsFreeRTOS(void)
+{
+    --g_flagDisableCheckIsThreadFreeRTOS;
+    assert(g_flagDisableCheckIsThreadFreeRTOS >= 0);
+}
+
+int
+checkIfCurThreadIsFreeRTOS(void)
+{
+    if (nullptr == g_pTestClass)
+    {
+        return false;
+    }
+    if (g_flagDisableCheckIsThreadFreeRTOS)
+    {
+        return true;
+    }
+    const pthread_t cur_thread_pid = pthread_self();
+    if (cur_thread_pid == g_pTestClass->pid_test)
+    {
+        return false;
+    }
+    return true;
 }
 
 } // extern "C"
@@ -297,13 +362,13 @@ cmdHandlerTask(void* p_param)
                     "timer_periodic",
                     pObj->p_signal,
                     OS_SIGNAL_NUM_1,
-                    100);
+                    pdMS_TO_TICKS(100));
                 break;
             case MainTaskCmd_TimerSigPeriodicStart:
                 os_timer_sig_periodic_start(pObj->p_timer_sig_periodic);
                 break;
             case MainTaskCmd_TimerSigPeriodicRestart:
-                os_timer_sig_periodic_restart(pObj->p_timer_sig_periodic, 200);
+                os_timer_sig_periodic_restart(pObj->p_timer_sig_periodic, pdMS_TO_TICKS(200));
                 break;
             case MainTaskCmd_TimerSigPeriodicStop:
                 os_timer_sig_periodic_stop(pObj->p_timer_sig_periodic);
@@ -319,7 +384,7 @@ cmdHandlerTask(void* p_param)
                     "timer_one_shot",
                     pObj->p_signal,
                     OS_SIGNAL_NUM_0,
-                    100);
+                    pdMS_TO_TICKS(100));
                 break;
             case MainTaskCmd_TimerSigOneShotCreateStatic:
                 pObj->p_timer_sig_one_shot = os_timer_sig_one_shot_create_static(
@@ -327,13 +392,13 @@ cmdHandlerTask(void* p_param)
                     "timer_one_shot",
                     pObj->p_signal,
                     OS_SIGNAL_NUM_0,
-                    100);
+                    pdMS_TO_TICKS(100));
                 break;
             case MainTaskCmd_TimerSigOneShotStart:
                 os_timer_sig_one_shot_start(pObj->p_timer_sig_one_shot);
                 break;
             case MainTaskCmd_TimerSigOneShotRestart:
-                os_timer_sig_one_shot_restart(pObj->p_timer_sig_one_shot, 200);
+                os_timer_sig_one_shot_restart(pObj->p_timer_sig_one_shot, pdMS_TO_TICKS(200));
                 break;
             case MainTaskCmd_TimerSigOneShotStop:
                 os_timer_sig_one_shot_stop(pObj->p_timer_sig_one_shot);
@@ -356,7 +421,8 @@ cmdHandlerTask(void* p_param)
 static void*
 freertosStartup(void* arg)
 {
-    auto*      pObj = static_cast<TestOsTimerSigFreertos*>(arg);
+    auto* pObj = static_cast<TestOsTimerSigFreertos*>(arg);
+    disableCheckingIfCurThreadIsFreeRTOS();
     const bool res
         = xTaskCreate(&cmdHandlerTask, "cmdHandlerTask", configMINIMAL_STACK_SIZE, pObj, tskIDLE_PRIORITY + 1, nullptr);
     assert(res);
