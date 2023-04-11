@@ -45,6 +45,7 @@ add_subdirectory(test_os_task)
 #add_subdirectory(test_os_task_freertos)
 add_subdirectory(test_os_timer_freertos)
 add_subdirectory(test_os_timer_sig_freertos)
+add_subdirectory(test_snprintf_with_esp_err_desc)
 add_subdirectory(test_str_buf)
 add_subdirectory(test_time_units)
 
@@ -111,6 +112,11 @@ add_test(NAME test_os_timer_freertos
 add_test(NAME test_os_timer_sig_freertos
         COMMAND ruuvi_esp_wrappers-test-os_timer_sig_freertos
             --gtest_output=xml:$<TARGET_FILE_DIR:ruuvi_esp_wrappers-test-os_timer_sig_freertos>/gtestresults.xml
+)
+
+add_test(NAME test_snprintf_with_esp_err_desc
+        COMMAND ruuvi_esp_wrappers-test-snprintf_with_esp_err_desc
+            --gtest_output=xml:$<TARGET_FILE_DIR:ruuvi_esp_wrappers-test-snprintf_with_esp_err_desc>/gtestresults.xml
 )
 
 add_test(NAME test_str_buf
