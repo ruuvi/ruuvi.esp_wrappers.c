@@ -74,3 +74,20 @@ TEST_F(TestMacAddr, test_mac_address_to_str) // NOLINT
     const mac_address_str_t mac_str = mac_address_to_str(&mac_bin);
     ASSERT_EQ(string("11:22:33:AA:BB:CC"), string(mac_str.str_buf));
 }
+
+TEST_F(TestMacAddr, test_mac_addr_from_str) // NOLINT
+{
+    mac_address_bin_t mac_addr_bin = { 0 };
+    ASSERT_TRUE(mac_addr_from_str("11:22:33:AA:BB:CC", &mac_addr_bin));
+    ASSERT_EQ(0x11U, mac_addr_bin.mac[0]);
+    ASSERT_EQ(0x22U, mac_addr_bin.mac[1]);
+    ASSERT_EQ(0x33U, mac_addr_bin.mac[2]);
+    ASSERT_EQ(0xAAU, mac_addr_bin.mac[3]);
+    ASSERT_EQ(0xBBU, mac_addr_bin.mac[4]);
+    ASSERT_EQ(0xCCU, mac_addr_bin.mac[5]);
+
+    ASSERT_FALSE(mac_addr_from_str("11:22:33:AA:BB:CC", nullptr));
+    ASSERT_FALSE(mac_addr_from_str(nullptr, &mac_addr_bin));
+    ASSERT_FALSE(mac_addr_from_str("11:22:33:AA:BB:C", &mac_addr_bin));
+    ASSERT_FALSE(mac_addr_from_str("", &mac_addr_bin));
+}
