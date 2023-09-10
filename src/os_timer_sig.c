@@ -10,6 +10,7 @@
 #include "os_signal.h"
 #include "os_wrapper_types.h"
 #include "os_malloc.h"
+#include "os_mutex.h"
 #include "attribs.h"
 
 struct os_timer_sig_periodic_t
@@ -17,6 +18,7 @@ struct os_timer_sig_periodic_t
     os_timer_periodic_t* p_timer;
     os_signal_t*         p_signal;
     os_signal_num_e      sig_num;
+    os_delta_ticks_t     period_ticks;
     bool                 is_static;
     volatile bool        is_active;
 };
@@ -30,6 +32,7 @@ struct os_timer_sig_one_shot_t
     os_timer_one_shot_t* p_timer;
     os_signal_t*         p_signal;
     os_signal_num_e      sig_num;
+    os_delta_ticks_t     period_ticks;
     bool                 is_static;
     volatile bool        is_active;
 };
@@ -80,11 +83,12 @@ os_timer_sig_periodic_create(
     {
         return NULL;
     }
-    p_obj->p_signal  = p_signal;
-    p_obj->sig_num   = sig_num;
-    p_obj->is_static = false;
-    p_obj->is_active = false;
-    p_obj->p_timer   = os_timer_periodic_create(p_timer_name, period_ticks, &os_timer_sig_cb_periodic, p_obj);
+    p_obj->p_signal     = p_signal;
+    p_obj->sig_num      = sig_num;
+    p_obj->period_ticks = period_ticks;
+    p_obj->is_static    = false;
+    p_obj->is_active    = false;
+    p_obj->p_timer      = os_timer_periodic_create(p_timer_name, period_ticks, &os_timer_sig_cb_periodic, p_obj);
     if (NULL == p_obj->p_timer)
     {
         os_timer_sig_periodic_delete(&p_obj);
@@ -106,10 +110,11 @@ os_timer_sig_periodic_create_static(
 {
     os_timer_sig_periodic_t* const p_obj = (os_timer_sig_periodic_t*)&p_timer_sig_mem->obj_mem;
 
-    p_obj->p_signal  = p_signal;
-    p_obj->sig_num   = sig_num;
-    p_obj->is_static = true;
-    p_obj->is_active = false;
+    p_obj->p_signal     = p_signal;
+    p_obj->sig_num      = sig_num;
+    p_obj->period_ticks = period_ticks;
+    p_obj->is_static    = true;
+    p_obj->is_active    = false;
 
     p_obj->p_timer = os_timer_periodic_create_static(
         &p_timer_sig_mem->os_timer_mem,
@@ -133,11 +138,12 @@ os_timer_sig_one_shot_create(
     {
         return NULL;
     }
-    p_obj->p_signal  = p_signal;
-    p_obj->sig_num   = sig_num;
-    p_obj->is_static = false;
-    p_obj->is_active = false;
-    p_obj->p_timer   = os_timer_one_shot_create(p_timer_name, period_ticks, &os_timer_sig_cb_one_shot, p_obj);
+    p_obj->p_signal     = p_signal;
+    p_obj->sig_num      = sig_num;
+    p_obj->period_ticks = period_ticks;
+    p_obj->is_static    = false;
+    p_obj->is_active    = false;
+    p_obj->p_timer      = os_timer_one_shot_create(p_timer_name, period_ticks, &os_timer_sig_cb_one_shot, p_obj);
     if (NULL == p_obj->p_timer)
     {
         os_timer_sig_one_shot_delete(&p_obj);
@@ -159,10 +165,11 @@ os_timer_sig_one_shot_create_static(
 {
     os_timer_sig_one_shot_t* const p_obj = (os_timer_sig_one_shot_t*)&p_timer_sig_mem->obj_mem;
 
-    p_obj->p_signal  = p_signal;
-    p_obj->sig_num   = sig_num;
-    p_obj->is_static = true;
-    p_obj->is_active = false;
+    p_obj->p_signal     = p_signal;
+    p_obj->sig_num      = sig_num;
+    p_obj->period_ticks = period_ticks;
+    p_obj->is_static    = true;
+    p_obj->is_active    = false;
 
     p_obj->p_timer = os_timer_one_shot_create_static(
         &p_timer_sig_mem->os_timer_mem,
@@ -219,6 +226,18 @@ os_timer_sig_one_shot_delete(os_timer_sig_one_shot_t** const pp_obj)
     }
 }
 
+os_delta_ticks_t
+os_timer_sig_periodic_get_period(os_timer_sig_periodic_t* const p_obj)
+{
+    return p_obj->period_ticks;
+}
+
+os_delta_ticks_t
+os_timer_sig_one_shot_get_period(os_timer_sig_one_shot_t* const p_obj)
+{
+    return p_obj->period_ticks;
+}
+
 void
 os_timer_sig_periodic_start(os_timer_sig_periodic_t* const p_obj)
 {
@@ -242,25 +261,65 @@ os_timer_sig_one_shot_start(os_timer_sig_one_shot_t* const p_obj)
 }
 
 void
-os_timer_sig_periodic_restart(os_timer_sig_periodic_t* const p_obj, const os_delta_ticks_t delay_ticks)
+os_timer_sig_periodic_restart_with_period(
+    os_timer_sig_periodic_t* const p_obj,
+    const os_delta_ticks_t         delay_ticks,
+    const bool                     flag_reset_active_timer)
 {
     if (NULL == p_obj)
     {
         return;
     }
-    p_obj->is_active = true;
-    os_timer_periodic_restart(p_obj->p_timer, delay_ticks);
+    if (flag_reset_active_timer)
+    {
+        p_obj->is_active = false;
+        os_timer_periodic_stop(p_obj->p_timer);
+    }
+    p_obj->period_ticks = delay_ticks;
+    p_obj->is_active    = os_timer_periodic_restart(p_obj->p_timer, delay_ticks);
 }
 
 void
-os_timer_sig_one_shot_restart(os_timer_sig_one_shot_t* const p_obj, const os_delta_ticks_t delay_ticks)
+os_timer_sig_one_shot_restart_with_period(
+    os_timer_sig_one_shot_t* const p_obj,
+    const os_delta_ticks_t         delay_ticks,
+    const bool                     flag_reset_active_timer)
 {
     if (NULL == p_obj)
     {
         return;
     }
-    p_obj->is_active = true;
-    os_timer_one_shot_restart(p_obj->p_timer, delay_ticks);
+    if (flag_reset_active_timer)
+    {
+        p_obj->is_active = false;
+        os_timer_one_shot_stop(p_obj->p_timer);
+    }
+    p_obj->period_ticks = delay_ticks;
+    p_obj->is_active    = os_timer_one_shot_restart(p_obj->p_timer, delay_ticks);
+}
+
+void
+os_timer_sig_periodic_relaunch(os_timer_sig_periodic_t* const p_obj)
+{
+    if (NULL == p_obj)
+    {
+        return;
+    }
+    p_obj->is_active = false;
+    os_timer_periodic_stop(p_obj->p_timer);
+    p_obj->is_active = os_timer_periodic_restart(p_obj->p_timer, p_obj->period_ticks);
+}
+
+void
+os_timer_sig_one_shot_relaunch(os_timer_sig_one_shot_t* const p_obj)
+{
+    if (NULL == p_obj)
+    {
+        return;
+    }
+    p_obj->is_active = false;
+    os_timer_one_shot_stop(p_obj->p_timer);
+    p_obj->is_active = os_timer_one_shot_restart(p_obj->p_timer, p_obj->period_ticks);
 }
 
 void

@@ -22,11 +22,12 @@ typedef struct os_timer_sig_one_shot_t os_timer_sig_one_shot_t;
 
 typedef struct os_timer_sig_periodic_static_obj_t
 {
-    void*           stub1;
-    void*           stub2;
-    os_signal_num_e stub3;
-    bool            stub4;
-    bool            stub5;
+    void*            stub1;
+    void*            stub2;
+    os_signal_num_e  stub3;
+    os_delta_ticks_t stub4;
+    bool             stub5;
+    bool             stub6;
 } os_timer_sig_periodic_static_obj_t;
 
 typedef struct os_timer_sig_periodic_static_t
@@ -37,11 +38,12 @@ typedef struct os_timer_sig_periodic_static_t
 
 typedef struct os_timer_sig_one_shot_static_obj_t
 {
-    void*           stub1;
-    void*           stub2;
-    os_signal_num_e stub3;
-    bool            stub4;
-    bool            stub5;
+    void*            stub1;
+    void*            stub2;
+    os_signal_num_e  stub3;
+    os_delta_ticks_t stub4;
+    bool             stub5;
+    bool             stub6;
 } os_timer_sig_one_shot_static_obj_t;
 
 typedef struct os_timer_sig_one_shot_static_t
@@ -141,6 +143,20 @@ void
 os_timer_sig_one_shot_delete(os_timer_sig_one_shot_t** const pp_obj);
 
 /**
+ * @brief Returns period of the periodic timer.
+ * @param p_obj - ptr to the os_timer_sig_periodic_t object instance.
+ */
+os_delta_ticks_t
+os_timer_sig_periodic_get_period(os_timer_sig_periodic_t* const p_obj);
+
+/**
+ * @brief Returns period of the one-shot timer.
+ * @param p_obj - ptr to the os_timer_sig_periodic_t object instance.
+ */
+os_delta_ticks_t
+os_timer_sig_one_shot_get_period(os_timer_sig_one_shot_t* const p_obj);
+
+/**
  * @brief Activate the periodic timer to send the specified signal.
  * @param p_obj - ptr to the os_timer_sig_periodic_t object instance.
  */
@@ -155,18 +171,67 @@ void
 os_timer_sig_one_shot_start(os_timer_sig_one_shot_t* const p_obj);
 
 /**
- * @brief Restart the periodic timer which sends the specified signal.
- * @param p_obj - ptr to the os_timer_sig_periodic_t object instance.
+ * @brief Restarts the periodic timer which sends the specified signal.
+ *
+ * This function is responsible for reconfiguring the timer for periodic notifications.
+ * If the timer was not initially running, it starts it. For already started timers, it recalculates
+ * the next trigger time based on the elapsed time since the last trigger.
+ * In cases where the recalculated activation time is already past due, the next activation will be determined
+ * relative to the current moment.
+ *
+ * @note If the argument delay_ticks is zero, then the timer will be stopped.
+ *
+ * @param p_obj       Pointer to the os_timer_sig_periodic_t object instance.
+ * @param delay_ticks Period for the timer, specified in system ticks.
+ * @param flag_reset_active_timer If true, then restart an active timer from the current moment.
  */
 void
-os_timer_sig_periodic_restart(os_timer_sig_periodic_t* const p_obj, const os_delta_ticks_t delay_ticks);
+os_timer_sig_periodic_restart_with_period(
+    os_timer_sig_periodic_t* const p_obj,
+    const os_delta_ticks_t         delay_ticks,
+    const bool                     flag_reset_active_timer);
 
 /**
- * @brief Restart the one-shot timer which sends the specified signal.
- * @param p_obj - ptr to the os_timer_sig_one_shot_t object instance.
+ * @brief Restarts the one-shot timer which sends the specified signal.
+ *
+ * This function is designed to manage the one-shot timer notifications.
+ * If the timer wasn't initially active, it will initiate it.
+ * For already active timers, the function recalculates the next trigger time considering the elapsed time
+ * since the last activation.
+ *
+ * @note If the argument delay_ticks is zero, then the timer will be stopped.
+ *
+ * @param p_obj       Pointer to the os_timer_sig_one_shot_t object instance.
+ * @param delay_ticks Delay in system ticks before dispatching the signal.
+ * @param flag_reset_active_timer If true, then restart an active timer from the current moment.
  */
 void
-os_timer_sig_one_shot_restart(os_timer_sig_one_shot_t* const p_obj, const os_delta_ticks_t delay_ticks);
+os_timer_sig_one_shot_restart_with_period(
+    os_timer_sig_one_shot_t* const p_obj,
+    const os_delta_ticks_t         delay_ticks,
+    const bool                     flag_reset_active_timer);
+
+/**
+ * @brief Stop and restart the periodic timer which sends the specified signal from the current moment.
+ *
+ * If the timer wasn't initially active, it will initiate it.
+ * For already active timers, the function stops it and restarts from the current moment.
+ *
+ * @param p_obj Pointer to the os_timer_sig_periodic_t object instance.
+ */
+void
+os_timer_sig_periodic_relaunch(os_timer_sig_periodic_t* const p_obj);
+
+/**
+ * @brief Stop and restart the one-shot timer which sends the specified signal from the current moment.
+ *
+ * If the timer wasn't initially active, it will initiate it.
+ * For already active timers, the function stops it and restarts from the current moment.
+ *
+ * @param p_obj Pointer to the os_timer_sig_one_shot_t object instance.
+ */
+void
+os_timer_sig_one_shot_relaunch(os_timer_sig_one_shot_t* const p_obj);
 
 /**
  * @brief Stop the periodic timer which sends the specified signal.
