@@ -9,12 +9,15 @@
 #define OS_MALLOC_H
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <stddef.h>
 #include "attribs.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define OS_MALLOC_TRACE 0
 
 /**
  * This is a wrap for malloc - it allocates a block of memory of size 'size' bytes.
@@ -23,8 +26,14 @@ extern "C" {
  */
 ATTR_MALLOC
 ATTR_MALLOC_SIZE(1)
+#if OS_MALLOC_TRACE
+void*
+os_malloc_internal(const size_t size, const char* const p_file, const int32_t line);
+#define os_malloc(size) os_malloc_internal(size, __FILE__, __LINE__)
+#else
 void*
 os_malloc(const size_t size);
+#endif
 
 /**
  * This is a wrap for calloc - it allocates memory block for an array of 'nmemb' elements,
@@ -35,8 +44,14 @@ os_malloc(const size_t size);
  */
 ATTR_MALLOC
 ATTR_CALLOC_SIZE(1, 2)
+#if OS_MALLOC_TRACE
+void*
+os_calloc_internal(const size_t nmemb, const size_t size, const char* const p_file, const int32_t line);
+#define os_calloc(nmemb, size) os_calloc_internal(nmemb, size, __FILE__, __LINE__)
+#else
 void*
 os_calloc(const size_t nmemb, const size_t size);
+#endif
 
 /**
  * @brief This is a safer wrap for realloc,
@@ -49,8 +64,14 @@ os_calloc(const size_t nmemb, const size_t size);
  * @return true if the reallocation was successful.
  */
 ATTR_WARN_UNUSED_RESULT
+#if OS_MALLOC_TRACE
+bool
+os_realloc_safe_internal(void** const p_ptr, const size_t size, const char* const p_file, const int32_t line);
+#define os_realloc_safe(p_ptr, size) os_realloc_safe_internal(p_ptr, size, __FILE__, __LINE__)
+#else
 bool
 os_realloc_safe(void** const p_ptr, const size_t size);
+#endif
 
 /**
  * @brief This is a safer wrap for realloc,
@@ -65,26 +86,51 @@ os_realloc_safe(void** const p_ptr, const size_t size);
  */
 ATTR_WARN_UNUSED_RESULT
 ATTR_NONNULL(1)
+#if OS_MALLOC_TRACE
+bool
+os_realloc_safe_and_clean_internal(void** const p_ptr, const size_t size, const char* const p_file, const int32_t line);
+#define os_realloc_safe_and_clean(p_ptr, size) os_realloc_safe_and_clean_internal(p_ptr, size, __FILE__, __LINE__)
+#else
 bool
 os_realloc_safe_and_clean(void** const p_ptr, const size_t size);
+#endif
 
 /**
  * This is a wrap for 'free' - it deallocates a block of memory
  * @note This function should not be used, use macro @ref os_free instead.
  * @param ptr  - pointer to the memory block
  */
+#if OS_MALLOC_TRACE
+void
+os_free_internal(void* ptr, const char* const p_file, const int32_t line);
+#else
 void
 os_free_internal(void* ptr);
+#endif
 
 /**
  * @brief os_free - is a wrap for 'free' which automatically sets pointer to NULL after the memory freeing.
  */
+#if OS_MALLOC_TRACE
+#define os_free(ptr) \
+    do \
+    { \
+        os_free_internal((void*)(ptr), __FILE__, __LINE__); \
+        ptr = NULL; \
+    } while (0)
+#else
 #define os_free(ptr) \
     do \
     { \
         os_free_internal((void*)(ptr)); \
         ptr = NULL; \
     } while (0)
+#endif
+
+#if OS_MALLOC_TRACE
+void
+os_malloc_trace_dump(void);
+#endif
 
 #ifdef __cplusplus
 }
