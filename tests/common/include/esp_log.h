@@ -35,6 +35,13 @@ esp_log_timestamp(void)
     return 0;
 }
 
+static inline void
+esp_log_level_set(__attribute__((unused)) const char* tag, __attribute__((unused)) esp_log_level_t level)
+{
+    (void)tag;
+    (void)level;
+}
+
 #ifdef __cplusplus
 }
 #endif
