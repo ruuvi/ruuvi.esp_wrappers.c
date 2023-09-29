@@ -26,7 +26,8 @@ typedef enum MainTaskCmd_Tag
     MainTaskCmd_TimerSigPeriodicCreate,
     MainTaskCmd_TimerSigPeriodicCreateStatic,
     MainTaskCmd_TimerSigPeriodicStart,
-    MainTaskCmd_TimerSigPeriodicRestart,
+    MainTaskCmd_TimerSigPeriodicRestart200,
+    MainTaskCmd_TimerSigPeriodicRestart500,
     MainTaskCmd_TimerSigPeriodicStop,
     MainTaskCmd_TimerSigPeriodicDelete,
     MainTaskCmd_TimerSigPeriodicSimulate,
@@ -367,8 +368,11 @@ cmdHandlerTask(void* p_param)
             case MainTaskCmd_TimerSigPeriodicStart:
                 os_timer_sig_periodic_start(pObj->p_timer_sig_periodic);
                 break;
-            case MainTaskCmd_TimerSigPeriodicRestart:
-                os_timer_sig_periodic_restart(pObj->p_timer_sig_periodic, pdMS_TO_TICKS(200));
+            case MainTaskCmd_TimerSigPeriodicRestart200:
+                os_timer_sig_periodic_restart_with_period(pObj->p_timer_sig_periodic, pdMS_TO_TICKS(200), false);
+                break;
+            case MainTaskCmd_TimerSigPeriodicRestart500:
+                os_timer_sig_periodic_restart_with_period(pObj->p_timer_sig_periodic, pdMS_TO_TICKS(500), false);
                 break;
             case MainTaskCmd_TimerSigPeriodicStop:
                 os_timer_sig_periodic_stop(pObj->p_timer_sig_periodic);
@@ -398,7 +402,7 @@ cmdHandlerTask(void* p_param)
                 os_timer_sig_one_shot_start(pObj->p_timer_sig_one_shot);
                 break;
             case MainTaskCmd_TimerSigOneShotRestart:
-                os_timer_sig_one_shot_restart(pObj->p_timer_sig_one_shot, pdMS_TO_TICKS(200));
+                os_timer_sig_one_shot_restart_with_period(pObj->p_timer_sig_one_shot, pdMS_TO_TICKS(200), false);
                 break;
             case MainTaskCmd_TimerSigOneShotStop:
                 os_timer_sig_one_shot_stop(pObj->p_timer_sig_one_shot);
@@ -592,14 +596,51 @@ TEST_F(TestOsTimerSigFreertos, test1) // NOLINT
     ASSERT_EQ(3, this->counter1);
 
     cmdQueue.push_and_wait(MainTaskCmd_TimerSigPeriodicStart);
-    sleep_ms(50);
-    cmdQueue.push_and_wait(MainTaskCmd_TimerSigPeriodicRestart);
-    sleep_ms(150);
-    ASSERT_EQ(3, this->counter1);
-    sleep_ms(100);
+    // cur tick: 0, next timer at 100
+    sleep_ms(120);
+    // cur tick: 120, next timer at 200
     ASSERT_EQ(4, this->counter1);
-    sleep_ms(200);
+    cmdQueue.push_and_wait(MainTaskCmd_TimerSigPeriodicRestart200);
+    // cur tick: 120, next timer at 300
+    sleep_ms(150);
+    // cur tick: 270, next timer at 300
+    ASSERT_EQ(4, this->counter1);
+    sleep_ms(70);
+    // cur tick: 340, next timer at 500
     ASSERT_EQ(5, this->counter1);
+    sleep_ms(200);
+    // cur tick: 540, next timer at 700
+    ASSERT_EQ(6, this->counter1);
+    cmdQueue.push_and_wait(MainTaskCmd_TimerSigPeriodicStop);
+
+    // cur tick: 0
+    cmdQueue.push_and_wait(MainTaskCmd_TimerSigPeriodicRestart200);
+    // cur tick: 0, next timer at 200
+    sleep_ms(180);
+    // cur tick: 180, next timer at 200
+    ASSERT_EQ(6, this->counter1);
+    sleep_ms(50);
+    // cur tick: 230, next timer at 400
+    ASSERT_EQ(7, this->counter1);
+    cmdQueue.push_and_wait(MainTaskCmd_TimerSigPeriodicStop);
+    sleep_ms(100);
+    ASSERT_EQ(7, this->counter1);
+
+    cmdQueue.push_and_wait(MainTaskCmd_TimerSigPeriodicStart);
+    cmdQueue.push_and_wait(MainTaskCmd_TimerSigPeriodicRestart500);
+    // cur tick: 0, next timer at 500
+    sleep_ms(400);
+    // cur tick: 400, next timer at 500
+    ASSERT_EQ(7, this->counter1);
+    cmdQueue.push_and_wait(MainTaskCmd_TimerSigPeriodicRestart200);
+    // cur tick: 400, next timer at 600
+    sleep_ms(150);
+    // cur tick: 550, next timer at 600
+    ASSERT_EQ(7, this->counter1);
+    sleep_ms(100);
+    // cur tick: 750, next timer at 800
+    ASSERT_EQ(8, this->counter1);
+    cmdQueue.push_and_wait(MainTaskCmd_TimerSigPeriodicStop);
 
     cmdQueue.push_and_wait(MainTaskCmd_TimerSigPeriodicDelete);
     ASSERT_EQ(nullptr, this->p_timer_sig_periodic);
@@ -649,7 +690,7 @@ TEST_F(TestOsTimerSigFreertos, test1) // NOLINT
 
     cmdQueue.push_and_wait(MainTaskCmd_TimerSigPeriodicStart);
     sleep_ms(50);
-    cmdQueue.push_and_wait(MainTaskCmd_TimerSigPeriodicRestart);
+    cmdQueue.push_and_wait(MainTaskCmd_TimerSigPeriodicRestart200);
     sleep_ms(150);
     ASSERT_EQ(3, this->counter1);
     sleep_ms(100);

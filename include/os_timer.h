@@ -542,7 +542,7 @@ os_timer_one_shot_cptr_const_arg_start(os_timer_one_shot_cptr_const_arg_t* const
  * @brief Restart the periodic timer.
  * @param p_timer - ptr to the timer object instance.
  */
-void
+bool
 os_timer_periodic_restart(os_timer_periodic_t* const p_timer, const os_delta_ticks_t period_ticks);
 
 void
@@ -570,7 +570,7 @@ os_timer_periodic_cptr_const_arg_restart(
  * @brief Restart the one-shot timer.
  * @param p_timer - ptr to the timer object instance.
  */
-void
+bool
 os_timer_one_shot_restart(os_timer_one_shot_t* const p_timer, const os_delta_ticks_t delay_ticks);
 
 void

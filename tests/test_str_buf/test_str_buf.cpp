@@ -103,6 +103,21 @@ TEST_F(TestStrBuf, test_macro_str_buf_init_null) // NOLINT
     ASSERT_EQ(0, str_buf.idx);
 }
 
+TEST_F(TestStrBuf, test_free_null_buffer) // NOLINT
+{
+    str_buf_t str_buf = STR_BUF_INIT_NULL();
+
+    ASSERT_EQ(nullptr, str_buf.buf);
+    ASSERT_EQ(0, str_buf.size);
+    ASSERT_EQ(0, str_buf.idx);
+
+    str_buf_free_buf(&str_buf);
+
+    ASSERT_EQ(nullptr, str_buf.buf);
+    ASSERT_EQ(0, str_buf.size);
+    ASSERT_EQ(0, str_buf.idx);
+}
+
 TEST_F(TestStrBuf, test_str_buf_init) // NOLINT
 {
     char tmp_buf[10] = "undef";

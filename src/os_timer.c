@@ -459,7 +459,7 @@ os_timer_periodic_create_static(
     p_timer->is_static                 = true;
     p_timer->h_timer                   = xTimerCreateStatic(
         p_timer_name,
-        period_ticks,
+        (0 == period_ticks) ? OS_DELTA_TICKS_INFINITE : period_ticks,
         pdTRUE,
         p_timer,
         &os_timer_callback_periodic,
@@ -1860,15 +1860,20 @@ os_timer_one_shot_cptr_const_arg_set_period(
     }
 }
 
-void
+bool
 os_timer_periodic_restart(os_timer_periodic_t* const p_timer, const os_delta_ticks_t period_ticks)
 {
     if (NULL == p_timer)
     {
-        return;
+        return false;
+    }
+    if (0 == period_ticks)
+    {
+        os_timer_periodic_stop(p_timer);
+        return false;
     }
     os_timer_periodic_set_period(p_timer, period_ticks);
-    os_timer_periodic_start(p_timer);
+    return true;
 }
 
 void
@@ -1880,8 +1885,14 @@ os_timer_periodic_without_arg_restart(
     {
         return;
     }
-    os_timer_periodic_without_arg_set_period(p_timer, period_ticks);
-    os_timer_periodic_without_arg_start(p_timer);
+    if (0 == period_ticks)
+    {
+        os_timer_periodic_without_arg_stop(p_timer);
+    }
+    else
+    {
+        os_timer_periodic_without_arg_set_period(p_timer, period_ticks);
+    }
 }
 
 void
@@ -1891,8 +1902,14 @@ os_timer_periodic_const_arg_restart(os_timer_periodic_const_arg_t* const p_timer
     {
         return;
     }
-    os_timer_periodic_const_arg_set_period(p_timer, period_ticks);
-    os_timer_periodic_const_arg_start(p_timer);
+    if (0 == period_ticks)
+    {
+        os_timer_periodic_const_arg_stop(p_timer);
+    }
+    else
+    {
+        os_timer_periodic_const_arg_set_period(p_timer, period_ticks);
+    }
 }
 
 void
@@ -1902,8 +1919,14 @@ os_timer_periodic_cptr_restart(os_timer_periodic_cptr_t* const p_timer, const os
     {
         return;
     }
-    os_timer_periodic_cptr_set_period(p_timer, period_ticks);
-    os_timer_periodic_cptr_start(p_timer);
+    if (0 == period_ticks)
+    {
+        os_timer_periodic_cptr_stop(p_timer);
+    }
+    else
+    {
+        os_timer_periodic_cptr_set_period(p_timer, period_ticks);
+    }
 }
 
 void
@@ -1915,8 +1938,14 @@ os_timer_periodic_cptr_without_arg_restart(
     {
         return;
     }
-    os_timer_periodic_cptr_without_arg_set_period(p_timer, period_ticks);
-    os_timer_periodic_cptr_without_arg_start(p_timer);
+    if (0 == period_ticks)
+    {
+        os_timer_periodic_cptr_without_arg_stop(p_timer);
+    }
+    else
+    {
+        os_timer_periodic_cptr_without_arg_set_period(p_timer, period_ticks);
+    }
 }
 
 void
@@ -1928,19 +1957,30 @@ os_timer_periodic_cptr_const_arg_restart(
     {
         return;
     }
-    os_timer_periodic_cptr_const_arg_set_period(p_timer, period_ticks);
-    os_timer_periodic_cptr_const_arg_start(p_timer);
+    if (0 == period_ticks)
+    {
+        os_timer_periodic_cptr_const_arg_stop(p_timer);
+    }
+    else
+    {
+        os_timer_periodic_cptr_const_arg_set_period(p_timer, period_ticks);
+    }
 }
 
-void
+bool
 os_timer_one_shot_restart(os_timer_one_shot_t* const p_timer, const os_delta_ticks_t delay_ticks)
 {
     if (NULL == p_timer)
     {
-        return;
+        return false;
+    }
+    if (0 == delay_ticks)
+    {
+        os_timer_one_shot_stop(p_timer);
+        return false;
     }
     os_timer_one_shot_set_period(p_timer, delay_ticks);
-    os_timer_one_shot_start(p_timer);
+    return true;
 }
 
 void
@@ -1952,8 +1992,14 @@ os_timer_one_shot_without_arg_restart(
     {
         return;
     }
-    os_timer_one_shot_without_arg_set_period(p_timer, delay_ticks);
-    os_timer_one_shot_without_arg_start(p_timer);
+    if (0 == delay_ticks)
+    {
+        os_timer_one_shot_without_arg_stop(p_timer);
+    }
+    else
+    {
+        os_timer_one_shot_without_arg_set_period(p_timer, delay_ticks);
+    }
 }
 
 void
@@ -1963,8 +2009,14 @@ os_timer_one_shot_const_arg_restart(os_timer_one_shot_const_arg_t* const p_timer
     {
         return;
     }
-    os_timer_one_shot_const_arg_set_period(p_timer, delay_ticks);
-    os_timer_one_shot_const_arg_start(p_timer);
+    if (0 == delay_ticks)
+    {
+        os_timer_one_shot_const_arg_stop(p_timer);
+    }
+    else
+    {
+        os_timer_one_shot_const_arg_set_period(p_timer, delay_ticks);
+    }
 }
 
 void
@@ -1974,8 +2026,14 @@ os_timer_one_shot_cptr_restart(os_timer_one_shot_cptr_t* const p_timer, const os
     {
         return;
     }
-    os_timer_one_shot_cptr_set_period(p_timer, delay_ticks);
-    os_timer_one_shot_cptr_start(p_timer);
+    if (0 == delay_ticks)
+    {
+        os_timer_one_shot_cptr_stop(p_timer);
+    }
+    else
+    {
+        os_timer_one_shot_cptr_set_period(p_timer, delay_ticks);
+    }
 }
 
 void
@@ -1987,8 +2045,14 @@ os_timer_one_shot_cptr_without_arg_restart(
     {
         return;
     }
-    os_timer_one_shot_cptr_without_arg_set_period(p_timer, delay_ticks);
-    os_timer_one_shot_cptr_without_arg_start(p_timer);
+    if (0 == delay_ticks)
+    {
+        os_timer_one_shot_cptr_without_arg_stop(p_timer);
+    }
+    else
+    {
+        os_timer_one_shot_cptr_without_arg_set_period(p_timer, delay_ticks);
+    }
 }
 
 void
@@ -2000,8 +2064,14 @@ os_timer_one_shot_cptr_const_arg_restart(
     {
         return;
     }
-    os_timer_one_shot_cptr_const_arg_set_period(p_timer, delay_ticks);
-    os_timer_one_shot_cptr_const_arg_start(p_timer);
+    if (0 == delay_ticks)
+    {
+        os_timer_one_shot_cptr_const_arg_stop(p_timer);
+    }
+    else
+    {
+        os_timer_one_shot_cptr_const_arg_set_period(p_timer, delay_ticks);
+    }
 }
 
 void

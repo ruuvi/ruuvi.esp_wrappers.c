@@ -260,7 +260,10 @@ ATTR_NONNULL(1)
 void
 str_buf_free_buf(str_buf_t* const p_str_buf)
 {
-    os_free(p_str_buf->buf);
+    if (NULL != p_str_buf->buf)
+    {
+        os_free(p_str_buf->buf);
+    }
     p_str_buf->size = 0;
     p_str_buf->idx  = 0;
     p_str_buf->buf  = NULL;
