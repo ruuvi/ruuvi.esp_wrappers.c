@@ -19,8 +19,10 @@ struct os_timer_sig_periodic_t
     os_signal_t*         p_signal;
     os_signal_num_e      sig_num;
     os_delta_ticks_t     period_ticks;
+    TickType_t           last_tick_when_timer_was_triggered;
     bool                 is_static;
     volatile bool        is_active;
+    bool                 flag_need_to_restart;
 };
 
 _Static_assert(
@@ -48,7 +50,13 @@ os_timer_sig_cb_periodic(ATTR_UNUSED os_timer_periodic_t* p_timer, void* p_arg)
     {
         return;
     }
-    os_timer_sig_periodic_t* p_obj = p_arg;
+    os_timer_sig_periodic_t* p_obj            = p_arg;
+    p_obj->last_tick_when_timer_was_triggered = xTaskGetTickCount();
+    if (p_obj->flag_need_to_restart)
+    {
+        p_obj->is_active            = os_timer_periodic_restart(p_obj->p_timer, p_obj->period_ticks);
+        p_obj->flag_need_to_restart = false;
+    }
     if (p_obj->is_active)
     {
         os_signal_send(p_obj->p_signal, p_obj->sig_num);
@@ -83,12 +91,14 @@ os_timer_sig_periodic_create(
     {
         return NULL;
     }
-    p_obj->p_signal     = p_signal;
-    p_obj->sig_num      = sig_num;
-    p_obj->period_ticks = period_ticks;
-    p_obj->is_static    = false;
-    p_obj->is_active    = false;
-    p_obj->p_timer      = os_timer_periodic_create(p_timer_name, period_ticks, &os_timer_sig_cb_periodic, p_obj);
+    p_obj->p_signal                           = p_signal;
+    p_obj->sig_num                            = sig_num;
+    p_obj->period_ticks                       = period_ticks;
+    p_obj->last_tick_when_timer_was_triggered = xTaskGetTickCount() - period_ticks;
+    p_obj->is_static                          = false;
+    p_obj->is_active                          = false;
+    p_obj->flag_need_to_restart               = false;
+    p_obj->p_timer = os_timer_periodic_create(p_timer_name, period_ticks, &os_timer_sig_cb_periodic, p_obj);
     if (NULL == p_obj->p_timer)
     {
         os_timer_sig_periodic_delete(&p_obj);
@@ -299,7 +309,15 @@ os_timer_sig_one_shot_restart_with_period(
 }
 
 void
-os_timer_sig_periodic_relaunch(os_timer_sig_periodic_t* const p_obj)
+os_timer_sig_periodic_update_timestamp_when_timer_was_triggered(
+    os_timer_sig_periodic_t* const p_obj,
+    const TickType_t               timestamp)
+{
+    p_obj->last_tick_when_timer_was_triggered = timestamp;
+}
+
+void
+os_timer_sig_periodic_relaunch(os_timer_sig_periodic_t* const p_obj, bool flag_restart_from_current_moment)
 {
     if (NULL == p_obj)
     {
@@ -307,7 +325,36 @@ os_timer_sig_periodic_relaunch(os_timer_sig_periodic_t* const p_obj)
     }
     p_obj->is_active = false;
     os_timer_periodic_stop(p_obj->p_timer);
-    p_obj->is_active = os_timer_periodic_restart(p_obj->p_timer, p_obj->period_ticks);
+
+    int32_t delta_ticks = (int32_t)p_obj->period_ticks;
+    if (flag_restart_from_current_moment)
+    {
+        os_timer_sig_periodic_update_timestamp_when_timer_was_triggered(p_obj, xTaskGetTickCount());
+    }
+    else
+    {
+        const os_delta_ticks_t elapsed_ticks = xTaskGetTickCount() - p_obj->last_tick_when_timer_was_triggered;
+        delta_ticks                          = (int32_t)(p_obj->period_ticks - elapsed_ticks);
+    }
+    if (delta_ticks > 0)
+    {
+        if (delta_ticks == (int32_t)p_obj->period_ticks)
+        {
+            p_obj->flag_need_to_restart = false;
+            p_obj->is_active            = os_timer_periodic_restart(p_obj->p_timer, p_obj->period_ticks);
+        }
+        else
+        {
+            p_obj->flag_need_to_restart = true;
+            p_obj->is_active            = os_timer_periodic_restart(p_obj->p_timer, delta_ticks);
+        }
+    }
+    else
+    {
+        p_obj->flag_need_to_restart = false;
+        p_obj->is_active            = os_timer_periodic_restart(p_obj->p_timer, p_obj->period_ticks);
+        os_timer_periodic_simulate(p_obj->p_timer);
+    }
 }
 
 void
