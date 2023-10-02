@@ -44,8 +44,9 @@ typedef struct os_timer_sig_one_shot_static_obj_t
     void*            stub2;
     os_signal_num_e  stub3;
     os_delta_ticks_t stub4;
-    bool             stub5;
+    TickType_t       stub5;
     bool             stub6;
+    bool             stub7;
 } os_timer_sig_one_shot_static_obj_t;
 
 typedef struct os_timer_sig_one_shot_static_t
@@ -173,6 +174,24 @@ void
 os_timer_sig_one_shot_start(os_timer_sig_one_shot_t* const p_obj);
 
 /**
+ * @brief Set the new period for the timer (but do not start or restart it).
+ *
+ * @param p_obj       Pointer to the os_timer_sig_periodic_t object instance.
+ * @param delay_ticks Period for the timer, specified in system ticks.
+ */
+void
+os_timer_sig_periodic_set_period(os_timer_sig_periodic_t* const p_obj, const os_delta_ticks_t delay_ticks);
+
+/**
+ * @brief Set the new period for the timer (but do not start or restart it).
+ *
+ * @param p_obj       Pointer to the os_timer_sig_periodic_t object instance.
+ * @param delay_ticks Period for the timer, specified in system ticks.
+ */
+void
+os_timer_sig_one_shot_set_period(os_timer_sig_one_shot_t* const p_obj, const os_delta_ticks_t delay_ticks);
+
+/**
  * @brief Restarts the periodic timer which sends the specified signal.
  *
  * This function is responsible for reconfiguring the timer for periodic notifications.
@@ -214,6 +233,21 @@ os_timer_sig_one_shot_restart_with_period(
     const bool                     flag_reset_active_timer);
 
 /**
+ * @brief Updates the timestamp associated with a one-shot signal timer when the timer was triggered.
+ *
+ * This function is used to update the timestamp value associated with a one-shot signal timer
+ * when the timer was triggered. It takes a pointer to the `os_timer_sig_one_shot_t` object and
+ * updates the `timestamp` field with the specified system tick counter.
+ *
+ * @param p_obj Pointer to the `os_timer_sig_one_shot_t` object.
+ * @param timestamp The timestamp value to update.
+ */
+void
+os_timer_sig_one_shot_update_timestamp_when_timer_was_triggered(
+    os_timer_sig_one_shot_t* const p_obj,
+    const TickType_t               timestamp);
+
+/**
  * @brief Updates the timestamp associated with a periodic signal timer when the timer was triggered.
  *
  * This function is used to update the timestamp value associated with a periodic signal timer
@@ -246,15 +280,21 @@ void
 os_timer_sig_periodic_relaunch(os_timer_sig_periodic_t* const p_obj, bool flag_restart_from_current_moment);
 
 /**
- * @brief Stop and restart the one-shot timer which sends the specified signal from the current moment.
+ * @brief Stop and restart the one-shot timer which sends the specified signal.
  *
  * If the timer wasn't initially active, it will initiate it.
- * For already active timers, the function stops it and restarts from the current moment.
+ * This function will restart the timer from the last time it was triggered (or from the current moment).
+ * For already active timers, the function stops it and then calculates the next trigger time.
+ * If the time since the last activation exceeds the configured period, the timer will be triggered immediately
+ * and the signal will be sent, but the one-shot timer will not be activated.
+ * If the time elapsed since the last actuation is less than the configured period, the timer will be configured
+ * for the remaining time, and after it is triggered.
  *
  * @param p_obj Pointer to the os_timer_sig_one_shot_t object instance.
+ * @param flag_restart_from_current_moment If true, then restart the timer from the current moment.
  */
 void
-os_timer_sig_one_shot_relaunch(os_timer_sig_one_shot_t* const p_obj);
+os_timer_sig_one_shot_relaunch(os_timer_sig_one_shot_t* const p_obj, const bool flag_restart_from_current_moment);
 
 /**
  * @brief Stop the periodic timer which sends the specified signal.
