@@ -181,6 +181,9 @@ esp_log_wrapper_pop();
 void
 esp_log_wrapper_clear();
 
+string
+esp_log_wrapper_get_logs();
+
 #define ESP_LOG_WRAPPER_TEST_CHECK_LOG_RECORD(tag_, level_, msg_) \
     do \
     { \

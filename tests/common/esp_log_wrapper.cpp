@@ -60,3 +60,40 @@ esp_log_wrapper_clear()
     assert(nullptr != gp_esp_log_queue);
     gp_esp_log_queue->clear();
 }
+
+string
+esp_log_wrapper_get_logs()
+{
+    string result = "";
+    while (!esp_log_wrapper_is_empty())
+    {
+        const LogRecord log_record = esp_log_wrapper_pop();
+        string          prefix     = "";
+        switch (log_record.level)
+        {
+            case ESP_LOG_NONE:
+                break;
+            case ESP_LOG_ERROR:
+                prefix = "E";
+                break;
+            case ESP_LOG_WARN:
+                prefix = "W";
+                break;
+            case ESP_LOG_INFO:
+                prefix = "I";
+                break;
+            case ESP_LOG_DEBUG:
+                prefix = "D";
+                break;
+            case ESP_LOG_VERBOSE:
+                prefix = "V";
+                break;
+        }
+        if (prefix == "")
+        {
+            continue;
+        }
+        result += prefix + " " + log_record.tag + ": " + log_record.parsed.msg + "\n";
+    }
+    return result;
+}
