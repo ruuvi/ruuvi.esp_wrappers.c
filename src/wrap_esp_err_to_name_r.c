@@ -7,6 +7,7 @@
 
 #include "wrap_esp_err_to_name_r.h"
 #include <esp_err.h>
+#include <string.h>
 
 #define HAS_MBED_TLS 0
 
@@ -57,4 +58,10 @@ wrap_esp_err_to_name_r(const esp_err_t code, char* const p_buf, const size_t buf
 #endif
 
     return p_buf;
+}
+
+const char*
+__wrap_esp_err_to_name_r(esp_err_t code, char* buf, size_t buflen)
+{
+    return wrap_esp_err_to_name_r(code, buf, buflen);
 }
