@@ -7,7 +7,7 @@
 
 #include <cstdarg>
 #include <cassert>
-#include "esp_log.h"
+#include "esp_log_test.h"
 #include "TQueue.hpp"
 #include "esp_log_wrapper.hpp"
 
@@ -27,6 +27,12 @@ esp_log_wrapper_deinit()
         delete gp_esp_log_queue;
         gp_esp_log_queue = nullptr;
     }
+}
+
+uint32_t
+esp_log_timestamp(void)
+{
+    return 0;
 }
 
 void

@@ -8,7 +8,7 @@
 #ifndef RUUVI_TESTS_ESP_LOG_WRAPPER_HPP
 #define RUUVI_TESTS_ESP_LOG_WRAPPER_HPP
 
-#include "esp_log.h"
+#include "esp_log_test.h"
 #include <string>
 #include <cstdarg>
 #include <cstdio>

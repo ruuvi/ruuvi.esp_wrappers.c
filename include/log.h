@@ -8,7 +8,11 @@
 #ifndef RUUVI_LOG_H
 #define RUUVI_LOG_H
 
+#if defined(RUUVI_TESTS) && RUUVI_TESTS
+#include "esp_log_test.h"
+#else
 #include "esp_log.h"
+#endif
 #include "os_task.h"
 #include "esp_type_wrapper.h"
 #include "snprintf_with_esp_err_desc.h"

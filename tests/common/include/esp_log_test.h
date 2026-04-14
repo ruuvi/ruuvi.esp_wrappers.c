@@ -1,12 +1,16 @@
 /**
- * @file esp_log.h
+ * @file esp_log_test.h
  * @author TheSomeMan
  * @date 2020-08-26
  * @copyright Ruuvi Innovations Ltd, license BSD-3-Clause.
  */
 
-#ifndef ESP_LOG_H
-#define ESP_LOG_H
+#ifdef ESP_LOG_H
+#warning ESP_LOG_H already defined
+#endif
+
+#ifndef __ESP_LOG_H__
+#define __ESP_LOG_H__
 
 #include <stdint.h>
 
@@ -29,11 +33,8 @@ typedef enum
 void
 esp_log_write(esp_log_level_t level, const char* tag, const char* fmt, ...);
 
-static inline uint32_t
-esp_log_timestamp(void)
-{
-    return 0;
-}
+uint32_t
+esp_log_timestamp(void);
 
 static inline void
 esp_log_level_set(__attribute__((unused)) const char* tag, __attribute__((unused)) esp_log_level_t level)
@@ -46,4 +47,4 @@ esp_log_level_set(__attribute__((unused)) const char* tag, __attribute__((unused
 }
 #endif
 
-#endif // ESP_LOG_H
+#endif // __ESP_LOG_H__
