@@ -8,7 +8,7 @@
 #ifndef RUUVI_LOG_H
 #define RUUVI_LOG_H
 
-#if defined(RUUVI_TESTS) && RUUVI_TESTS
+#if (defined(RUUVI_TESTS) && RUUVI_TESTS) || (defined(RUUVI_ESP_WRAPPERS_TESTS) && RUUVI_ESP_WRAPPERS_TESTS)
 #include "esp_log_test.h"
 #else
 #include "esp_log.h"
