@@ -50,7 +50,7 @@ private:
     parseLogRecordWithThreadInfoAndFileInfo(LogRecordParsed& msg_parsed) const
     {
         // "E (0) SWD: [main/1] ruuvi.gateway_esp.c/main/nrf52swd.c:79 {nrf52swd_init_gpio_cfg_nreset}:
-        const std::regex msg_regex(
+        static const std::regex msg_regex(
             R"(([EWIDV]) \([0-9]+\) ([^ ]+): \[([^ ]+)\/([0-9]+)\] ([^ ]+):([0-9]+) \{([^ ]+)\}: (.*))",
             std::regex::extended);
         std::smatch match {};
@@ -76,7 +76,7 @@ private:
     parseLogRecordWithoutThreadInfoAndWithFileInfo(LogRecordParsed& msg_parsed) const
     {
         // "E (0) SWD: ruuvi.gateway_esp.c/main/nrf52swd.c:79 {nrf52swd_init_gpio_cfg_nreset}:
-        const std::regex msg_regex(
+        static const std::regex msg_regex(
             R"(([EWIDV]) \([0-9]+\) ([^ ]+): ([^ ]+):([0-9]+) \{([^ ]+)\}: (.*))",
             std::regex::extended);
         std::smatch match {};
@@ -100,8 +100,10 @@ private:
     parseLogRecordWithThreadInfoAndWithoutFileInfo(LogRecordParsed& msg_parsed) const
     {
         // "I (0) SWD: [main/1] nRF52 SWD init"
-        const std::regex msg_regex(R"(([EWIDV]) \([0-9]+\) ([^ ]+): \[([^ ]+)\/([0-9]+)\] (.*))", std::regex::extended);
-        std::smatch      match;
+        static const std::regex msg_regex(
+            R"(([EWIDV]) \([0-9]+\) ([^ ]+): \[([^ ]+)\/([0-9]+)\] (.*))",
+            std::regex::extended);
+        std::smatch match;
         std::regex_match(this->message, match, msg_regex);
         constexpr size_t exp_num_regexp_matches = 6U;
         const size_t     num_regexp_matched     = match.size();
@@ -118,11 +120,11 @@ private:
     }
 
     bool
-    parseLogRecordWithoutThreadInfoAndFileInfo(LogRecordParsed& msg_parsed) const
+    parseLogRecordWithoutThreadInfoAndWithoutFileInfo(LogRecordParsed& msg_parsed) const
     {
         // "I (0) SWD: nRF52 SWD init"
-        const std::regex msg_regex(R"(([EWIDV]) \([0-9]+\) ([^ ]+): (.*))", std::regex::extended);
-        std::smatch      match;
+        static const std::regex msg_regex(R"(([EWIDV]) \([0-9]+\) ([^ ]+): (.*))", std::regex::extended);
+        std::smatch             match;
         std::regex_match(this->message, match, msg_regex);
         constexpr size_t exp_num_regexp_matches = 4U;
         const size_t     num_regexp_matched     = match.size();
@@ -141,7 +143,7 @@ private:
     {
         // "E (0) test: [thread_name/priority] ruuvi.gateway_esp.c/main/nrf52swd.c:79 {nrf52swd_init_gpio_cfg_nreset}:
         // 0000: 30                                              | 0"
-        const std::regex msg_regex_log_dump(
+        static const std::regex msg_regex_log_dump(
             R"(([EWIDV]) \([0-9]+\) ([^ ]+): \[([^ ]+)/([0-9]+)\] ([^ ]+):([0-9]+) \{([^ ]+)\}: ([0-9A-F]+: [0-9A-F]+.*))",
             std::regex::extended);
         std::smatch match {};
@@ -167,7 +169,7 @@ private:
     parseLogDumpRecordWithoutThreadInfoAndWithFileInfo(LogRecordParsed& msg_parsed) const
     {
         // "E (0) test: ruuvi.gateway_esp.c/main/nrf52swd.c:79 {nrf52swd_init_gpio_cfg_nreset}:0000: 30 | 0"
-        const std::regex msg_regex_log_dump(
+        static const std::regex msg_regex_log_dump(
             R"(([EWIDV]) \([0-9]+\) ([^ ]+): ([^ ]+):([0-9]+) \{([^ ]+)\}: ([0-9A-F]+: [0-9A-F]+.*))",
             std::regex::extended);
         std::smatch match {};
@@ -191,7 +193,7 @@ private:
     parseLogDumpRecordWithThreadInfoAndWithoutFileInfo(LogRecordParsed& msg_parsed) const
     {
         // "E (0) test: [thread_name/priority] 0000: 30                                              | 0"
-        const std::regex msg_regex_log_dump(
+        static const std::regex msg_regex_log_dump(
             R"(([EWIDV]) \([0-9]+\) ([^ ]+): \[([^ ]+)/([0-9]+)\] ([0-9A-F]+: [0-9A-F]+.*))",
             std::regex::extended);
         std::smatch match {};
@@ -211,10 +213,10 @@ private:
     }
 
     bool
-    parseLogDumpRecordWithoutThreadInfoAndFileInfo(LogRecordParsed& msg_parsed) const
+    parseLogDumpRecordWithoutThreadInfoAndWithoutFileInfo(LogRecordParsed& msg_parsed) const
     {
         // "E (0) test: 0000: 30                                              | 0"
-        const std::regex msg_regex_log_dump(
+        static const std::regex msg_regex_log_dump(
             R"(([EWIDV]) \([0-9]+\) ([^ ]+): ([0-9A-F]+: [0-9A-F]+.*))",
             std::regex::extended);
         std::smatch match {};
@@ -259,11 +261,11 @@ private:
         {
             return msg_parsed;
         }
-        if (parseLogRecordWithoutThreadInfoAndFileInfo(msg_parsed))
+        if (parseLogRecordWithoutThreadInfoAndWithoutFileInfo(msg_parsed))
         {
             return msg_parsed;
         }
-        if (parseLogDumpRecordWithoutThreadInfoAndFileInfo(msg_parsed))
+        if (parseLogDumpRecordWithoutThreadInfoAndWithoutFileInfo(msg_parsed))
         {
             return msg_parsed;
         }
