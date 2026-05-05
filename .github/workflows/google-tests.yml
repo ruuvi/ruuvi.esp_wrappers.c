@@ -8,17 +8,17 @@ on:
 
 jobs:
   google-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Checkout submodules
-        run: git submodule update --init --recursive
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
 
       - name: Install dependencies
         run: |
+          sudo apt-get update
           sudo apt-get install -y gcc g++ cmake make ninja-build
           sudo apt-get install -y locales
           sudo locale-gen de_DE.UTF-8
@@ -34,4 +34,4 @@ jobs:
       - name: Run tests
         run: |
           cd tests/cmake-build-unit-tests
-          ctest
+          ctest --output-on-failure

@@ -6,7 +6,7 @@ set(ProjectId ruuvi_esp_wrappers-common_test_funcs)
 set(RUUVI_ESP_WRAPPERS_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_library(${ProjectId} STATIC
-        ${RUUVI_ESP_WRAPPERS_INCLUDE}/esp_log.h
+        ${RUUVI_ESP_WRAPPERS_INCLUDE}/esp_log_test.h
         ${RUUVI_ESP_WRAPPERS_INCLUDE}/esp_err.h
         ${RUUVI_ESP_WRAPPERS_INCLUDE}/TQueue.hpp
         ${RUUVI_ESP_WRAPPERS_INCLUDE}/esp_log_wrapper.hpp
