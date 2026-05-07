@@ -7,7 +7,6 @@
 
 #include "os_malloc.h"
 #include <stdlib.h>
-#include <assert.h>
 
 #if OS_MALLOC_TRACE
 #include <string.h>
@@ -89,11 +88,15 @@ os_free_internal(void* ptr, const char* const p_file, const int32_t line)
     }
 
     os_malloc_trace_info_t* const p_info = (os_malloc_trace_info_t*)((uint8_t*)ptr - sizeof(os_malloc_trace_info_t));
+    const size_t                  size   = p_info->size;
     os_malloc_trace_list_t*       p_list = os_malloc_trace_mutex_lock();
-    TAILQ_REMOVE(p_list, p_info, list);
-    g_os_malloc_trace_cnt -= 1;
+    if (NULL != p_info->list.tqe_prev)
+    {
+        TAILQ_REMOVE(p_list, p_info, list);
+        g_os_malloc_trace_cnt -= 1;
+    }
     os_malloc_trace_mutex_unlock(&p_list);
-    memset(p_info, 0, sizeof(*p_info) + p_info->size);
+    memset(p_info, 0, sizeof(*p_info) + size);
 
     free(p_info);
 }
@@ -259,14 +262,13 @@ void
 os_malloc_trace_clear(void)
 {
     os_malloc_trace_list_t* p_list = os_malloc_trace_mutex_lock();
-
-    while (!TAILQ_EMPTY(p_list))
+    os_malloc_trace_info_t* p_info;
+    TAILQ_FOREACH(p_info, p_list, list)
     {
-        os_malloc_trace_info_t* p_info = TAILQ_FIRST(p_list);
-        TAILQ_REMOVE(p_list, p_info, list);
-        g_os_malloc_trace_cnt -= 1;
+        p_info->list.tqe_prev = NULL;
     }
-    assert(0 == g_os_malloc_trace_cnt);
+    TAILQ_INIT(p_list);
+    g_os_malloc_trace_cnt = 0;
     os_malloc_trace_mutex_unlock(&p_list);
 }
 #endif
