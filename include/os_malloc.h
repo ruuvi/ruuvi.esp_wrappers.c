@@ -17,7 +17,13 @@
 extern "C" {
 #endif
 
+#if !defined(OS_MALLOC_TRACE)
 #define OS_MALLOC_TRACE 0
+#endif
+
+#if !defined(OS_MALLOC_TRACE_DISABLE_TIMESTAMP)
+#define OS_MALLOC_TRACE_DISABLE_TIMESTAMP 0
+#endif
 
 /**
  * This is a wrap for malloc - it allocates a block of memory of size 'size' bytes.
@@ -130,6 +136,11 @@ os_free_internal(void* ptr);
 #if OS_MALLOC_TRACE
 void
 os_malloc_trace_dump(void);
+#endif
+
+#if OS_MALLOC_TRACE
+void
+os_malloc_trace_clear(void);
 #endif
 
 #ifdef __cplusplus

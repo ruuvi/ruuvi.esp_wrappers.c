@@ -23,7 +23,9 @@ typedef struct os_malloc_trace_info_t
     TAILQ_ENTRY(os_malloc_trace_info_t) list;
     const char* p_file;
     int32_t     line;
-    uint32_t    timestamp;
+#if !OS_MALLOC_TRACE_DISABLE_TIMESTAMP
+    uint32_t timestamp;
+#endif
 } os_malloc_trace_info_t;
 
 typedef TAILQ_HEAD(os_malloc_trace_list_t, os_malloc_trace_info_t) os_malloc_trace_list_t;
@@ -119,7 +121,9 @@ os_calloc_internal(const size_t nmemb, const size_t size, const char* const p_fi
     p_info->size                         = size;
     p_info->p_file                       = p_file;
     p_info->line                         = line;
-    p_info->timestamp                    = xTaskGetTickCount();
+#if !OS_MALLOC_TRACE_DISABLE_TIMESTAMP
+    p_info->timestamp = xTaskGetTickCount();
+#endif
 
     g_os_malloc_trace_cnt += 1;
 
@@ -223,6 +227,7 @@ os_malloc_trace_dump(void)
     os_malloc_trace_info_t* p_info;
     TAILQ_FOREACH(p_info, p_list, list)
     {
+#if !OS_MALLOC_TRACE_DISABLE_TIMESTAMP
         LOG_INFO(
             "[%4u] %p: %u bytes (at %u), %s:%d",
             cnt,
@@ -231,8 +236,31 @@ os_malloc_trace_dump(void)
             p_info->timestamp,
             p_info->p_file,
             p_info->line);
+#else
+        LOG_INFO("[%4u] %p: %u bytes, %s:%d", cnt, p_info->p_mem, p_info->size, p_info->p_file, p_info->line);
+#endif
         cnt += 1;
     }
     os_malloc_trace_mutex_unlock(&p_list);
+}
+#endif
+
+#if OS_MALLOC_TRACE
+void
+os_malloc_trace_clear(void)
+{
+    os_malloc_trace_list_t* p_list = os_malloc_trace_mutex_lock();
+
+    while (!TAILQ_EMPTY(p_list))
+    {
+        os_malloc_trace_info_t* p_info = TAILQ_FIRST(p_list);
+        TAILQ_REMOVE(p_list, p_info, list);
+        memset(p_info, 0, sizeof(*p_info) + p_info->size);
+        free(p_info);
+        g_os_malloc_trace_cnt -= 1;
+    }
+    os_malloc_trace_mutex_unlock(&p_list);
+
+    assert(0 == g_os_malloc_trace_cnt);
 }
 #endif
