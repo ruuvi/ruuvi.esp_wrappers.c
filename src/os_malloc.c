@@ -7,6 +7,7 @@
 
 #include "os_malloc.h"
 #include <stdlib.h>
+#include <assert.h>
 
 #if OS_MALLOC_TRACE
 #include <string.h>
@@ -259,8 +260,7 @@ os_malloc_trace_clear(void)
         free(p_info);
         g_os_malloc_trace_cnt -= 1;
     }
-    os_malloc_trace_mutex_unlock(&p_list);
-
     assert(0 == g_os_malloc_trace_cnt);
+    os_malloc_trace_mutex_unlock(&p_list);
 }
 #endif
