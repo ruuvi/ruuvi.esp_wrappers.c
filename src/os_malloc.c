@@ -118,7 +118,7 @@ os_calloc_internal(const size_t nmemb, const size_t size, const char* const p_fi
 
     os_malloc_trace_info_t* const p_info = p_mem;
     p_info->p_mem                        = p_mem;
-    p_info->size                         = size;
+    p_info->size                         = nmemb * size;
     p_info->p_file                       = p_file;
     p_info->line                         = line;
 #if !OS_MALLOC_TRACE_DISABLE_TIMESTAMP
