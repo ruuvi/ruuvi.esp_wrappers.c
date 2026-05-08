@@ -43,11 +43,15 @@ os_malloc_trace_init(void)
     if (NULL == g_p_os_malloc_trace_mutex)
     {
         g_p_os_malloc_trace_mutex = os_mutex_create_static(&g_os_malloc_trace_mutex_mem);
+        os_mutex_lock(g_p_os_malloc_trace_mutex);
+        TAILQ_INIT(&g_os_malloc_trace_list);
+        g_os_malloc_trace_cnt = 0;
+        os_mutex_unlock(g_p_os_malloc_trace_mutex);
     }
-    os_mutex_lock(g_p_os_malloc_trace_mutex);
-    TAILQ_INIT(&g_os_malloc_trace_list);
-    g_os_malloc_trace_cnt = 0;
-    os_mutex_unlock(g_p_os_malloc_trace_mutex);
+    else
+    {
+        os_malloc_trace_clear();
+    }
 }
 
 void
@@ -270,7 +274,7 @@ os_malloc_trace_dump(void)
             (printf_uint_t)cnt,
             p_info->p_mem,
             p_info->size,
-            p_info->timestamp,
+            (printf_uint_t)p_info->timestamp,
             p_info->p_file,
             p_info->line);
 #else
