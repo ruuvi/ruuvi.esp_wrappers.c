@@ -135,13 +135,17 @@ os_free_internal(void* ptr);
 
 #if OS_MALLOC_TRACE
 void
-os_malloc_trace_dump(void);
-#endif
+os_malloc_trace_init(void);
 
-#if OS_MALLOC_TRACE
+void
+os_malloc_trace_deinit(void);
+
+void
+os_malloc_trace_dump(void);
+
 void
 os_malloc_trace_clear(void);
-#endif
+#endif // OS_MALLOC_TRACE
 
 #ifdef __cplusplus
 }

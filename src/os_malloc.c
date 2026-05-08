@@ -10,6 +10,7 @@
 
 #if OS_MALLOC_TRACE
 #include <string.h>
+#include <assert.h>
 #include "sys/queue.h"
 #include "os_mutex.h"
 #define LOG_LOCAL_LEVEL LOG_LEVEL_INFO
@@ -35,26 +36,45 @@ static os_mutex_t             g_p_os_malloc_trace_mutex;
 static os_mutex_static_t      g_os_malloc_trace_mutex_mem;
 static int32_t                g_os_malloc_trace_cnt;
 
+void
+os_malloc_trace_init(void)
+{
+    assert(NULL == g_p_os_malloc_trace_mutex);
+    if (NULL == g_p_os_malloc_trace_mutex)
+    {
+        g_p_os_malloc_trace_mutex = os_mutex_create_static(&g_os_malloc_trace_mutex_mem);
+    }
+    os_mutex_lock(g_p_os_malloc_trace_mutex);
+    TAILQ_INIT(&g_os_malloc_trace_list);
+    g_os_malloc_trace_cnt = 0;
+    os_mutex_unlock(g_p_os_malloc_trace_mutex);
+}
+
+void
+os_malloc_trace_deinit(void)
+{
+    os_malloc_trace_clear();
+    os_mutex_delete(&g_p_os_malloc_trace_mutex);
+}
+
 static os_malloc_trace_list_t*
 os_malloc_trace_mutex_lock(void)
 {
     if (NULL == g_p_os_malloc_trace_mutex)
     {
-        g_p_os_malloc_trace_mutex = os_mutex_create_static(&g_os_malloc_trace_mutex_mem);
-        os_mutex_lock(g_p_os_malloc_trace_mutex);
-        TAILQ_INIT(&g_os_malloc_trace_list);
-        g_os_malloc_trace_cnt = 0;
+        return NULL;
     }
-    else
-    {
-        os_mutex_lock(g_p_os_malloc_trace_mutex);
-    }
+    os_mutex_lock(g_p_os_malloc_trace_mutex);
     return &g_os_malloc_trace_list;
 }
 
 static void
 os_malloc_trace_mutex_unlock(os_malloc_trace_list_t** p_p_list)
 {
+    if (NULL == g_p_os_malloc_trace_mutex)
+    {
+        return;
+    }
     os_mutex_unlock(g_p_os_malloc_trace_mutex);
     *p_p_list = NULL;
 }
@@ -90,12 +110,15 @@ os_free_internal(void* ptr, const char* const p_file, const int32_t line)
     os_malloc_trace_info_t* const p_info = (os_malloc_trace_info_t*)((uint8_t*)ptr - sizeof(os_malloc_trace_info_t));
     const size_t                  size   = p_info->size;
     os_malloc_trace_list_t*       p_list = os_malloc_trace_mutex_lock();
-    if (NULL != p_info->list.tqe_prev)
+    if (NULL != p_list)
     {
-        TAILQ_REMOVE(p_list, p_info, list);
-        g_os_malloc_trace_cnt -= 1;
+        if (NULL != p_info->list.tqe_prev)
+        {
+            TAILQ_REMOVE(p_list, p_info, list);
+            g_os_malloc_trace_cnt -= 1;
+        }
+        os_malloc_trace_mutex_unlock(&p_list);
     }
-    os_malloc_trace_mutex_unlock(&p_list);
     memset(p_info, 0, sizeof(*p_info) + size);
 
     free(p_info);
@@ -133,9 +156,12 @@ os_calloc_internal(const size_t nmemb, const size_t size, const char* const p_fi
 #endif
 
     os_malloc_trace_list_t* p_list = os_malloc_trace_mutex_lock();
-    TAILQ_INSERT_TAIL(p_list, p_info, list);
-    g_os_malloc_trace_cnt += 1;
-    os_malloc_trace_mutex_unlock(&p_list);
+    if (NULL != p_list)
+    {
+        TAILQ_INSERT_TAIL(p_list, p_info, list);
+        g_os_malloc_trace_cnt += 1;
+        os_malloc_trace_mutex_unlock(&p_list);
+    }
     return (void*)((uint8_t*)p_mem + sizeof(os_malloc_trace_info_t));
 }
 #else
@@ -228,15 +254,20 @@ void
 os_malloc_trace_dump(void)
 {
     os_malloc_trace_list_t* p_list = os_malloc_trace_mutex_lock();
-    uint32_t                cnt    = 0;
+    if (NULL == p_list)
+    {
+        LOG_INFO("os_malloc trace is not initialized");
+        return;
+    }
+    uint32_t cnt = 0;
     LOG_INFO("Num blocks allocated: %d", g_os_malloc_trace_cnt);
     os_malloc_trace_info_t* p_info;
     TAILQ_FOREACH(p_info, p_list, list)
     {
 #if !OS_MALLOC_TRACE_DISABLE_TIMESTAMP
         LOG_INFO(
-            "[%4u] %p: %u bytes (at %u), %s:%d",
-            cnt,
+            "[%4u] %p: %zu bytes (at %u), %s:%d",
+            (printf_uint_t)cnt,
             p_info->p_mem,
             p_info->size,
             p_info->timestamp,
@@ -262,6 +293,10 @@ void
 os_malloc_trace_clear(void)
 {
     os_malloc_trace_list_t* p_list = os_malloc_trace_mutex_lock();
+    if (NULL == p_list)
+    {
+        return;
+    }
     os_malloc_trace_info_t* p_info;
     TAILQ_FOREACH(p_info, p_list, list)
     {
