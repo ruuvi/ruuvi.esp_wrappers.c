@@ -11,6 +11,7 @@
 #if OS_MALLOC_TRACE
 #include <string.h>
 #include <assert.h>
+#include <inttypes.h>
 #include "sys/queue.h"
 #include "os_mutex.h"
 #define LOG_LOCAL_LEVEL LOG_LEVEL_INFO
@@ -264,7 +265,7 @@ os_malloc_trace_dump(void)
         return;
     }
     uint32_t cnt = 0;
-    LOG_INFO("Num blocks allocated: %d", g_os_malloc_trace_cnt);
+    LOG_INFO("Num blocks allocated: %" PRId32, g_os_malloc_trace_cnt);
     os_malloc_trace_info_t* p_info;
     TAILQ_FOREACH(p_info, p_list, list)
     {
