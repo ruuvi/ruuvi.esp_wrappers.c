@@ -38,6 +38,7 @@ add_subdirectory(test_os_malloc)
 add_subdirectory(test_os_mkgmtime)
 add_subdirectory(test_os_mutex)
 add_subdirectory(test_os_mutex_recursive)
+add_subdirectory(test_os_rw_lock)
 add_subdirectory(test_os_sema)
 add_subdirectory(test_os_signal_freertos)
 add_subdirectory(test_os_str)
@@ -77,6 +78,11 @@ add_test(NAME test_os_mutex
 add_test(NAME test_os_mutex_recursive
         COMMAND ruuvi_esp_wrappers-test-os_mutex_recursive
             --gtest_output=xml:$<TARGET_FILE_DIR:ruuvi_esp_wrappers-test-os_mutex_recursive>/gtestresults.xml
+)
+
+add_test(NAME test_os_rw_lock
+        COMMAND ruuvi_esp_wrappers-test-os_rw_lock
+            --gtest_output=xml:$<TARGET_FILE_DIR:ruuvi_esp_wrappers-test-os_rw_lock>/gtestresults.xml
 )
 
 add_test(NAME test_os_sema
